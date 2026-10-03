@@ -1,0 +1,275 @@
+---
+import '../styles/global.css';
+import Monogram from '../components/Monogram.astro';
+import { company, email } from '../site';
+
+interface Props {
+  title?: string;
+  description: string;
+  /** Pages under /wallyt get the product's own links in the header. */
+  section?: 'wallyt';
+}
+
+const { title, description, section } = Astro.props;
+const fullTitle = title ? `${title} | ${company.brand}` : company.brand;
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', company.url).href;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12110f" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.brand} />
+    <meta property="og:title" content={title ?? company.brand} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${company.url}/og.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap bar">
+        <a class="brand" href="/" aria-label={`${company.brand}, home`}>
+          <Monogram size={30} />
+          <span class="wordmark">Leeman <em>Software</em></span>
+        </a>
+        <nav aria-label="Main">
+          {
+            section === 'wallyt' ? (
+              <>
+                <a class="optional" href="/wallyt">Wallyt</a>
+                <a href="/wallyt/support">Support</a>
+                <a href="/wallyt/privacy">Privacy</a>
+              </>
+            ) : (
+              <>
+                <a href="/#products">Products</a>
+                <a class="optional" href="/#about">About</a>
+                <a href="/#contact">Contact</a>
+              </>
+            )
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap foot">
+        <div class="foot-brand">
+          <a class="brand" href="/" aria-label={`${company.brand}, home`}>
+            <Monogram size={26} />
+            <span class="wordmark">Leeman <em>Software</em></span>
+          </a>
+          <p>
+            {company.brand} is the product studio of {company.legalName}.
+          </p>
+        </div>
+
+        <div class="foot-cols">
+          <div>
+            <p class="eyebrow">Products</p>
+            <ul>
+              <li><a href="/wallyt">Wallyt</a></li>
+              <li><a href="https://www.osrs.exchange" rel="noopener">OSRS Exchange</a></li>
+              <li><a href="https://www.rs3.exchange" rel="noopener">RS3 Exchange</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="eyebrow">Wallyt</p>
+            <ul>
+              <li><a href="/wallyt/support">Support</a></li>
+              <li><a href="/wallyt/privacy">Privacy policy</a></li>
+              <li><a href="/wallyt/delete-account">Delete your account</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="eyebrow">Company</p>
+            <ul>
+              <li><a href={`mailto:${email.hello}`}>{email.hello}</a></li>
+              <li><a href="/privacy">Website privacy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="fine">
+          <p>&copy; {year} {company.legalName}. All rights reserved.</p>
+          <p>
+            OSRS Exchange and RS3 Exchange are independent and not affiliated with Jagex Ltd.
+            RuneScape and Old School RuneScape are trademarks of Jagex Ltd.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid transparent;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    height: 68px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .wordmark {
+    font-family: var(--serif);
+    font-size: 23px;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+
+  .wordmark em {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  nav {
+    display: flex;
+    gap: clamp(16px, 3vw, 32px);
+  }
+
+  nav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+  }
+
+  @media (max-width: 520px) {
+    .wordmark {
+      font-size: 21px;
+    }
+
+    nav {
+      gap: 18px;
+    }
+
+    nav a.optional {
+      display: none;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .wordmark em {
+      display: none;
+    }
+  }
+
+  .site-footer {
+    margin-top: clamp(96px, 14vw, 160px);
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 48px;
+    padding-block: 56px 40px;
+  }
+
+  .foot-brand p {
+    max-width: 26em;
+    margin: 16px 0 0;
+  }
+
+  .foot-cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .foot-cols ul {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .foot-cols li {
+    margin-bottom: 8px;
+  }
+
+  .foot-cols a {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  .foot-cols a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .fine {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 32px;
+    padding-block: 20px 40px;
+    border-top: 1px solid var(--rule);
+    font-size: 12.5px;
+  }
+
+  .fine p {
+    margin: 0;
+    max-width: 52em;
+  }
+
+  @media (max-width: 820px) {
+    .foot {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .foot-cols {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .foot-cols > div:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

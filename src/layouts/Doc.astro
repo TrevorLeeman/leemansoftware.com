@@ -1,0 +1,50 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  /** Shown under the title, e.g. "Effective October 2, 2026". */
+  meta?: string;
+  section?: 'wallyt';
+}
+
+const { title, description, eyebrow, meta, section } = Astro.props;
+---
+
+<Base title={title} description={description} section={section}>
+  <article class="wrap doc">
+    <header class="doc-head">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1 class="display">{title}</h1>
+      {meta && <p class="meta">{meta}</p>}
+    </header>
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .doc-head {
+    padding-block: clamp(56px, 9vw, 112px) clamp(32px, 4vw, 48px);
+    margin-bottom: clamp(8px, 2vw, 24px);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .doc-head h1 {
+    margin-top: 18px;
+    font-size: clamp(46px, 7.4vw, 92px);
+  }
+
+  .meta {
+    margin: 20px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .prose > :global(:first-child) {
+    margin-top: 2em;
+  }
+</style>

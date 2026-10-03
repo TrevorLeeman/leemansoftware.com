@@ -1,0 +1,228 @@
+---
+import Doc from '../../layouts/Doc.astro';
+import { company, email } from '../../site';
+---
+
+<Doc
+  title="Wallyt privacy policy"
+  eyebrow="Wallyt"
+  meta="Last updated October 2, 2026"
+  section="wallyt"
+  description="What Wallyt collects, who can see it, who we share it with, and how to delete it."
+>
+  <p>
+    Wallyt is an app for splitting shared costs. It is made by {company.brand}, the product studio of
+    {company.legalName} (“we”, “us”). This policy covers the Wallyt apps for Android and iPhone and
+    Wallyt on the web. It explains what we collect, why, who can see it, and how you can delete it.
+  </p>
+
+  <div class="callout">
+    <p>
+      <strong>In short:</strong> we collect what Wallyt needs to work: your name, email, the groups
+      you’re in and the expenses you record. The people in your groups can see what you share with
+      them. We don’t show ads, we don’t use analytics or tracking tools, and we never sell your data.
+    </p>
+  </div>
+
+  <h2>What we collect</h2>
+
+  <h3>Your account</h3>
+  <ul>
+    <li><strong>Email address</strong>, used to sign you in and to match you to groups you’ve been added to.</li>
+    <li><strong>Name</strong>, as you want it shown to the people in your groups.</li>
+    <li><strong>Photo</strong>, if you choose to add one. We crop it to a square and resize it before it is uploaded.</li>
+    <li>
+      <strong>Sign-in details.</strong> If you sign in with Google, we receive your name, email address,
+      Google account ID and profile photo from Google. If you sign in with Apple, we receive your name
+      and email address from Apple. We never receive or store a password.
+    </li>
+  </ul>
+
+  <h3>Your groups and expenses</h3>
+  <ul>
+    <li>Group names and group photos.</li>
+    <li>
+      Expenses and payments: descriptions, notes, amounts, currencies, dates, who paid and how each
+      one is split.
+    </li>
+    <li>A history of changes to each expense: who changed it, when, and what changed.</li>
+    <li>
+      For repeating expenses, your time zone offset, so each copy is added on the right day where
+      you live.
+    </li>
+    <li>
+      If you import a Splitwise export, the file name and the expenses in it. The file is read on
+      your device and only the expenses are sent to us.
+    </li>
+  </ul>
+
+  <h3>People you add</h3>
+  <p>
+    When you add someone to a group, we store the name you give them and, if you add them from
+    your contacts, their email address. If you are the group’s owner or an admin, the contact’s photo
+    is saved as their photo in that group. When that person later joins Wallyt with the same email
+    address, they take over their place in the group and can change their own name and photo.
+  </p>
+
+  <h3>Contacts on your phone</h3>
+  <p>
+    Wallyt asks for access to your contacts only when you choose to add people from them, and it
+    only ever reads them. The list is shown on your phone. Nothing is uploaded except the people
+    you pick, as described above. Phone numbers are never sent to us: when you text someone an
+    invite, the number goes straight to your phone’s messaging app.
+  </p>
+
+  <h3>Photos on your phone</h3>
+  <p>
+    Wallyt can open your photo library so you can choose a picture for yourself, someone in a
+    group, or a group. Only the photo you choose is uploaded. Wallyt does not use your camera.
+  </p>
+
+  <h3>What we don’t collect</h3>
+  <p>
+    We don’t collect your location, your bank or card details, your device’s advertising ID, or
+    information about other apps. Wallyt doesn’t move money: it records what people owe each other,
+    and you settle up however you like.
+  </p>
+
+  <h2>How we use it</h2>
+  <ul>
+    <li>To run Wallyt: show your groups, work out balances, add repeating expenses and keep the history.</li>
+    <li>To sign you in, including emailing you sign-in codes.</li>
+    <li>To convert between currencies at the right day’s exchange rate.</li>
+    <li>To keep Wallyt secure, for example by limiting repeated attempts to guess invite links.</li>
+    <li>To answer you when you contact us.</li>
+  </ul>
+  <p>
+    We don’t use your data for advertising, we don’t build profiles of you, and we don’t use it to
+    train AI models.
+  </p>
+
+  <h2>Who can see your information</h2>
+  <ul>
+    <li>
+      <strong>People in your groups</strong> can see your name, email address and photo, and every
+      expense, payment, note and change in the groups you share.
+    </li>
+    <li>
+      <strong>Anyone with a group’s invite link</strong> can see a preview of that group before joining:
+      its name, photo and currency, and the names and photos of people in it. Email addresses are never
+      shown in the preview. Only share an invite link with people you want in the group.
+    </li>
+    <li>
+      <strong>Photos</strong> are stored at addresses that can’t be guessed, but anyone who has the
+      address of a photo can open it.
+    </li>
+    <li>
+      <strong>Us</strong>, when we need to: to keep Wallyt running, to fix a problem you’ve asked us
+      about, or when the law requires it.
+    </li>
+  </ul>
+
+  <h2>Who we share it with</h2>
+  <p>We never sell or rent your personal information. We use a small number of service providers:</p>
+      <table>
+      <thead>
+        <tr><th>Provider</th><th>Why</th><th>What they receive</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Our hosting provider</td>
+          <td data-label="Why">Runs the servers Wallyt’s data is stored on</td>
+          <td data-label="Receives">Everything described in this policy, stored on our behalf</td>
+        </tr>
+        <tr>
+          <td>Our email delivery provider</td>
+          <td data-label="Why">Sends your sign-in codes</td>
+          <td data-label="Receives">Your email address and the code</td>
+        </tr>
+        <tr>
+          <td>Google</td>
+          <td data-label="Why">Sign in with Google, if you use it</td>
+          <td data-label="Receives">A sign-in token, which we check with Google</td>
+        </tr>
+        <tr>
+          <td>Apple</td>
+          <td data-label="Why">Sign in with Apple, if you use it</td>
+          <td data-label="Receives">Your sign-in request</td>
+        </tr>
+        <tr>
+          <td>Frankfurter and Currency API</td>
+          <td data-label="Why">Daily exchange rates</td>
+          <td data-label="Receives">Only currency codes and dates, never anything about you</td>
+        </tr>
+      </tbody>
+    </table>
+  <p>
+    We may also disclose information if the law requires it, or to protect the safety of our users
+    or the public. If {company.legalName} is ever sold or merged, Wallyt’s data would move with it,
+    and this policy would keep applying until you’re told otherwise.
+  </p>
+
+  <h2>What’s stored on your device</h2>
+  <p>
+    Wallyt keeps your sign-in session in your phone’s secure storage, and a few preferences in the
+    app’s own storage: the last email you typed, the group you last opened, your appearance setting,
+    a pending invite, and recent exchange rates. On the web, these are kept in your browser’s local
+    storage. Wallyt doesn’t use advertising or tracking cookies.
+  </p>
+
+  <h2>How long we keep it</h2>
+  <p>
+    We keep your account for as long as you have it. Groups, expenses and their history are kept
+    until the group is deleted. When someone leaves or is removed from a group, their name and email
+    address stay with that group’s past expenses, so everyone else’s balances remain correct.
+  </p>
+  <p>
+    When you delete your account, we delete it within 30 days. See
+    <a href="/wallyt/delete-account">Delete your Wallyt account</a> for exactly what is removed and
+    what stays with your groups.
+  </p>
+
+  <h2>Security</h2>
+  <p>
+    Everything between Wallyt and our servers is encrypted in transit. Wallyt has no passwords to
+    leak: you sign in with a one-time code that expires after 10 minutes, or with Google or Apple.
+    Groups are visible only to their members. Only a group’s owner and admins can remove people,
+    and only its owner can delete it. No system is perfectly secure, but we work to protect your data and will
+    tell you if a breach affects you.
+  </p>
+
+  <h2>Children</h2>
+  <p>
+    Wallyt is not meant for children under 13, and we don’t knowingly collect information from them.
+    If you believe a child under 13 has given us information, email
+    <a href={`mailto:${email.privacy}`}>{email.privacy}</a> and we will delete it.
+  </p>
+
+  <h2>Your choices and rights</h2>
+  <ul>
+    <li>You can change your name and photo in Wallyt at any time, from Account.</li>
+    <li>You can leave a group at any time.</li>
+    <li>
+      You can ask us for a copy of your data, ask us to correct it, or ask us to delete it, by
+      emailing <a href={`mailto:${email.privacy}`}>{email.privacy}</a> from the email address you
+      sign in with.
+    </li>
+    <li>You can delete your account. See <a href="/wallyt/delete-account">Delete your Wallyt account</a>.</li>
+  </ul>
+  <p>
+    Depending on where you live, privacy laws such as the California Consumer Privacy Act or the GDPR
+    may give you further rights, including the right to object to how we use your data and to
+    complain to a regulator. We honor these requests wherever you live, and we will never treat you
+    differently for making one. We reply within 30 days.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    If we change this policy, we’ll update the date at the top. If a change affects how we use your
+    information in a meaningful way, we’ll let you know by email or in Wallyt before it takes effect.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    {company.brand}, the product studio of {company.legalName}<br />
+    Privacy: <a href={`mailto:${email.privacy}`}>{email.privacy}</a><br />
+    Everything else: <a href={`mailto:${email.support}`}>{email.support}</a>
+  </p>
+</Doc>

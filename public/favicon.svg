@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .bg { fill: #1c1b18 } .l { stroke: #f6f3ec } .dot { fill: #b8915a }
+    @media (prefers-color-scheme: dark) { .bg { fill: #ede8de } .l { stroke: #12110f } .dot { fill: #8a6a37 } }
+  </style>
+  <rect class="bg" width="64" height="64" rx="15"/>
+  <path class="l" d="M23 15v33h21" fill="none" stroke-width="5" stroke-linecap="square"/>
+  <rect class="dot" x="40" y="15" width="6" height="6"/>
+</svg>

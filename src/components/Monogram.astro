@@ -1,0 +1,20 @@
+---
+// The studio mark: an L drawn as two strokes, with a brass point where they would meet.
+interface Props {
+  size?: number;
+}
+const { size = 28 } = Astro.props;
+---
+
+<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" class="mark">
+  <rect width="64" height="64" rx="15" fill="currentColor"></rect>
+  <path d="M23 15v33h21" fill="none" stroke="var(--paper)" stroke-width="5" stroke-linecap="square"></path>
+  <rect x="40" y="15" width="6" height="6" fill="var(--brass)"></rect>
+</svg>
+
+<style>
+  .mark {
+    flex: none;
+    color: var(--ink);
+  }
+</style>

@@ -1,0 +1,15 @@
+[tools]
+node = "24"
+pnpm = "12"
+
+[tasks.dev]
+description = "Local dev server at http://localhost:4321"
+run = "pnpm dev"
+
+[tasks.build]
+description = "Static build into dist/"
+run = "pnpm build"
+
+[tasks.check]
+description = "Type-check and build"
+run = ["pnpm astro check", "pnpm build"]

@@ -1,0 +1,44 @@
+---
+import Doc from '../layouts/Doc.astro';
+import { company, email } from '../site';
+---
+
+<Doc
+  title="Website privacy"
+  eyebrow={company.brand}
+  meta="Last updated October 2, 2026"
+  description="How leemansoftware.com handles your information. Each product has its own privacy policy."
+>
+  <p>
+    This notice covers this website, {company.domain}, run by {company.legalName}. Each of our
+    products has its own privacy policy:
+  </p>
+  <ul>
+    <li><a href="/wallyt/privacy">Wallyt privacy policy</a></li>
+    <li><a href="https://www.osrs.exchange/privacy-policy" rel="noopener">OSRS Exchange privacy policy</a></li>
+    <li><a href="https://www.rs3.exchange/privacy-policy" rel="noopener">RS3 Exchange privacy policy</a></li>
+  </ul>
+
+  <h2>What this website collects</h2>
+  <p>
+    Nothing about you. This site has no accounts, no forms, no cookies, no analytics and no
+    advertising. Its fonts and images are served from this site, so visiting it doesn’t contact
+    anyone else.
+  </p>
+  <p>
+    Like any website, the service that hosts it briefly receives standard technical details with
+    each visit, such as your IP address and browser type, to deliver the page and protect against
+    abuse. We don’t use these details to identify you.
+  </p>
+
+  <h2>Email</h2>
+  <p>
+    If you email us, we keep your message and address so we can reply, and delete them when they’re
+    no longer needed.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    <a href={`mailto:${email.privacy}`}>{email.privacy}</a>
+  </p>
+</Doc>

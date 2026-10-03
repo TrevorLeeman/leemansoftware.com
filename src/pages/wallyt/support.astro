@@ -1,0 +1,120 @@
+---
+import Doc from '../../layouts/Doc.astro';
+import { email } from '../../site';
+
+const faqs = [
+  {
+    q: 'I didn’t get my sign-in code.',
+    a: 'Codes usually arrive within a minute. Check your spam or junk folder, and make sure the email address is spelled correctly. Each code works for 10 minutes, so if yours has expired, ask for a new one.',
+  },
+  {
+    q: 'How do I join a group?',
+    a: 'Open the invite link someone sent you. You’ll see the group’s name and who’s in it, then tap Join group. If they added you by name before you joined, choose which person is you, and the expenses already recorded for you become yours.',
+  },
+  {
+    q: 'Someone left or was removed. What happens to their expenses?',
+    a: 'They stay in the group under that person’s name, so everyone else’s balances stay correct.',
+  },
+  {
+    q: 'Can I use different currencies in one group?',
+    a: 'Yes. Each expense can be in its own currency. Wallyt converts it into the group’s currency at that day’s exchange rate.',
+  },
+  {
+    q: 'Can I bring my history over from Splitwise?',
+    a: 'Yes. Export your group from Splitwise as a CSV file, then import it into Wallyt. You can match each person in the file to someone in your Wallyt group.',
+  },
+  {
+    q: 'I deleted an expense by mistake.',
+    a: 'Tap Undo right after deleting it, or restore it later from Deleted expenses in the group’s settings.',
+  },
+  {
+    q: 'How do I delete my account?',
+    a: 'See Delete your Wallyt account for the steps and for exactly what is deleted.',
+    link: { href: '/wallyt/delete-account', label: 'Delete your Wallyt account' },
+  },
+];
+---
+
+<Doc
+  title="Wallyt support"
+  eyebrow="Wallyt"
+  section="wallyt"
+  description="Get help with Wallyt: sign-in codes, joining groups, currencies, imports, and how to reach us."
+>
+  <div class="contact-card">
+    <p class="contact-label">Email us</p>
+    <a class="contact-mail" href={`mailto:${email.support}`}>{email.support}</a>
+    <p>
+      Tell us what you were doing and what happened, and include a screenshot if you can. We read
+      every message and usually reply within two business days.
+    </p>
+  </div>
+
+  <h2>Common questions</h2>
+  <dl class="faq">
+    {
+      faqs.map((f) => (
+        <div>
+          <dt>{f.q}</dt>
+          <dd>
+            {f.link ? (
+              <>
+                See <a href={f.link.href}>{f.link.label}</a> for the steps and for exactly what is
+                deleted.
+              </>
+            ) : (
+              f.a
+            )}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <p>
+    Questions about your data? Read the <a href="/wallyt/privacy">privacy policy</a> or email
+    <a href={`mailto:${email.privacy}`}>{email.privacy}</a>.
+  </p>
+</Doc>
+
+<style>
+  .contact-card {
+    padding: 28px 0 8px;
+  }
+
+  .contact-label {
+    margin: 0 0 6px !important;
+    font-size: 13px;
+    color: var(--muted) !important;
+  }
+
+  .contact-mail {
+    font-family: var(--serif);
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-card p:last-child {
+    margin-top: 16px;
+  }
+
+  .faq {
+    margin: 0 0 2em;
+  }
+
+  .faq > div {
+    padding-block: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .faq dt {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .faq dd {
+    margin: 6px 0 0;
+    color: var(--ink-soft);
+  }
+</style>

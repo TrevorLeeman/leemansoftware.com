@@ -1,0 +1,80 @@
+---
+import Doc from '../../layouts/Doc.astro';
+import { company, email } from '../../site';
+
+const subject = encodeURIComponent('Delete my Wallyt account');
+const body = encodeURIComponent(
+  'Please delete my Wallyt account. I am sending this from the email address I sign in with.',
+);
+---
+
+<Doc
+  title="Delete your Wallyt account"
+  eyebrow="Wallyt"
+  meta={`Wallyt, by ${company.brand}`}
+  section="wallyt"
+  description="How to delete your Wallyt account, what is deleted, and what stays with your groups."
+>
+  <p>
+    You can ask us to delete your Wallyt account and the personal data that goes with it at any
+    time. You don’t need the app installed to do it.
+  </p>
+
+  <h2>How to delete your account</h2>
+  <ol>
+    <li>
+      Email <a href={`mailto:${email.privacy}?subject=${subject}&body=${body}`}>{email.privacy}</a>
+      from the email address you use to sign in to Wallyt, with the subject “Delete my Wallyt
+      account”.
+    </li>
+    <li>
+      We reply to confirm. If you write from a different address, we’ll send a code to your Wallyt
+      address to check the account is yours.
+    </li>
+    <li>We delete your account within 30 days, and email you when it’s done.</li>
+  </ol>
+
+  <div class="callout">
+    <p>
+      <strong>If you own a group</strong> that has other people in it, you can make someone else the
+      owner first, from the group’s settings. Otherwise we pass ownership to one of its admins, or to
+      another member if it has none.
+    </p>
+  </div>
+
+  <h2>What we delete</h2>
+  <ul>
+    <li>Your account: your email address, name and photo.</li>
+    <li>Your Google or Apple sign-in link, and every signed-in session.</li>
+    <li>Your email address and photo from each group you were in.</li>
+    <li>Groups where you were the only person, with all their expenses and history.</li>
+  </ul>
+
+  <h2>What stays with your groups</h2>
+  <p>
+    Expenses are shared records: the other people in a group rely on them for their own balances.
+    So expenses and payments you were part of, and their history, stay in those groups. They
+    show the name you had in that group, but nothing else about you, and they’re no longer
+    connected to an account. The other people in the group can still edit or delete them.
+  </p>
+
+  <h2>How long it takes</h2>
+  <p>
+    Your account is deleted within 30 days of your request. If any copy of it remains in a backup,
+    it is erased within 30 days after that.
+  </p>
+
+  <h2>Deleting some data without closing your account</h2>
+  <ul>
+    <li>Remove or change your photo and name in Wallyt, from Account.</li>
+    <li>Leave a group from its settings. Its past expenses keep your name, as described above.</li>
+    <li>
+      To have something else removed, such as a photo someone added of you or an expense, email
+      <a href={`mailto:${email.privacy}`}>{email.privacy}</a> and tell us what it is.
+    </li>
+  </ul>
+
+  <p>
+    Read the full <a href="/wallyt/privacy">Wallyt privacy policy</a>.
+  </p>
+</Doc>
