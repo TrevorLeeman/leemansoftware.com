@@ -11,6 +11,7 @@ const body = encodeURIComponent(
 <Doc
   title="Delete your Wallyt account"
   eyebrow="Wallyt"
+  eyebrowHref="/wallyt"
   meta={`Wallyt, by ${company.brand}`}
   section="wallyt"
   description="How to delete your Wallyt account, what is deleted, and what stays with your groups."
@@ -19,6 +20,13 @@ const body = encodeURIComponent(
     You can ask us to delete your Wallyt account and the personal data that goes with it at any
     time. You don’t need the app installed to do it.
   </p>
+
+  <div class="request">
+    <a class="button primary" href={`mailto:${email.privacy}?subject=${subject}&body=${body}`}>
+      Email a deletion request
+    </a>
+    <p>Opens your email app with the request written for you. Send it from the address you sign in with.</p>
+  </div>
 
   <h2>How to delete your account</h2>
   <ol>
@@ -76,3 +84,24 @@ const body = encodeURIComponent(
     Read the full <a href="/wallyt/privacy">Wallyt privacy policy</a>.
   </p>
 </Doc>
+
+<style>
+  .request {
+    margin: 1.5em 0 0;
+    padding: 20px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .request p {
+    margin: 12px 0 0 !important;
+    font-size: 14px;
+    color: var(--muted) !important;
+  }
+
+  .request .button {
+    color: var(--bg);
+    text-decoration: none;
+  }
+</style>

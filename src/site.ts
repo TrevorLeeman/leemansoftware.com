@@ -23,6 +23,8 @@ export type Product = {
   href: string;
   external: boolean;
   icon: string;
+  /** The product's own brand color, used for small accents next to it. */
+  color: string;
 };
 
 export const products: Product[] = [
@@ -31,11 +33,12 @@ export const products: Product[] = [
     name: 'Wallyt',
     summary:
       'Split rent, trips and dinners with the people you share them with. Everyone sees the same balances, in any currency, and settling up takes as few payments as possible.',
-    platforms: 'Android, coming soon',
+    platforms: 'Android',
     status: 'soon',
     href: '/wallyt',
     external: false,
     icon: '/products/wallyt.webp',
+    color: '#0f766e',
   },
   {
     slug: 'osrs-exchange',
@@ -47,6 +50,7 @@ export const products: Product[] = [
     href: 'https://www.osrs.exchange',
     external: true,
     icon: '/products/osrs-exchange.webp',
+    color: '#4f46e5',
   },
   {
     slug: 'rs3-exchange',
@@ -58,5 +62,6 @@ export const products: Product[] = [
     href: 'https://www.rs3.exchange',
     external: true,
     icon: '/products/rs3-exchange.webp',
+    color: '#047857',
   },
 ];

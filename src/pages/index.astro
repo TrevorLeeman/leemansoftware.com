@@ -34,7 +34,7 @@ const contacts = [
       {
         products.map((p, i) => (
           <li>
-            <a class="row" href={p.href} {...(p.external ? { rel: 'noopener' } : {})}>
+            <a class="row" href={p.href} style={`--brand: ${p.color}`} {...(p.external ? { rel: 'noopener' } : {})}>
               <img
                 class:list={['icon', { pixel: p.slug !== 'wallyt' }]}
                 src={p.icon} alt=""
@@ -93,8 +93,13 @@ const contacts = [
           <div>
             <dt>{c.key}</dt>
             <dd>
-              <a href={`mailto:${c.value}`}>{c.value}</a>
-              <span>{c.note}</span>
+              <span class="addr">
+                <a href={`mailto:${c.value}`}>{c.value}</a>
+                <button class="copy" type="button" data-copy={c.value} aria-label={`Copy ${c.value}`}>
+                  Copy
+                </button>
+              </span>
+              <span class="note">{c.note}</span>
             </dd>
           </div>
         ))
@@ -106,7 +111,7 @@ const contacts = [
 <style>
   .hero {
     position: relative;
-    padding-block: clamp(64px, 11vw, 128px) clamp(56px, 8vw, 96px);
+    padding-block: clamp(64px, 11vw, 128px) clamp(48px, 6vw, 72px);
     border-bottom: 1px solid var(--rule);
     overflow: hidden;
   }
@@ -150,7 +155,7 @@ const contacts = [
   }
 
   .section {
-    padding-top: clamp(64px, 9vw, 104px);
+    padding-top: clamp(56px, 8vw, 96px);
   }
 
   .products {
@@ -177,8 +182,27 @@ const contacts = [
     transition: background-color 140ms ease;
   }
 
+  /* Each row warms to its product's own color on hover. */
+  .row {
+    position: relative;
+  }
+
+  .row::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: var(--brand);
+    opacity: 0;
+    transition: opacity 140ms ease;
+  }
+
   .row:hover {
-    background: color-mix(in srgb, var(--ink) 2.5%, transparent);
+    background: color-mix(in srgb, var(--brand) 5%, transparent);
+  }
+
+  .row:hover::before {
+    opacity: 1;
   }
 
   .icon {
@@ -237,8 +261,8 @@ const contacts = [
   }
 
   .row:hover .arrow {
-    color: var(--ink);
-    border-color: var(--rule-strong);
+    color: var(--brand);
+    border-color: color-mix(in srgb, var(--brand) 40%, var(--rule));
     transform: translateX(2px);
   }
 
@@ -324,7 +348,14 @@ const contacts = [
     overflow-wrap: anywhere;
   }
 
-  .contacts dd span {
+  .addr {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .note {
     font-size: 14px;
     color: var(--muted);
   }

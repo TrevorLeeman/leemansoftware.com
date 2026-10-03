@@ -4,25 +4,78 @@ import Base from './Base.astro';
 interface Props {
   title: string;
   description: string;
-  /** Short lowercase label above the title, e.g. "wallyt". */
+  /** Short label above the title, e.g. "wallyt". */
   eyebrow: string;
+  /** Where the label links back to, e.g. "/wallyt". */
+  eyebrowHref?: string;
   /** Shown under the title, e.g. "Last updated October 2, 2026". */
   meta?: string;
   section?: 'wallyt';
 }
 
-const { title, description, eyebrow, meta, section } = Astro.props;
+const { title, description, eyebrow, eyebrowHref, meta, section } = Astro.props;
+
+// Give every h2 an id and list them as the page's contents.
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/&[a-z]+;|<[^>]+>/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+const headings: { id: string; text: string }[] = [];
+const html = (await Astro.slots.render('default')).replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/g, (_, attrs, inner) => {
+  const text = inner.replace(/<[^>]+>/g, '').trim();
+  const id = slugify(text);
+  headings.push({ id, text });
+  return `<h2${attrs} id="${id}">${inner}</h2>`;
+});
+const hasToc = headings.length >= 4;
 ---
 
 <Base title={title} description={description} section={section}>
   <article class="wrap doc">
     <header class="doc-head">
-      <p class="label">{eyebrow.toLowerCase()}</p>
+      {
+        eyebrowHref ? (
+          <a class="label crumb" href={eyebrowHref}>{eyebrow.toLowerCase()}</a>
+        ) : (
+          <p class="label">{eyebrow.toLowerCase()}</p>
+        )
+      }
       <h1 class="title">{title}</h1>
       {meta && <p class="meta">{meta}</p>}
     </header>
-    <div class="prose">
-      <slot />
+
+    <div class:list={['doc-body', { 'has-toc': hasToc }]}>
+      {
+        hasToc && (
+          <nav class="toc" aria-label="On this page">
+            <p class="toc-title">On this page</p>
+            <ol>
+              {headings.map((h) => (
+                <li>
+                  <a href={`#${h.id}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      {
+        hasToc && (
+          <details class="toc-fold">
+            <summary>On this page</summary>
+            <ol>
+              {headings.map((h) => (
+                <li>
+                  <a href={`#${h.id}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        )
+      }
+      <div class="prose" set:html={html} />
     </div>
   </article>
 </Base>
@@ -30,8 +83,16 @@ const { title, description, eyebrow, meta, section } = Astro.props;
 <style>
   .doc-head {
     padding-block: clamp(48px, 8vw, 96px) clamp(28px, 4vw, 40px);
-    margin-bottom: 8px;
     border-bottom: 1px solid var(--rule);
+  }
+
+  .crumb {
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .crumb:hover {
+    color: var(--ink);
   }
 
   .doc-head h1 {
@@ -46,7 +107,91 @@ const { title, description, eyebrow, meta, section } = Astro.props;
     color: var(--muted);
   }
 
+  .doc-body.has-toc {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) 220px;
+    justify-content: space-between;
+    gap: 64px;
+  }
+
   .prose > :global(:first-child) {
     margin-top: 2em;
+  }
+
+  .toc {
+    order: 2;
+    position: sticky;
+    top: 92px;
+    align-self: start;
+    margin-top: 2.4em;
+    padding-left: 16px;
+    border-left: 1px solid var(--rule);
+  }
+
+  .toc-title,
+  .toc-fold summary {
+    margin: 0 0 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .toc ol,
+  .toc-fold ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc li,
+  .toc-fold li {
+    margin-bottom: 8px;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+
+  .toc a,
+  .toc-fold a {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  .toc a:hover,
+  .toc-fold a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .toc-fold {
+    display: none;
+  }
+
+  /* On narrower screens the contents fold into one line above the text. */
+  @media (max-width: 960px) {
+    .doc-body.has-toc {
+      display: block;
+    }
+
+    .toc {
+      display: none;
+    }
+
+    .toc-fold {
+      display: block;
+      margin-top: 24px;
+      padding: 12px 16px;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+
+    .toc-fold summary {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .toc-fold[open] summary {
+      margin-bottom: 12px;
+    }
   }
 </style>
