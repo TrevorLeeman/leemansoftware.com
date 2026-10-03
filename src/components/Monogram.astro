@@ -1,5 +1,5 @@
 ---
-// The studio mark: an L drawn as two strokes, with a brass point where they would meet.
+// The studio mark: an L followed by a terminal cursor.
 interface Props {
   size?: number;
 }
@@ -7,14 +7,26 @@ const { size = 28 } = Astro.props;
 ---
 
 <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" class="mark">
-  <rect width="64" height="64" rx="15" fill="currentColor"></rect>
-  <path d="M23 15v33h21" fill="none" stroke="var(--paper)" stroke-width="5" stroke-linecap="square"></path>
-  <rect x="40" y="15" width="6" height="6" fill="var(--brass)"></rect>
+  <rect width="64" height="64" rx="14" fill="var(--mark)"></rect>
+  <path d="M21 16V45H35" fill="none" stroke="var(--mark-fg)" stroke-width="6.5"></path>
+  <rect class="cursor" x="40" y="41.75" width="10" height="6.5" fill="var(--cursor)"></rect>
 </svg>
 
 <style>
   .mark {
     flex: none;
-    color: var(--ink);
+    border-radius: 22%;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+
+  /* Blinks only when someone hovers the logo, so the page itself stays still. */
+  :global(a:hover) > .mark .cursor {
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
   }
 </style>

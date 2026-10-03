@@ -4,24 +4,24 @@ import Base from '../layouts/Base.astro';
 
 <Base title="Page not found" description="This page doesn't exist.">
   <section class="wrap missing">
-    <p class="eyebrow">404</p>
-    <h1 class="display">This page isn’t here.</h1>
+    <p class="label">404</p>
+    <h1 class="title">This page isn’t here.</h1>
     <p class="lede">It may have moved, or the link may be mistyped.</p>
-    <p class="back"><a href="/">Go to the home page</a></p>
+    <p class="back"><a class="button" href="/">Go to the home page</a></p>
   </section>
 </Base>
 
 <style>
   .missing {
-    padding-block: clamp(80px, 14vw, 180px) 0;
+    padding-block: clamp(72px, 12vw, 160px) 0;
   }
 
   .missing h1 {
-    margin: 18px 0 24px;
-    font-size: clamp(48px, 8vw, 96px);
+    margin: 14px 0 18px;
+    font-size: clamp(36px, 6vw, 64px);
   }
 
   .back {
-    margin-top: 32px;
+    margin-top: 28px;
   }
 </style>

@@ -1,41 +1,49 @@
-@import '@fontsource-variable/inter';
-@import '@fontsource/instrument-serif/400.css';
-@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
 
 :root {
   color-scheme: light;
-  --paper: #f6f3ec;
-  --paper-raised: #fbf9f4;
-  --ink: #1c1b18;
-  --ink-soft: #3d3a34;
-  --muted: #6e695f;
-  --rule: #e1dbcf;
-  --rule-strong: #cfc7b7;
-  --brass: #8a6a37;
-  --brass-soft: #efe5d2;
-  --focus: #1f4f8a;
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --ink: #0b0b0c;
+  --ink-soft: #3b3b40;
+  --muted: #6c6c73;
+  --rule: #e8e8eb;
+  --rule-strong: #d4d4d9;
+  --grid: rgb(11 11 12 / 0.045);
+  --accent: #16a34a;
+  --accent-soft: #e9f7ee;
+  --focus: #2563eb;
+  --mark: #0b0b0c;
+  --mark-fg: #fafafa;
+  --cursor: #22c55e;
 
-  --serif: 'Instrument Serif', 'Iowan Old Style', 'Times New Roman', serif;
-  --sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-  --gutter: clamp(16px, 4vw, 40px);
-  --measure: 66ch;
-  --wide: 1120px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --measure: 68ch;
+  --wide: 1080px;
+  --radius: 12px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --paper: #12110f;
-    --paper-raised: #1a1916;
-    --ink: #ede8de;
-    --ink-soft: #cdc7bb;
-    --muted: #9b958a;
-    --rule: #2a2824;
-    --rule-strong: #3a3732;
-    --brass: #cfab6e;
-    --brass-soft: #2a2419;
-    --focus: #8ab4f0;
+    --bg: #0a0a0b;
+    --surface: #111113;
+    --ink: #ededef;
+    --ink-soft: #c2c2c8;
+    --muted: #8a8a93;
+    --rule: #222226;
+    --rule-strong: #303036;
+    --grid: rgb(255 255 255 / 0.04);
+    --accent: #4ade80;
+    --accent-soft: #10251a;
+    --focus: #60a5fa;
+    --mark: #18181b;
+    --mark-fg: #fafafa;
+    --cursor: #4ade80;
   }
 }
 
@@ -52,15 +60,13 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.6;
-  font-feature-settings: 'ss01', 'cv11';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
 img {
@@ -73,8 +79,8 @@ a {
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: var(--rule-strong);
-  text-underline-offset: 0.22em;
-  transition: text-decoration-color 160ms ease, color 160ms ease;
+  text-underline-offset: 0.24em;
+  transition: text-decoration-color 140ms ease, color 140ms ease;
 }
 
 a:hover {
@@ -83,13 +89,18 @@ a:hover {
 
 :focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
 ::selection {
-  background: var(--brass-soft);
-  color: var(--ink);
+  background: color-mix(in srgb, var(--focus) 22%, transparent);
+}
+
+code,
+.mono {
+  font-family: var(--mono);
+  font-size: 0.9em;
 }
 
 .wrap {
@@ -99,32 +110,97 @@ a:hover {
   padding-inline: var(--gutter);
 }
 
-.eyebrow {
+/* Section labels read like code comments: "// products". */
+.label {
   margin: 0;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--brass);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 450;
+  color: var(--muted);
 }
 
-.display {
+.label::before {
+  content: '// ';
+  color: var(--rule-strong);
+}
+
+.title {
   margin: 0;
-  font-family: var(--serif);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
   text-wrap: balance;
 }
 
 .lede {
   margin: 0;
-  max-width: 34em;
-  font-size: clamp(18px, 1.6vw, 21px);
-  line-height: 1.55;
+  max-width: 36em;
+  font-size: clamp(17px, 1.5vw, 19px);
+  line-height: 1.6;
   color: var(--ink-soft);
   text-wrap: pretty;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.badge.live::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.badge.soon::before {
+  background: #d97706;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.button:hover {
+  border-color: var(--ink);
+}
+
+.button.primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.button.primary:hover {
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
 }
 
 .skip {
@@ -138,7 +214,7 @@ a:hover {
   z-index: 10;
   padding: 8px 14px;
   background: var(--ink);
-  color: var(--paper);
+  color: var(--bg);
   border-radius: 8px;
 }
 
@@ -148,17 +224,16 @@ a:hover {
 }
 
 .prose h2 {
-  margin: 2.6em 0 0.5em;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  margin: 2.4em 0 0.6em;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
 }
 
 .prose h3 {
   margin: 1.8em 0 0.4em;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -191,22 +266,21 @@ a:hover {
   width: 100%;
   margin: 0.5em 0 1.5em;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: 14.5px;
 }
 
 .prose th,
 .prose td {
-  padding: 10px 12px 10px 0;
+  padding: 10px 14px 10px 0;
   text-align: left;
   vertical-align: top;
   border-bottom: 1px solid var(--rule);
 }
 
 .prose th {
+  font-family: var(--mono);
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 450;
   color: var(--muted);
 }
 
@@ -244,9 +318,11 @@ a:hover {
 
 .callout {
   margin: 1.5em 0;
-  padding: 18px 20px;
-  border-left: 2px solid var(--brass);
-  background: var(--paper-raised);
+  padding: 16px 18px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface);
   color: var(--ink-soft);
 }
 

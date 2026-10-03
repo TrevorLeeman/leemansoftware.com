@@ -42,7 +42,7 @@ const faqs = [
   description="Get help with Wallyt: sign-in codes, joining groups, currencies, imports, and how to reach us."
 >
   <div class="contact-card">
-    <p class="contact-label">Email us</p>
+    <p class="contact-label">email us</p>
     <a class="contact-mail" href={`mailto:${email.support}`}>{email.support}</a>
     <p>
       Tell us what you were doing and what happened, and include a screenshot if you can. We read
@@ -72,31 +72,34 @@ const faqs = [
   </dl>
 
   <p>
-    Questions about your data? Read the <a href="/wallyt/privacy">privacy policy</a> or email
-    <a href={`mailto:${email.privacy}`}>{email.privacy}</a>.
+    Questions about your data? Read the <a href="/wallyt/privacy">privacy policy</a> or email <a href={`mailto:${email.privacy}`}>{email.privacy}</a>.
   </p>
 </Doc>
 
 <style>
   .contact-card {
-    padding: 28px 0 8px;
+    margin-top: 2em;
+    padding: 20px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
   }
 
   .contact-label {
-    margin: 0 0 6px !important;
-    font-size: 13px;
+    margin: 0 0 4px !important;
+    font-family: var(--mono);
+    font-size: 12.5px;
     color: var(--muted) !important;
   }
 
   .contact-mail {
-    font-family: var(--serif);
-    font-size: clamp(28px, 4vw, 40px);
-    line-height: 1.1;
+    font-family: var(--mono);
+    font-size: clamp(17px, 2.4vw, 22px);
     overflow-wrap: anywhere;
   }
 
   .contact-card p:last-child {
-    margin-top: 16px;
+    margin: 12px 0 0;
   }
 
   .faq {
@@ -104,7 +107,7 @@ const faqs = [
   }
 
   .faq > div {
-    padding-block: 20px;
+    padding-block: 18px;
     border-bottom: 1px solid var(--rule);
   }
 

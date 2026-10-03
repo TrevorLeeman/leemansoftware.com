@@ -2,7 +2,7 @@
 
 The website of Leeman Software, the product studio of Leeman Group LLC: the studio's home page, Wallyt's page, and the pages Google Play needs for Wallyt (privacy policy, account deletion, support).
 
-Static [Astro](https://astro.build) site with no client-side JavaScript, no cookies and no analytics. Fonts (Instrument Serif and Inter) are self-hosted from npm, so the site makes no third-party requests.
+Static [Astro](https://astro.build) site with no client-side JavaScript, no cookies and no analytics. Fonts (Geist and Geist Mono) are self-hosted from npm, so the site makes no third-party requests.
 
 ## Run
 
