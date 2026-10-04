@@ -190,7 +190,7 @@ import { company, email } from '../../site';
   <h2>Children</h2>
   <p>
     Wallyt is not meant for children under 13, and we don’t knowingly collect information from them.
-    If you believe a child under 13 has given us information, email <a href={`mailto:${email.privacy}`}>{email.privacy}</a> and we will delete it.
+    If you believe a child under 13 has given us information, email <a href={`mailto:${email}`}>{email}</a> and we will delete it.
   </p>
 
   <h2>Your choices and rights</h2>
@@ -199,7 +199,7 @@ import { company, email } from '../../site';
     <li>You can leave a group at any time.</li>
     <li>
       You can ask us for a copy of your data, ask us to correct it, or ask us to delete it, by
-      emailing <a href={`mailto:${email.privacy}`}>{email.privacy}</a> from the email address you
+      emailing <a href={`mailto:${email}`}>{email}</a> from the email address you
       sign in with.
     </li>
     <li>You can delete your account. See <a href="/wallyt/delete-account">Delete your Wallyt account</a>.</li>
@@ -220,7 +220,6 @@ import { company, email } from '../../site';
   <h2>Contact</h2>
   <p>
     {company.brand}, the product studio of {company.legalName}<br />
-    Privacy: <a href={`mailto:${email.privacy}`}>{email.privacy}</a><br />
-    Everything else: <a href={`mailto:${email.support}`}>{email.support}</a>
+    <a href={`mailto:${email}`}>{email}</a>
   </p>
 </Doc>

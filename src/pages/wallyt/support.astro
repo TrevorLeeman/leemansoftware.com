@@ -45,8 +45,8 @@ const faqs = [
   <div class="contact-card">
     <p class="contact-label">email us</p>
     <p class="contact-line">
-      <a class="contact-mail" href={`mailto:${email.support}`}>{email.support}</a>
-      <button class="copy" type="button" data-copy={email.support} aria-label={`Copy ${email.support}`}>Copy</button>
+      <a class="contact-mail" href={`mailto:${email}`}>{email}</a>
+      <button class="copy" type="button" data-copy={email} aria-label={`Copy ${email}`}>Copy</button>
     </p>
     <p>
       Tell us what you were doing and what happened, and include a screenshot if you can. We read
@@ -76,7 +76,7 @@ const faqs = [
   </dl>
 
   <p>
-    Questions about your data? Read the <a href="/wallyt/privacy">privacy policy</a> or email <a href={`mailto:${email.privacy}`}>{email.privacy}</a>.
+    Questions about your data? Read the <a href="/wallyt/privacy">privacy policy</a> or email <a href={`mailto:${email}`}>{email}</a>.
   </p>
 </Doc>
 

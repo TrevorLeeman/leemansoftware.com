@@ -7,12 +7,8 @@ export const company = {
   url: 'https://leemansoftware.com',
 };
 
-// Every address forwards to the same inbox (Cloudflare Email Routing, see README).
-export const email = {
-  hello: 'hello@leemansoftware.com',
-  support: 'support@leemansoftware.com',
-  privacy: 'privacy@leemansoftware.com',
-};
+// The one address for everything: questions, Wallyt help and privacy requests.
+export const email = 'hello@leemansoftware.com';
 
 export type Product = {
   slug: string;

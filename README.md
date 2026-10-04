@@ -37,9 +37,4 @@ The Wallyt policy pages describe what the app actually does (checked against the
 
 ## Email
 
-Every address on the site forwards to one inbox through Cloudflare Email Routing (Email → Email Routing → enable, then add each address):
-
-- `hello@leemansoftware.com`: general and press
-- `support@leemansoftware.com`: Wallyt help, and the public developer email on Google Play
-- `privacy@leemansoftware.com`: data and deletion requests
-- `dev@leemansoftware.com`: the Google account that owns the Play developer account
+The site uses one address, `hello@leemansoftware.com`, for everything: questions, Wallyt support, privacy and deletion requests. It's also the public developer email on Google Play and the address of the Google account that owns the Play developer account. Forward it to your inbox with Cloudflare Email Routing (Email → Email Routing → enable, then add the address). The address lives in `src/site.ts`.

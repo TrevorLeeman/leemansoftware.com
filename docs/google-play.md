@@ -7,7 +7,7 @@ Everything the Play Console asks for that this site answers, and what still has 
 | Console field | Value |
 |---|---|
 | Developer website | https://leemansoftware.com |
-| Developer email (public) | support@leemansoftware.com |
+| Developer email (public) | hello@leemansoftware.com |
 | App > Privacy policy | https://leemansoftware.com/wallyt/privacy |
 | Data safety > Delete account URL | https://leemansoftware.com/wallyt/delete-account |
 | Store listing > Website | https://leemansoftware.com/wallyt |
