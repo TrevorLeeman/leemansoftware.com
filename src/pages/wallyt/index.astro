@@ -1,4 +1,5 @@
 ---
+import { url } from '../../url';
 import Base from '../../layouts/Base.astro';
 import { email } from '../../site';
 
@@ -52,7 +53,7 @@ const features = [
       <div>
         <p class="badge soon">coming soon to Google Play</p>
         <h1 class="title">
-          <img class="app-icon" src="/products/wallyt.webp" alt="" width="72" height="72" />
+          <img class="app-icon" src={url('/products/wallyt.webp')} alt="" width="72" height="72" />
           Wallyt
         </h1>
         <p class="lede">
@@ -67,9 +68,9 @@ const features = [
       </div>
       <figure class="phone">
         <picture>
-          <source srcset="/shots/wallyt-dark.webp" media="(prefers-color-scheme: dark)" />
+          <source srcset={url('/shots/wallyt-dark.webp')} media="(prefers-color-scheme: dark)" />
           <img
-            src="/shots/wallyt-light.webp"
+            src={url('/shots/wallyt-light.webp')}
             alt="Wallyt's home screen for a ski trip group: Cara owes you $202.15, with Add expense and Settle up buttons above a list of the trip's expenses."
             width="320"
             height="693"
@@ -107,7 +108,7 @@ const features = [
           { href: '/wallyt/delete-account', title: 'Delete your account', body: 'How to delete your Wallyt account and what happens to your data.' },
         ].map((l) => (
           <li>
-            <a href={l.href}>
+            <a href={url(l.href)}>
               <span class="link-title">{l.title}</span>
               <span class="link-body">{l.body}</span>
               <span class="path">

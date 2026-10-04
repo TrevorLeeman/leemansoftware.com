@@ -28,12 +28,14 @@ mise run check        # type-check and build into dist/
 
 The Wallyt policy pages describe what the app actually does (checked against the Wallyt repo on 2026-10-02). When Wallyt's data handling changes, update them and their "Last updated" date in the same change.
 
-## Deploy (Cloudflare Pages)
+## Deploy (GitHub Pages)
 
-1. Cloudflare dashboard → Workers & Pages → Create → Pages → connect this repo.
-2. Framework preset **Astro**, build command `pnpm build`, output directory `dist`, environment variable `NODE_VERSION=24`.
-3. Custom domains: `leemansoftware.com`, and `www.leemansoftware.com` redirected to it.
-4. `public/_headers` sets the security headers and long-lived caching for hashed assets.
+Every push to `main` builds and deploys the site with `.github/workflows/deploy.yml`.
+
+- Until a custom domain is set, the site is at `https://trevorleeman.github.io/leemansoftware.com/`. The workflow passes that subpath to the build as `BASE_PATH`, and every link goes through `url()` in `src/url.ts`, so nothing breaks there. Write new internal links as `url('/path')`, never a bare `/path`.
+- To move to `leemansoftware.com`, add it under Settings → Pages → Custom domain and point DNS at GitHub Pages: an `ALIAS`/flattened `CNAME` (or the four `A` records) for the apex and a `CNAME` for `www`. Then turn on Enforce HTTPS. The next deploy builds for the root automatically.
+- GitHub Pages can't set response headers, so there's no CSP or HSTS header beyond what GitHub sends. The site loads nothing from other origins and runs one small script (`public/site.js`).
+- `public/.nojekyll` is there so a branch-based Pages setup would still publish the `_astro/` folder; the workflow deploy doesn't need it.
 
 ## Email
 

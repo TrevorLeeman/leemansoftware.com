@@ -1,3 +1,5 @@
+import { url } from './url';
+
 // Facts that appear on more than one page. Change them here, not in the pages.
 
 export const company = {
@@ -51,12 +53,12 @@ export const products: Product[] = [
     status: 'live',
     href: 'https://www.osrs.exchange',
     external: true,
-    icon: '/products/osrs-exchange.webp',
+    icon: url('/products/osrs-exchange.webp'),
     color: '#4f46e5',
     shot: {
-      src: '/shots/osrs-exchange.webp',
-      small: '/shots/osrs-exchange-800.webp',
-      large: '/shots/osrs-exchange-2400.webp',
+      src: url('/shots/osrs-exchange.webp'),
+      small: url('/shots/osrs-exchange-800.webp'),
+      large: url('/shots/osrs-exchange-2400.webp'),
       width: 1600,
       height: 925,
       frame: 'browser',
@@ -73,12 +75,12 @@ export const products: Product[] = [
     status: 'live',
     href: 'https://www.rs3.exchange',
     external: true,
-    icon: '/products/rs3-exchange.webp',
+    icon: url('/products/rs3-exchange.webp'),
     color: '#047857',
     shot: {
-      src: '/shots/rs3-exchange.webp',
-      small: '/shots/rs3-exchange-800.webp',
-      large: '/shots/rs3-exchange-2400.webp',
+      src: url('/shots/rs3-exchange.webp'),
+      small: url('/shots/rs3-exchange-800.webp'),
+      large: url('/shots/rs3-exchange-2400.webp'),
       width: 1600,
       height: 925,
       frame: 'browser',
@@ -93,13 +95,13 @@ export const products: Product[] = [
       'Split rent, trips and dinners with the people you share them with. Everyone sees the same balances, in any currency, and settles up in as few payments as possible.',
     platforms: 'Android',
     status: 'soon',
-    href: '/wallyt',
+    href: url('/wallyt'),
     external: false,
-    icon: '/products/wallyt.webp',
+    icon: url('/products/wallyt.webp'),
     color: '#0f766e',
     shot: {
-      src: '/shots/wallyt-light.webp',
-      dark: '/shots/wallyt-dark.webp',
+      src: url('/shots/wallyt-light.webp'),
+      dark: url('/shots/wallyt-dark.webp'),
       width: 640,
       height: 1386,
       frame: 'phone',

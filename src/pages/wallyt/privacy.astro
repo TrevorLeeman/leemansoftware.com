@@ -1,4 +1,5 @@
 ---
+import { url } from '../../url';
 import Doc from '../../layouts/Doc.astro';
 import { company, email } from '../../site';
 ---
@@ -174,7 +175,7 @@ import { company, email } from '../../site';
     address stay with that group’s past expenses, so everyone else’s balances remain correct.
   </p>
   <p>
-    When you delete your account, we delete it within 30 days. See <a href="/wallyt/delete-account">Delete your Wallyt account</a> for exactly what is removed and
+    When you delete your account, we delete it within 30 days. See <a href={url('/wallyt/delete-account')}>Delete your Wallyt account</a> for exactly what is removed and
     what stays with your groups.
   </p>
 
@@ -202,7 +203,7 @@ import { company, email } from '../../site';
       emailing <a href={`mailto:${email}`}>{email}</a> from the email address you
       sign in with.
     </li>
-    <li>You can delete your account. See <a href="/wallyt/delete-account">Delete your Wallyt account</a>.</li>
+    <li>You can delete your account. See <a href={url('/wallyt/delete-account')}>Delete your Wallyt account</a>.</li>
   </ul>
   <p>
     Depending on where you live, privacy laws such as the California Consumer Privacy Act or the GDPR

@@ -1,5 +1,6 @@
 ---
 import Base from './Base.astro';
+import { url } from '../url';
 
 interface Props {
   title: string;
@@ -37,7 +38,7 @@ const hasToc = headings.length >= 4;
     <header class="doc-head">
       {
         eyebrowHref ? (
-          <a class="label crumb" href={eyebrowHref}>{eyebrow.toLowerCase()}</a>
+          <a class="label crumb" href={url(eyebrowHref)}>{eyebrow.toLowerCase()}</a>
         ) : (
           <p class="label">{eyebrow.toLowerCase()}</p>
         )
