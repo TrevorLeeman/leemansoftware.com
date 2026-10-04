@@ -9,6 +9,8 @@ export const company = {
   url: 'https://leemansoftware.com',
   /** What the studio does, after its name in the home page's search result. */
   tagline: 'Web and Android apps, built end to end',
+  /** The year the studio's first product, OSRS Exchange, was started. */
+  since: 2022,
 };
 
 // The one address for everything: questions, Wallyt help and privacy requests.
@@ -26,6 +28,9 @@ export const organization = {
   url: `${company.url}/`,
   email,
   logo: { '@type': 'ImageObject', url: `${company.url}/apple-touch-icon.png`, width: 180, height: 180 },
+  numberOfEmployees: { '@type': 'QuantitativeValue', value: 1 },
+  knowsAbout: ['Web applications', 'Android apps', 'React Native', 'Next.js', 'NestJS', 'Stripe subscriptions', 'Discord bots', 'Real-time market data'],
+  makesOffer: { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Web and Android app development, from design to production' } },
 };
 
 export const organizationRef = { '@id': organization['@id'] };
@@ -83,7 +88,7 @@ export const products: Product[] = [
     slug: 'osrs-exchange',
     name: 'OSRS Exchange',
     summary:
-      'Live Grand Exchange prices for Old School RuneScape, with margins, tax and profit worked out for every item as trades happen.',
+      'Live Grand Exchange prices for Old School RuneScape, trusted by 364,000+ traders. Margins after tax for every item, price alerts on Discord and email, and Premium billed through Stripe.',
     platforms: 'Web',
     status: 'live',
     href: url('/osrs-exchange'),
@@ -115,7 +120,7 @@ export const products: Product[] = [
     slug: 'rs3-exchange',
     name: 'RS3 Exchange',
     summary:
-      'The same live market for RuneScape 3, with years of price history behind every item.',
+      'Live Grand Exchange prices for RuneScape 3, on the same platform as OSRS Exchange, with five years of daily history behind every item and no ads.',
     platforms: 'Web',
     status: 'live',
     href: url('/rs3-exchange'),
@@ -147,7 +152,7 @@ export const products: Product[] = [
     slug: 'wallyt',
     name: 'Wallyt',
     summary:
-      'Split rent, trips and dinners with the people you share them with. Everyone sees the same balances, in any currency, and settles up in as few payments as possible.',
+      'Split rent, trips and dinners with the people you share them with. Everyone sees the same balances as they change, in any of 161 currencies, and settles up in as few payments as possible.',
     platforms: 'Android',
     status: 'soon',
     href: url('/wallyt'),
@@ -176,3 +181,28 @@ export const products: Product[] = [
 ];
 
 export const product = (slug: string) => products.find((p) => p.slug === slug)!;
+
+/**
+ * The scale of what the studio runs, as one developer. Checked against the products' repos on
+ * 2026-10-04: commits are OSRS/RS3 Exchange's main branch plus Wallyt's, tests are counted test
+ * cases across both. Round down when they change, never up.
+ */
+export const scale = [
+  { value: '364,000+', label: 'traders on OSRS Exchange' },
+  { value: '3', label: 'products, one developer' },
+  { value: '2,900+', label: 'commits since 2022' },
+  { value: '4,500+', label: 'automated tests' },
+];
+
+/** The outside services the products run on in production (Wallyt's are built and tested). */
+export const integrations = [
+  { title: 'Stripe', body: 'Premium subscriptions for both Exchange sites: checkout, automatic sales tax, renewals and a portal to change or cancel.' },
+  { title: 'Google', body: 'Sign-in on the web and on Android, through One Tap and Android’s own account sheet.' },
+  { title: 'Discord', body: 'Accounts linked through Discord, price alerts sent by direct message, and Premium roles kept in step with each subscription.' },
+  { title: 'RuneScape Wiki', body: 'Real-time Grand Exchange prices for both games, picked up the moment the Wiki refreshes them.' },
+  { title: 'WeirdGloop', body: 'Years of official daily Grand Exchange history, backfilled for every item in both games.' },
+  { title: 'Amazon SES and Postmark', body: 'Account email, price alerts and newsletters, with bounces and unsubscribes respected automatically.' },
+  { title: 'Cloudflare', body: 'In front of every site, with Turnstile keeping bots out of sign-up.' },
+  { title: 'Frankfurter', body: 'Central-bank exchange rates for Wallyt’s 161 currencies, with a fallback source and every rate kept.' },
+  { title: 'Sentry', body: 'Errors from browsers and servers reported as they happen, with what’s needed to fix them.' },
+];

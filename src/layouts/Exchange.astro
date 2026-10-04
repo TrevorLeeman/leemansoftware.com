@@ -9,7 +9,7 @@ import Stats from '../components/Stats.astro';
 import Questions from '../components/Questions.astro';
 import { company, organizationRef, type Product } from '../site';
 
-type Point = { title: string; body: string };
+type Point = { title: string; body: string; href?: string };
 
 interface Props {
   product: Product;
@@ -19,7 +19,7 @@ interface Props {
   lede: string;
   /** What players use it for. */
   features: Point[];
-  /** Numbers that show the scale of what we built. */
+  /** Numbers that show the scale of what the studio built. */
   stats: { value: string; label: string }[];
   /** How it's built. */
   built: Point[];
@@ -68,7 +68,8 @@ const host = new URL(site).hostname.replace(/^www\./, '');
 
   <section class="wrap section" id="built" aria-labelledby="built-title">
     <SectionHead title="Live data, at scale" id="built-title">
-      {company.brand} designs, builds and runs {p.name}, from the price pipeline to the charts.
+      {p.name} is designed, built and run by {company.brand}, a one-developer studio: the price
+      pipeline, the charts, accounts, payments, alerts and the servers they run on.
     </SectionHead>
     <Stats stats={stats} />
     <FeatureGrid features={built} />

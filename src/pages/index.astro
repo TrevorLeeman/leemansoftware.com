@@ -1,19 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
 import Product from '../components/Product.astro';
-import { email, products } from '../site';
+import SectionHead from '../components/SectionHead.astro';
+import Stats from '../components/Stats.astro';
+import FeatureGrid from '../components/FeatureGrid.astro';
+import { company, email, integrations, products, scale } from '../site';
+
+// What running three products alone takes, checked against the products' repos on 2026-10-04.
+const stack = [
+  { title: 'Live around the clock', body: 'Prices for two games come in every minute, alerts are checked every 6 seconds, and 11 scheduled jobs keep history, trends and subscriptions in order.' },
+  { title: 'Tested before it ships', body: 'Thousands of automated tests, from tax rules and payments to end-to-end runs on web, Android and iOS builds, run before a change goes out.' },
+  { title: 'Servers I run myself', body: 'Every product runs on servers I set up and look after, with PostgreSQL, Docker and Cloudflare, so when something breaks I can see it and fix it.' },
+];
 ---
 
 <Base
-  description="We design, build and run web and Android apps: OSRS Exchange and RS3 Exchange, used by 364,000+ RuneScape traders, and Wallyt for splitting shared costs."
+  description="One developer, 364,000+ traders: Leeman Software builds and runs OSRS Exchange, RS3 Exchange and Wallyt, with Stripe, Google and Discord built in."
 >
   <section class="intro wrap">
     <h1 class="title">
-      Small, focused software <span>for the web and Android.<i class="cursor" aria-hidden="true"></i></span>
+      Built by one developer. <span>Used by 364,000+ traders.<i class="cursor" aria-hidden="true"></i></span>
     </h1>
     <p class="lede">
-      We design, build and run our own products, end to end: live market tools used by 364,000+
-      RuneScape traders, and Wallyt, an app for splitting shared costs.
+      {company.brand} is one developer who designs, builds and runs every part of three products: OSRS
+      Exchange and RS3 Exchange, live Grand Exchange markets for RuneScape players, and Wallyt, an app
+      for splitting shared costs. The payments, sign-in, alerts and servers behind them are my work too.
     </p>
   </section>
 
@@ -21,11 +32,29 @@ import { email, products } from '../site';
     {products.map((p, i) => <Product product={p} flip={i % 2 === 1} eager={i === 0} />)}
   </section>
 
+  <section id="scale" class="wrap section" aria-labelledby="scale-title">
+    <SectionHead title="One person, the whole stack" id="scale-title">
+      Since {company.since} I’ve written every line, run every server and answered every support
+      email. This is what that adds up to.
+    </SectionHead>
+    <Stats stats={scale} />
+    <FeatureGrid features={stack} />
+  </section>
+
+  <section id="integrations" class="wrap section" aria-labelledby="integrations-title">
+    <SectionHead title="Connected to the platforms people already use" id="integrations-title">
+      Real products lean on real services. These are wired into the products today, each doing a job
+      people rely on, and I can wire them into yours.
+    </SectionHead>
+    <FeatureGrid features={integrations} />
+  </section>
+
   <section id="contact" class="contact wrap" aria-labelledby="contact-title">
-    <h2 class="title" id="contact-title">Work with us</h2>
+    <h2 class="title" id="contact-title">Work with me</h2>
     <p class="lede">
-      We take on a few projects a year: web apps, Android apps and the backends behind them, from the
-      first sketch to launch.
+      I take on a few projects a year: web apps, Android apps, and the payments, sign-in and servers
+      behind them, from the first sketch to running in production. You work directly with the person
+      writing the code.
     </p>
     <p class="addr">
       <a href={`mailto:${email}`}>{email}</a>
@@ -53,6 +82,13 @@ import { email, products } from '../site';
     color: var(--muted);
   }
 
+  /* Each line of the headline stays whole wherever it fits on one line. */
+  @media (min-width: 900px) {
+    .intro h1 span {
+      white-space: nowrap;
+    }
+  }
+
   .intro .lede {
     max-width: 34em;
   }
@@ -61,6 +97,10 @@ import { email, products } from '../site';
   .products {
     display: grid;
     gap: clamp(88px, 10vw, 152px);
+  }
+
+  .section {
+    padding-top: clamp(112px, 14vw, 200px);
   }
 
   .contact {

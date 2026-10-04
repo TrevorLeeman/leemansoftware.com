@@ -21,10 +21,14 @@ const features = [
   { title: 'No passwords', body: 'Sign in with a code sent to your email, or with Google.' },
 ];
 
+// Checked against the Wallyt repo (docs/decisions.md, its tests) on 2026-10-04.
 const built = [
-  { title: 'One codebase, Android and web', body: 'Built with React Native and Expo, so the app and its web version share every screen.' },
+  { title: 'Exact to the cent', body: 'Amounts are stored as whole cents, never rounded floats, and leftover cents from an uneven split stay with the same people when the expense is edited.' },
+  { title: 'Rates that don’t move', body: 'Each expense keeps the central-bank rate it was added at, so a balance someone has settled never shifts later.' },
   { title: 'Live for everyone', body: 'A change one person makes shows up on everyone else’s screen as it happens.' },
-  { title: 'Money maths that adds up', body: 'Exchange rates are saved with each expense, so every balance adds up to the cent.' },
+  { title: 'Nothing lost by accident', body: 'Deleting an expense or removing someone can be undone, and every change to an expense is kept in its history.' },
+  { title: 'Tested on every platform', body: '900+ automated tests, with end-to-end runs on Android, iOS and web builds against a real server.' },
+  { title: 'One codebase, Android and web', body: 'Built with React Native and Expo, so the app and its web version share every screen.' },
 ];
 
 const policies = [
@@ -77,7 +81,8 @@ const policies = [
 
   <section class="wrap section" id="built" aria-labelledby="built-title">
     <SectionHead title="Built to be trusted with money" id="built-title">
-      {company.brand} designs, builds and runs Wallyt, from the app to the servers behind it.
+      Wallyt is designed, built and run by {company.brand}, the one-developer studio behind OSRS
+      Exchange, from the app to the server it syncs with.
     </SectionHead>
     <FeatureGrid features={built} />
   </section>

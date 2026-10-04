@@ -1,7 +1,8 @@
 ---
-// Short points side by side: a title and a sentence each.
+// Short points side by side: a title and a sentence each. A title with an href links to the thing
+// it describes, such as a product's tool.
 interface Props {
-  features: { title: string; body: string }[];
+  features: { title: string; body: string; href?: string }[];
 }
 
 const { features } = Astro.props;
@@ -13,7 +14,7 @@ const columns = features.length === 4 ? 4 : 3;
   {
     features.map((f) => (
       <li>
-        <h3>{f.title}</h3>
+        <h3>{f.href ? <a href={f.href} rel="noopener">{f.title}</a> : f.title}</h3>
         <p>{f.body}</p>
       </li>
     ))
@@ -35,6 +36,14 @@ const columns = features.length === 4 ? 4 : 3;
     font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.015em;
+  }
+
+  h3 a {
+    text-decoration-color: var(--rule-strong);
+  }
+
+  h3 a:hover {
+    text-decoration-color: var(--accent);
   }
 
   p {

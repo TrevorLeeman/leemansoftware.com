@@ -31,7 +31,7 @@ mise run check        # type-check and build into dist/
 | `src/pages/wallyt/delete-account.astro` | Wallyt account deletion (Play: delete account URL) |
 | `src/pages/wallyt/support.astro` | Wallyt support |
 | `src/pages/privacy.astro` | Privacy notice for this website |
-| `src/site.ts` | Company name, email address, and each product with its subsite's nav and footer |
+| `src/site.ts` | Company name, email address, each product with its subsite's nav and footer, and the studio's scale numbers and integrations (checked against the products' repos; round down, never up) |
 | `src/components/` | Studio and product headers and footers, and the sections subsites are built from |
 | `public/og/<slug>.png` | Each subsite's link-preview card (1200×630), in the style of the studio's `public/og.png` |
 | `src/pages/sitemap.xml.ts`, `src/pages/llms.txt.ts` | The sitemap, and a plain-text summary of the studio for AI assistants, built from `src/site.ts`. Add new pages to both |
