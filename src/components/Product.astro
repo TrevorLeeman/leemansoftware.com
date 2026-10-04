@@ -1,0 +1,255 @@
+---
+// One product: its icon and name, what it does, and a real screen from it.
+import type { Product } from '../site';
+
+interface Props {
+  product: Product;
+  /** The `sizes` hint for the screenshot, matching where this block sits in the layout. */
+  sizes: string;
+  eager?: boolean;
+  id?: string;
+}
+
+const { product: p, sizes, eager = false, id } = Astro.props;
+const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
+const linkProps = p.external ? { rel: 'noopener' } : {};
+const loading = eager ? 'eager' : 'lazy';
+---
+
+<article id={id ?? p.slug} class:list={['product', p.shot.frame, { featured: p.featured }]} style={`--brand: ${p.color}`}>
+  <div class="info">
+    <div class="head">
+      <img class:list={['icon', { pixel: p.slug !== 'wallyt' }]} src={p.icon} alt="" width="44" height="44" loading={loading} />
+      <h2 class="name"><a href={p.href} {...linkProps}>{p.name}</a></h2>
+    </div>
+    <div class="about">
+      <p class="summary">{p.summary}</p>
+      <p class="meta">
+        <span class:list={['badge', p.status]}>{p.status === 'live' ? 'live' : 'coming soon'}</span>
+        <span>{p.platforms.toLowerCase()}</span>
+        <a class="go" href={p.href} {...linkProps}>
+          {p.external ? host(p.href) : `About ${p.name}`}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            {p.external ? <path d="M7 17 17 7M8 7h9v9" /> : <path d="M5 12h14M13 6l6 6-6 6" />}
+          </svg>
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <a class="screen" href={p.shot.url ?? p.href} tabindex="-1" aria-hidden="true" {...linkProps}>
+    {
+      p.shot.frame === 'browser' && (
+        <span class="chrome">
+          <i />
+          <i />
+          <i />
+          <span class="url">{p.shot.url ? p.shot.url.replace(/^https:\/\/(www\.)?/, '') : host(p.href)}</span>
+        </span>
+      )
+    }
+    <picture>
+      {p.shot.dark && <source srcset={p.shot.dark} media="(prefers-color-scheme: dark)" />}
+      <img
+        src={p.shot.src}
+        srcset={p.shot.small ? `${p.shot.small} 800w, ${p.shot.src} ${p.shot.width}w${p.shot.large ? `, ${p.shot.large} 2360w` : ''}` : undefined}
+        sizes={p.shot.small ? sizes : undefined}
+        width={p.shot.width}
+        height={p.shot.height}
+        alt={p.shot.alt}
+        loading={loading}
+        decoding="async"
+      />
+    </picture>
+  </a>
+</article>
+
+<style>
+  .product {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    align-content: start;
+    gap: clamp(20px, 2.2vw, 32px);
+    min-width: 0;
+  }
+
+  .info {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .icon {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+
+  .icon.pixel {
+    image-rendering: pixelated;
+  }
+
+  .name {
+    margin: 0;
+    font-size: clamp(26px, 2.4vw, 40px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+
+  .name a {
+    text-decoration: none;
+  }
+
+  .about {
+    display: grid;
+    gap: 10px;
+  }
+
+  .summary {
+    margin: 0;
+    max-width: 36em;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .go {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-family: var(--sans);
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .go svg {
+    color: var(--brand);
+    transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .go:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--brand);
+  }
+
+  .go:hover svg {
+    transform: translateX(3px);
+  }
+
+  .browser .go:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  .screen {
+    display: block;
+    align-self: start;
+    text-decoration: none;
+    transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .product:hover .screen {
+    transform: translateY(-4px);
+  }
+
+  .screen img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Web products sit in a slim browser outline showing the page the screen came from. */
+  .browser .screen {
+    overflow: hidden;
+    border: 1px solid var(--rule-strong);
+    border-radius: 12px;
+    background: #0b0b0c;
+    box-shadow: 0 40px 80px -50px color-mix(in srgb, var(--brand) 80%, transparent);
+  }
+
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    background: #141416;
+  }
+
+  .chrome i {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  .url {
+    flex: 1;
+    min-width: 0;
+    margin-right: 39px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: rgb(255 255 255 / 0.55);
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Wallyt sits in a plain phone outline. */
+  .phone .screen {
+    width: min(100%, 320px);
+    padding: 8px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 38px;
+    background: var(--surface);
+    box-shadow: 0 40px 80px -48px color-mix(in srgb, var(--brand) 80%, transparent);
+  }
+
+  .phone .screen img {
+    aspect-ratio: 390 / 560;
+    border-radius: 30px;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  /* The featured product gets a larger name, with what it does beside it on wide screens. */
+  .featured .name {
+    font-size: clamp(30px, 3vw, 52px);
+  }
+
+  @media (min-width: 700px) {
+    .featured .info {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: end;
+      column-gap: clamp(28px, 4vw, 64px);
+    }
+
+    .featured .summary {
+      font-size: 17px;
+    }
+  }
+</style>

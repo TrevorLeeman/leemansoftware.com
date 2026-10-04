@@ -23,7 +23,8 @@
 
   --gutter: clamp(16px, 4vw, 32px);
   --measure: 68ch;
-  --wide: 1200px;
+  /* Content width grows with the screen, so big displays get more room, not bigger margins. */
+  --wide: clamp(1200px, 84vw, 1760px);
   --radius: 12px;
 }
 
@@ -429,22 +430,9 @@ main .hero + .section {
   padding-top: clamp(12px, 3vw, 32px);
 }
 
-/* Big screens: scale the whole page instead of stretching it, so 1440p and 4K read like a
-   laptop at a comfortable distance rather than a narrow column in a sea of background. */
-@media (min-width: 2000px) {
+/* A 4K screen at 100% scaling: enlarge the page a little so text stays readable. */
+@media (min-width: 3000px) {
   html {
-    zoom: 1.25;
-  }
-}
-
-@media (min-width: 2400px) {
-  html {
-    zoom: 1.4;
-  }
-}
-
-@media (min-width: 3200px) {
-  html {
-    zoom: 2;
+    zoom: 1.5;
   }
 }
