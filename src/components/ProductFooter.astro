@@ -1,0 +1,49 @@
+---
+// A product subsite's footer: the product's own links and policies, then the studio that makes it.
+import { url } from '../url';
+import { company, email, type Product } from '../site';
+import Stamp from './Stamp.astro';
+
+interface Props {
+  product: Product;
+}
+
+const { product: p } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="wrap foot">
+    <a class="brand" href={p.href} aria-label={`${p.name}, home`}>
+      <img class:list={['product-icon', { pixel: p.pixelIcon }]} src={p.icon} alt="" width="22" height="22" loading="lazy" />
+      <span class="wordmark">{p.name}</span>
+    </a>
+    <ul class="foot-links">
+      {p.footer.map((l) => <li><a href={l.href} rel={l.external ? 'noopener' : undefined}>{l.label}</a></li>)}
+      <li><a href={`mailto:${email}`}>{email}</a></li>
+    </ul>
+  </div>
+
+  <div class="wrap">
+    <div class="fine">
+      <p>
+        {p.name} is made by <a href={url('/')}>{company.brand}</a>. &copy; {new Date().getFullYear()} {company.legalName}.
+        <Stamp />
+      </p>
+      {p.notice && <p>{p.notice}</p>}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .product-icon {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+
+  .product-icon.pixel {
+    image-rendering: pixelated;
+  }
+</style>

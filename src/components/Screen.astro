@@ -1,0 +1,127 @@
+---
+// A real screen from a product: a browser outline for the web products, a phone outline for Wallyt.
+import type { Product } from '../site';
+
+interface Props {
+  product: Product;
+  /** The `sizes` hint for the screenshot, matching where it sits in the layout. */
+  sizes: string;
+  eager?: boolean;
+  /** Where the screen links. Without one it is a plain figure. */
+  href?: string;
+  class?: string;
+  /** Show only the light or the dark screen, whatever the viewer's theme. */
+  scheme?: 'light' | 'dark';
+  /** Marks a second copy of a screen already described, so screen readers skip it. */
+  decorative?: boolean;
+}
+
+const { product: p, sizes, eager = false, href, class: className, scheme, decorative = false } = Astro.props;
+const shot = p.shot;
+const loading = eager ? 'eager' : 'lazy';
+const host = (link: string) => new URL(link).hostname.replace(/^www\./, '');
+const external = href?.startsWith('http');
+const Tag = href ? 'a' : 'figure';
+const linkProps = href ? { href, tabindex: '-1', 'aria-hidden': 'true', ...(external ? { rel: 'noopener' } : {}) } : {};
+---
+
+<Tag class:list={['screen', shot.frame, className]} style={`--brand: ${p.color}`} {...linkProps}>
+  {
+    shot.frame === 'browser' && (
+      <span class="chrome">
+        <i />
+        <i />
+        <i />
+        <span class="url">{shot.url ? shot.url.replace(/^https:\/\/(www\.)?/, '') : p.site && host(p.site)}</span>
+      </span>
+    )
+  }
+  <picture>
+    {shot.dark && !scheme && <source srcset={shot.dark} media="(prefers-color-scheme: dark)" />}
+    <img
+      src={scheme === 'dark' && shot.dark ? shot.dark : shot.src}
+      srcset={shot.small ? `${shot.small} 800w, ${shot.src} ${shot.width}w${shot.large ? `, ${shot.large} 2360w` : ''}` : undefined}
+      sizes={shot.small ? sizes : undefined}
+      width={shot.width}
+      height={shot.height}
+      alt={decorative ? '' : shot.alt}
+      loading={loading}
+      decoding="async"
+    />
+  </picture>
+</Tag>
+
+<style>
+  .screen {
+    display: block;
+    margin: 0;
+    text-decoration: none;
+  }
+
+  .screen img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Web products sit in a slim browser outline showing the page the screen came from. */
+  .browser {
+    overflow: hidden;
+    border: 1px solid var(--rule-strong);
+    border-radius: 12px;
+    background: #0b0b0c;
+    box-shadow: 0 40px 80px -50px color-mix(in srgb, var(--brand) 80%, transparent);
+  }
+
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    background: #141416;
+  }
+
+  .chrome i {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  .url {
+    flex: 1;
+    min-width: 0;
+    margin-right: 39px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: rgb(255 255 255 / 0.55);
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Wallyt sits in a plain phone outline. */
+  .phone {
+    width: min(100%, 320px);
+    padding: 8px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 38px;
+    background: var(--surface);
+    box-shadow: 0 40px 80px -48px color-mix(in srgb, var(--brand) 80%, transparent);
+  }
+
+  .phone img {
+    border-radius: 30px;
+  }
+
+  /* A cropped phone shows the top of the screen, enough to read it, in less height. */
+  .phone.cropped img {
+    aspect-ratio: 390 / 560;
+    object-fit: cover;
+    object-position: top;
+  }
+</style>

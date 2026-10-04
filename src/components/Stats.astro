@@ -1,0 +1,49 @@
+---
+// A few numbers that show what a product does at its scale: a large figure over a short label.
+interface Props {
+  stats: { value: string; label: string }[];
+}
+
+const { stats } = Astro.props;
+---
+
+<dl class="stats">
+  {
+    stats.map((s) => (
+      <div>
+        <dt>{s.label}</dt>
+        <dd>{s.value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 24px clamp(24px, 4vw, 48px);
+    margin: 0 0 clamp(40px, 5vw, 64px);
+  }
+
+  .stats div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 4px;
+  }
+
+  dd {
+    margin: 0;
+    font-size: clamp(32px, 3.6vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  dt {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+</style>

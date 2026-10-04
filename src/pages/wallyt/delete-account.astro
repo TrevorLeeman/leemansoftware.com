@@ -1,7 +1,7 @@
 ---
 import { url } from '../../url';
 import Doc from '../../layouts/Doc.astro';
-import { company, email } from '../../site';
+import { company, email, product } from '../../site';
 
 const subject = encodeURIComponent('Delete my Wallyt account');
 const body = encodeURIComponent(
@@ -14,7 +14,7 @@ const body = encodeURIComponent(
   eyebrow="Wallyt"
   eyebrowHref="/wallyt"
   meta={`Wallyt, by ${company.brand}`}
-  section="wallyt"
+  product={product('wallyt')}
   description="How to delete your Wallyt account, what is deleted, and what stays with your groups."
 >
   <p>
@@ -74,7 +74,10 @@ const body = encodeURIComponent(
 
   <h2>Deleting some data without closing your account</h2>
   <ul>
-    <li>Remove or change your photo and name in Wallyt, from Account.</li>
+    <li>
+      Remove or change your photo and name in Wallyt, from Account, or for one group from your own row
+      in its settings.
+    </li>
     <li>Leave a group from its settings. Its past expenses keep your name, as described above.</li>
     <li>
       To have something else removed, such as a photo someone added of you or an expense, email <a href={`mailto:${email}`}>{email}</a> and tell us what it is.

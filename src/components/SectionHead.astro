@@ -1,0 +1,34 @@
+---
+// A section's opening: a heading and an optional line of introduction.
+interface Props {
+  title: string;
+  id?: string;
+}
+
+const { title, id } = Astro.props;
+---
+
+<div class="head">
+  <h2 class="title" id={id}>{title}</h2>
+  {Astro.slots.has('default') && <p class="intro"><slot /></p>}
+</div>
+
+<style>
+  .head {
+    display: grid;
+    gap: 12px;
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+
+  h2 {
+    font-size: clamp(28px, 3.2vw, 40px);
+  }
+
+  .intro {
+    margin: 0;
+    max-width: 36em;
+    font-size: clamp(16px, 1.3vw, 18px);
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+</style>

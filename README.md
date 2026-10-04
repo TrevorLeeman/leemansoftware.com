@@ -1,6 +1,8 @@
 # leemansoftware.com
 
-The website of Leeman Software, the product studio of Leeman Group LLC: the studio's home page, Wallyt's page, and the pages Google Play needs for Wallyt (privacy policy, account deletion, support).
+The website of Leeman Software, the product studio of Leeman Group LLC: the studio's home page, and a subsite for each product. Wallyt's subsite has the pages Google Play needs (privacy policy, account deletion, support, terms).
+
+Each product's pages are its own subsite: `Base` takes a `product` and swaps the studio's header, footer, favicon and accent color for the product's. The studio's footer links only to the products' subsites, never to a product's policies. A product's nav and footer links live with it in `src/site.ts`.
 
 Static [Astro](https://astro.build) site with no client-side JavaScript, no cookies and no analytics. Fonts (Geist and Geist Mono) are self-hosted from npm, so the site makes no third-party requests.
 
@@ -17,16 +19,22 @@ mise run check        # type-check and build into dist/
 
 | Path | Page |
 |---|---|
-| `src/pages/index.astro` | Home: products, about, contact |
-| `src/pages/wallyt/index.astro` | Wallyt (coming soon) |
+| `src/pages/index.astro` | Home: products and contact |
+| `src/pages/osrs-exchange/index.astro` | OSRS Exchange subsite (content checked against osrs.exchange) |
+| `src/pages/rs3-exchange/index.astro` | RS3 Exchange subsite |
+| `src/layouts/Exchange.astro` | The page both Exchange subsites share |
+| `src/pages/wallyt/index.astro` | Wallyt subsite home (Play: store listing website) |
+| `src/pages/wallyt/terms.astro` | Wallyt terms of use |
 | `src/pages/wallyt/privacy.astro` | Wallyt privacy policy (Play: privacy policy URL) |
 | `src/pages/wallyt/delete-account.astro` | Wallyt account deletion (Play: delete account URL) |
 | `src/pages/wallyt/support.astro` | Wallyt support |
 | `src/pages/privacy.astro` | Privacy notice for this website |
-| `src/site.ts` | Company name, email addresses and the product list |
+| `src/site.ts` | Company name, email address, and each product with its subsite's nav and footer |
+| `src/components/` | Studio and product headers and footers, and the sections subsites are built from |
+| `public/og/<slug>.png` | Each subsite's link-preview card (1200×630), in the style of the studio's `public/og.png` |
 | `docs/google-play.md` | Console answers, Data safety draft, store listing draft, launch to-dos |
 
-The Wallyt policy pages describe what the app actually does (checked against the Wallyt repo on 2026-10-02). When Wallyt's data handling changes, update them and their "Last updated" date in the same change.
+The Wallyt pages describe what the app actually does (checked against the Wallyt repo on 2026-10-04). When Wallyt's data handling changes, update them and their "Last updated" date in the same change.
 
 ## Deploy (GitHub Pages)
 

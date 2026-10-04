@@ -1,0 +1,59 @@
+---
+// Short points side by side: a title and a sentence each.
+interface Props {
+  features: { title: string; body: string }[];
+}
+
+const { features } = Astro.props;
+// Four sit in one row of four rather than three and one left over.
+const columns = features.length === 4 ? 4 : 3;
+---
+
+<ul class="features" style={`--columns: ${columns}`}>
+  {
+    features.map((f) => (
+      <li>
+        <h3>{f.title}</h3>
+        <p>{f.body}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .features {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+    gap: 36px clamp(28px, 4vw, 56px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    .features {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .features {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+  }
+</style>

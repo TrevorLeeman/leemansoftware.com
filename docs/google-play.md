@@ -1,20 +1,46 @@
 # Wallyt on Google Play
 
-Everything the Play Console asks for that this site answers, and what still has to happen before the first release. Written 2026-10-02.
+Everything the Play Console asks for that this site answers, and what still has to happen before the first release. Written 2026-10-02, updated 2026-10-04.
+
+`/wallyt` is Wallyt's own subsite: its header, footer and colors are Wallyt's, and every Wallyt page links to its support, privacy policy, terms and account deletion. The studio's pages don't link to Wallyt's policies, only to `/wallyt`.
 
 ## Links to paste into the Console
 
 | Console field | Value |
 |---|---|
-| Developer website | https://leemansoftware.com |
-| Developer email (public) | hello@leemansoftware.com |
-| App > Privacy policy | https://leemansoftware.com/wallyt/privacy |
-| Data safety > Delete account URL | https://leemansoftware.com/wallyt/delete-account |
-| Store listing > Website | https://leemansoftware.com/wallyt |
+| Store settings > Store listing contact details > Website | https://leemansoftware.com/wallyt |
+| Store settings > Store listing contact details > Email | hello@leemansoftware.com |
+| App content > Privacy policy | https://leemansoftware.com/wallyt/privacy |
+| App content > Data safety > Delete account URL | https://leemansoftware.com/wallyt/delete-account |
+| Developer page > Website (optional) | https://leemansoftware.com |
+
+Google Cloud OAuth consent screen (Sign in with Google), Branding:
+
+| Field | Value |
+|---|---|
+| App name | Wallyt |
+| App home page | https://leemansoftware.com/wallyt |
+| Privacy policy | https://leemansoftware.com/wallyt/privacy |
+| Terms of service | https://leemansoftware.com/wallyt/terms |
+| Authorized domain | leemansoftware.com (verify it in Google Search Console first) |
+
+## What the website covers
+
+| Requirement | Where |
+|---|---|
+| Privacy policy: public, not a PDF, names the app and the developer, says what's collected, used and shared, how long it's kept and how to delete it | `/wallyt/privacy` |
+| Account deletion page: names the app and developer as on the store listing, gives the steps, says what's deleted and what's kept, and for how long | `/wallyt/delete-account` |
+| A way to contact the developer | Every Wallyt page's footer, `/wallyt/support`, `/wallyt#maker` |
+| OAuth home page: describes the app, links the privacy policy, on a verified domain | `/wallyt` |
+| Terms (OAuth consent screen, and a future App Store listing) | `/wallyt/terms`. A plain-language draft: have it reviewed, and add a governing-law clause if you want one |
+
+The deletion page shows "Wallyt, by Leeman Software". If the Play developer name is "Leeman Group LLC" instead, change that line (`meta` in `src/pages/wallyt/delete-account.astro`) to match it exactly.
+
+When Wallyt goes live, set its `status` to `'live'` in `src/site.ts`. Every "coming soon" line then becomes a Get it on Google Play link to `wallytPlayUrl`.
 
 ## Before the first upload
 
-These are in the Wallyt repo, not here, and the pages on this site assume them.
+These are in the Wallyt repo, not here, and the pages on this site assume them. None of them was done as of 2026-10-04.
 
 1. **In-app account deletion.** Play requires a way to delete the account from inside the app as well as the web page. Wallyt has none yet (no hook runs on user deletion either). Build it to do what `/wallyt/delete-account` promises:
    - delete the user record, its Google/Apple link and sessions;
@@ -26,7 +52,10 @@ These are in the Wallyt repo, not here, and the pages on this site assume them.
 3. **A sign-in path for Google's reviewers.** Sign-in is by emailed code, and a reviewer can't read the inbox. The App access form needs working credentials, for example one review account with a fixed code.
 4. **Production server and domain.** Deploy per `docs/deploy.md` in the Wallyt repo and build with `WALLYT_PRODUCTION_API_URL`.
 5. **Release signing.** Use EAS Build (or an upload keystore). Today's release build is signed with the debug key.
-6. **Smaller cleanups.** Turn off `usesCleartextTraffic` in production builds, and add `android.permission.SYSTEM_ALERT_WINDOW` to `blockedPermissions`.
+6. **Smaller cleanups.** Turn off `usesCleartextTraffic` in production builds, and add `android.permission.SYSTEM_ALERT_WINDOW` to `blockedPermissions`. The release manifest also asks for `USE_BIOMETRIC`, `USE_FINGERPRINT` and storage permissions up to Android 12: block what Wallyt doesn't use before filling in Data safety.
+7. **Server logs.** The privacy policy says server logs (with IP addresses) are deleted after a few days. Check the log retention in the production PocketBase admin (Settings > Logs) and keep it at a few days.
+8. **Sign in with Apple.** The privacy policy mentions it. If production won't have Apple configured, either is fine, but don't add the button without the server side.
+9. **Deleting an account in the database.** `expenses.created_by` and `imports.created_by` require a user, so deleting a user who has added anything will fail until those relations allow it (or the deletion hook clears them).
 
 ## Data safety answers (draft)
 
@@ -64,14 +93,14 @@ Re-check this table against the code before submitting if anything has changed.
 > Make a group for your apartment, a trip or a standing dinner and share one link to bring everyone in. Add people before they join, by name or from your contacts, and start splitting right away.
 >
 > • Split equally, by exact amounts, by percentage or by shares, with one person paying or several
-> • Any currency, converted at that day's exchange rate
+> • 161 currencies, converted at that day's exchange rate
 > • Simplify debts settles the whole group in as few payments as possible
 > • Repeating expenses for rent and subscriptions
 > • A full history of every change, and deletes you can undo
-> • Import your history from Splitwise
+> • Import from Splitwise or any spreadsheet, and export to CSV
 > • No passwords: sign in with an email code or with Google
 >
-> No ads. No tracking. Your data is never sold.
+> Free, with no ads. No tracking. Your data is never sold.
 
 - **Category:** Finance. **Tags:** expense splitting, bill splitting.
 - **Graphics:** 512×512 icon, 1024×500 feature graphic, 2 to 8 phone screenshots.

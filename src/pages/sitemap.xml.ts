@@ -1,7 +1,17 @@
 import type { APIRoute } from 'astro';
 import { company } from '../site';
 
-const paths = ['/', '/wallyt', '/wallyt/support', '/wallyt/privacy', '/wallyt/delete-account', '/privacy'];
+const paths = [
+  '/',
+  '/osrs-exchange',
+  '/rs3-exchange',
+  '/wallyt',
+  '/wallyt/support',
+  '/wallyt/privacy',
+  '/wallyt/terms',
+  '/wallyt/delete-account',
+  '/privacy',
+];
 
 export const GET: APIRoute = () =>
   new Response(

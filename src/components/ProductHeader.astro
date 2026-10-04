@@ -1,0 +1,112 @@
+---
+// A product subsite's header: the product's own name and links, with the studio credited beside it.
+import { url, withoutBase } from '../url';
+import { company, wallytPlayUrl, type Product } from '../site';
+
+interface Props {
+  product: Product;
+}
+
+const { product: p } = Astro.props;
+const path = withoutBase(Astro.url.pathname);
+const current = (href: string) => (withoutBase(href) === path ? 'page' : undefined);
+const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
+// The one action a visitor most likely came for: open the website, or get the app once it's out.
+const action = p.site
+  ? { label: 'Open', detail: host(p.site), href: p.site }
+  : p.status === 'live'
+    ? { label: 'Get it', detail: 'on Google Play', href: wallytPlayUrl }
+    : undefined;
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <div class="owner">
+      <a class="brand" href={p.href} aria-label={`${p.name}, home`}>
+        <img class:list={['product-icon', { pixel: p.pixelIcon }]} src={p.icon} alt="" width="28" height="28" />
+        <span class="wordmark">{p.name}</span>
+      </a>
+      <a class="by" href={url('/')}>by {company.brand}</a>
+    </div>
+    <nav aria-label={p.name}>
+      {p.nav.map((l) => <a class="optional" href={l.href} aria-current={current(l.href)}>{l.label}</a>)}
+      {
+        action && (
+          <a class="nav-action" href={action.href} rel="noopener">
+            {action.label}<span class="detail"> {action.detail}</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
+          </a>
+        )
+      }
+    </nav>
+  </div>
+</header>
+
+<style>
+  .owner {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .owner .brand {
+    align-self: center;
+  }
+
+  .product-icon {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+
+  .product-icon.pixel {
+    image-rendering: pixelated;
+  }
+
+  .by {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    text-decoration-color: transparent;
+  }
+
+  .by:hover {
+    color: var(--ink);
+    text-decoration-color: currentColor;
+  }
+
+  .nav-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 6px;
+    border: 1px solid var(--rule-strong);
+    white-space: nowrap;
+  }
+
+  .nav-action:hover {
+    border-color: var(--ink);
+    background: transparent;
+  }
+
+  .nav-action svg {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .by,
+    .detail {
+      display: none;
+    }
+  }
+
+  @media (max-width: 360px) {
+    nav a.optional:first-child:not([aria-current='page']) {
+      display: none;
+    }
+  }
+</style>

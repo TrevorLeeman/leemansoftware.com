@@ -1,95 +1,151 @@
 ---
-// One product: its icon and name, what it does, and a real screen from it.
+// One product on the home page: its name, what it does, a link to its subsite, and a real screen.
 import type { Product } from '../site';
+import Screen from './Screen.astro';
 
 interface Props {
   product: Product;
-  /** The `sizes` hint for the screenshot, matching where this block sits in the layout. */
-  sizes: string;
+  /** Puts the screen on the left, so rows alternate down the page. */
+  flip?: boolean;
   eager?: boolean;
-  id?: string;
 }
 
-const { product: p, sizes, eager = false, id } = Astro.props;
-const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
-const linkProps = p.external ? { rel: 'noopener' } : {};
-const loading = eager ? 'eager' : 'lazy';
+const { product: p, flip = false, eager = false } = Astro.props;
 ---
 
-<article id={id ?? p.slug} class:list={['product', p.shot.frame, { featured: p.featured }]} style={`--brand: ${p.color}`}>
+<article id={p.slug} class:list={['product', p.shot.frame, { flip }]} style={`--brand: ${p.color}`}>
   <div class="info">
-    <div class="head">
-      <img class:list={['icon', { pixel: p.slug !== 'wallyt' }]} src={p.icon} alt="" width="44" height="44" loading={loading} />
-      <h2 class="name"><a href={p.href} {...linkProps}>{p.name}</a></h2>
-    </div>
-    <div class="about">
-      <p class="summary">{p.summary}</p>
-      <p class="meta">
-        <span class:list={['badge', p.status]}>{p.status === 'live' ? 'live' : 'coming soon'}</span>
-        <span>{p.platforms.toLowerCase()}</span>
-        <a class="go" href={p.href} {...linkProps}>
-          {p.external ? host(p.href) : `About ${p.name}`}
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            {p.external ? <path d="M7 17 17 7M8 7h9v9" /> : <path d="M5 12h14M13 6l6 6-6 6" />}
-          </svg>
-        </a>
-      </p>
-    </div>
+    <h2 class="name">
+      <a href={p.href}>
+        <img class:list={['icon', { pixel: p.pixelIcon }]} src={p.icon} alt="" width="40" height="40" loading={eager ? 'eager' : 'lazy'} />
+        <span>{p.name}</span>
+      </a>
+    </h2>
+    <p class="summary">{p.summary}</p>
+    {p.status === 'soon' && <p class="status">Coming soon to Google Play</p>}
+    <a class="go" href={p.href}>
+      More about {p.name}
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14M13 6l6 6-6 6" />
+      </svg>
+    </a>
   </div>
 
-  <a class="screen" href={p.shot.url ?? p.href} tabindex="-1" aria-hidden="true" {...linkProps}>
+  <div class="stage">
     {
-      p.shot.frame === 'browser' && (
-        <span class="chrome">
-          <i />
-          <i />
-          <i />
-          <span class="url">{p.shot.url ? p.shot.url.replace(/^https:\/\/(www\.)?/, '') : host(p.href)}</span>
-        </span>
+      p.shot.frame === 'phone' && p.shot.dark ? (
+        // An app shows its light and dark screens side by side, at full height, filling the space a
+        // browser would.
+        <a class="phones" href={p.href} tabindex="-1" aria-hidden="true">
+          <Screen product={p} eager={eager} scheme="light" sizes="280px" />
+          <Screen product={p} eager={eager} scheme="dark" decorative sizes="280px" />
+        </a>
+      ) : (
+        <Screen product={p} eager={eager} href={p.href} sizes="(min-width: 3000px) 1500px, (min-width: 900px) 58vw, 100vw" />
       )
     }
-    <picture>
-      {p.shot.dark && <source srcset={p.shot.dark} media="(prefers-color-scheme: dark)" />}
-      <img
-        src={p.shot.src}
-        srcset={p.shot.small ? `${p.shot.small} 800w, ${p.shot.src} ${p.shot.width}w${p.shot.large ? `, ${p.shot.large} 2360w` : ''}` : undefined}
-        sizes={p.shot.small ? sizes : undefined}
-        width={p.shot.width}
-        height={p.shot.height}
-        alt={p.shot.alt}
-        loading={loading}
-        decoding="async"
-      />
-    </picture>
-  </a>
+  </div>
 </article>
 
 <style>
+  /*
+   * Text and screen hang from one shared top edge, like a caption beside its figure, so the eye
+   * reads the name and then drops straight into the screen beside it.
+   */
   .product {
     display: grid;
-    grid-template-rows: auto 1fr;
-    align-content: start;
-    gap: clamp(20px, 2.2vw, 32px);
-    min-width: 0;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+    gap: clamp(40px, 5vw, 88px);
+  }
+
+  .flip {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  .flip > .stage {
+    order: -1;
   }
 
   .info {
     display: grid;
-    align-content: start;
-    gap: 14px;
+    justify-items: start;
+    gap: 12px;
+    padding-top: 8px;
   }
 
-  .head {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+  /*
+   * The stage: a soft light in the product's color behind the screen, and a faint grid that fades
+   * out around it, so the screen sits in the page's space rather than on top of it.
+   */
+  .stage {
+    position: relative;
+    isolation: isolate;
+    perspective: 1800px;
+  }
+
+  .stage::before,
+  .stage::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .stage::before {
+    inset: -18% -12%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 30%, transparent), transparent);
+    filter: blur(24px);
+    opacity: 0.7;
+    transition: opacity 600ms ease;
+  }
+
+  .stage::after {
+    inset: -12% -8%;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(closest-side, #000 40%, transparent);
+    -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent);
+  }
+
+  .product:hover .stage::before {
+    opacity: 1;
+  }
+
+  .stage :global(.screen) {
+    box-shadow: 0 30px 70px -36px rgb(0 0 0 / 0.55);
+    transition: border-color 400ms ease;
+  }
+
+  .product:hover .stage :global(.screen) {
+    border-color: color-mix(in srgb, var(--brand) 55%, var(--rule-strong));
+  }
+
+  /* Two phones, the dark one a step lower, so they read as a pair rather than a grid. */
+  .phones {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 280px));
+    align-items: start;
+    justify-content: center;
+    gap: clamp(20px, 3vw, 40px);
+    perspective: 1800px;
+  }
+
+  .phones > :global(.phone) {
+    width: 100%;
+    border-radius: 42px;
+  }
+
+  .phones > :global(.phone:last-child) {
+    margin-top: clamp(32px, 4vw, 56px);
   }
 
   .icon {
     flex: none;
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
+    width: 1.15em;
+    height: 1.15em;
+    border-radius: 24%;
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
   }
 
@@ -99,34 +155,33 @@ const loading = eager ? 'eager' : 'lazy';
 
   .name {
     margin: 0;
-    font-size: clamp(26px, 2.4vw, 40px);
+    font-size: clamp(26px, 2.6vw, 38px);
     font-weight: 600;
     letter-spacing: -0.035em;
-    line-height: 1.05;
+    line-height: 1.1;
   }
 
   .name a {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
     text-decoration: none;
   }
 
-  .about {
-    display: grid;
-    gap: 10px;
+  .name a:hover span {
+    text-decoration: underline;
+    text-decoration-color: var(--brand);
+    text-decoration-thickness: 2px;
   }
 
   .summary {
     margin: 0;
-    max-width: 46em;
+    max-width: 30em;
     color: var(--ink-soft);
-    /* Where a summary has to wrap, split it evenly rather than leave a word on its own. */
-    text-wrap: balance;
+    text-wrap: pretty;
   }
 
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 14px;
+  .status {
     margin: 0;
     font-family: var(--mono);
     font-size: 12.5px;
@@ -137,11 +192,9 @@ const loading = eager ? 'eager' : 'lazy';
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-left: auto;
-    font-family: var(--sans);
-    font-size: 14.5px;
+    margin-top: 8px;
+    font-size: 15px;
     font-weight: 500;
-    color: var(--ink);
     text-decoration: none;
   }
 
@@ -159,155 +212,65 @@ const loading = eager ? 'eager' : 'lazy';
     transform: translateX(3px);
   }
 
-  .browser .go:hover svg {
-    transform: translate(2px, -2px);
+  /*
+   * As a screen scrolls into view it starts tipped back, like it's lying on a desk, and stands up
+   * to face you by the time it's well on screen. The second phone follows a moment later.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .stage :global(.screen) {
+        transform-origin: 50% 100%;
+        animation: stand-up linear both;
+      }
+
+      /* Kept apart from the shorthand above, which would otherwise absorb it and be dropped. */
+      .stage :global(.screen:where(*)) {
+        animation-timeline: view();
+        animation-range: entry 5% entry 85%;
+      }
+
+      .stage :global(.phone:last-child:where(*)) {
+        animation-range: entry 20% entry 100%;
+      }
+    }
   }
 
-  .screen {
-    display: block;
-    align-self: start;
-    text-decoration: none;
-    transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  @keyframes stand-up {
+    from {
+      opacity: 0.35;
+      transform: rotateX(22deg) scale(0.92) translateY(40px);
+    }
   }
 
-  .product:hover .screen {
-    transform: translateY(-4px);
-  }
+  /* Phones and small tablets read top to bottom: what it is, then the screen. */
+  @media (max-width: 899px) {
+    .product,
+    .flip {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
 
-  .screen img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
+    .flip > .stage {
+      order: 0;
+    }
 
-  /* Web products sit in a slim browser outline showing the page the screen came from. */
-  .browser .screen {
-    overflow: hidden;
-    border: 1px solid var(--rule-strong);
-    border-radius: 12px;
-    background: #0b0b0c;
-    box-shadow: 0 40px 80px -50px color-mix(in srgb, var(--brand) 80%, transparent);
-  }
+    .info {
+      padding-top: 0;
+    }
 
-  .chrome {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    height: 32px;
-    padding: 0 12px;
-    border-bottom: 1px solid rgb(255 255 255 / 0.08);
-    background: #141416;
-  }
+    .phones {
+      justify-content: start;
+      gap: 16px;
+    }
 
-  .chrome i {
-    flex: none;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: rgb(255 255 255 / 0.14);
-  }
-
-  .url {
-    flex: 1;
-    min-width: 0;
-    margin-right: 39px;
-    overflow: hidden;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    color: rgb(255 255 255 / 0.55);
-    text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* Wallyt sits in a plain phone outline. */
-  .phone .screen {
-    width: min(100%, 320px);
-    padding: 8px;
-    border: 1px solid var(--rule-strong);
-    border-radius: 38px;
-    background: var(--surface);
-    box-shadow: 0 40px 80px -48px color-mix(in srgb, var(--brand) 80%, transparent);
-  }
-
-  .phone .screen img {
-    aspect-ratio: 390 / 560;
-    border-radius: 30px;
-    object-fit: cover;
-    object-position: top;
-  }
-
-  /* The featured product gets a larger name and summary. */
-  .featured .name {
-    font-size: clamp(30px, 3vw, 52px);
-  }
-
-  @media (min-width: 700px) {
-    .featured .summary {
-      font-size: 17px;
+    .phones > :global(.phone) {
+      border-radius: 32px;
     }
   }
 
   @media (min-width: 1100px) {
-    .name {
-      font-size: clamp(32px, 2.3vw, 46px);
-    }
-
     .summary {
-      font-size: clamp(16px, 1vw, 19px);
-    }
-
-    .go {
-      margin-left: 6px;
-    }
-
-    /* The flagship's name and summary sit centred over its chart, under the centred headline. */
-    .featured {
-      gap: clamp(36px, 3.4vw, 56px);
-    }
-
-    .featured .info {
-      justify-items: center;
-      text-align: center;
-    }
-
-    .featured .name {
-      font-size: clamp(32px, 2.3vw, 46px);
-    }
-
-    .featured .summary {
-      max-width: 36em;
-      font-size: clamp(17px, 1.1vw, 21px);
-    }
-
-    .featured .meta {
-      justify-content: center;
-    }
-
-    .phone .screen {
-      width: min(100%, 340px);
-    }
-  }
-
-  /* Products below the first screen rise into place as they scroll in. */
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .product:not(.featured) > * {
-        animation: product-rise linear both;
-        animation-timeline: view();
-        animation-range: entry 5% entry 80%;
-      }
-
-      .product:not(.featured) > .screen {
-        animation-range: entry 15% entry 95%;
-      }
-    }
-  }
-
-  @keyframes product-rise {
-    from {
-      opacity: 0;
-      translate: 0 48px;
+      font-size: 17px;
     }
   }
 </style>

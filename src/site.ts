@@ -12,19 +12,46 @@ export const company = {
 // The one address for everything: questions, Wallyt help and privacy requests.
 export const email = 'hello@leemansoftware.com';
 
+/** The studio as schema.org sees it: the publisher of every product. */
+export const organization = {
+  '@type': 'Organization',
+  name: company.brand,
+  legalName: company.legalName,
+  url: company.url,
+  email,
+};
+
+export const jagexNotice =
+  'OSRS Exchange and RS3 Exchange are independent and not affiliated with Jagex Ltd. RuneScape and Old School RuneScape are trademarks of Jagex Ltd.';
+
+/** Wallyt's Google Play listing. Linked once Wallyt's status is 'live'. */
+export const wallytPlayUrl = 'https://play.google.com/store/apps/details?id=com.wallyt.app';
+
+export type Link = { label: string; href: string; external?: boolean };
+
 export type Product = {
   slug: string;
   name: string;
   summary: string;
   platforms: string;
   status: 'live' | 'soon';
+  /** The product's page on this site, its subsite's home. */
   href: string;
-  external: boolean;
+  /** The product itself, when it lives somewhere else (a website, a store listing). */
+  site?: string;
   icon: string;
-  /** Our most used product: shown first, with its screen across the full width. */
-  featured?: boolean;
-  /** The product's own brand color, used for small accents next to it. */
+  /** Pixel-art icons are scaled without smoothing. */
+  pixelIcon?: boolean;
+  /** The product's own brand color, used for small accents next to it and across its subsite. */
   color: string;
+  /** The same color, lightened to read on the dark theme. */
+  colorDark: string;
+  /** Links in the subsite's header. */
+  nav: Link[];
+  /** The subsite footer's links: help, community and policies. */
+  footer: Link[];
+  /** Fine print under the subsite's footer, such as a trademark notice. */
+  notice?: string;
   /** A real screen from the product, shown in a browser or phone outline. */
   shot: {
     src: string;
@@ -45,16 +72,25 @@ export type Product = {
 export const products: Product[] = [
   {
     slug: 'osrs-exchange',
-    featured: true,
     name: 'OSRS Exchange',
     summary:
       'Live Grand Exchange prices for Old School RuneScape, with margins, tax and profit worked out for every item as trades happen.',
     platforms: 'Web',
     status: 'live',
-    href: 'https://www.osrs.exchange',
-    external: true,
+    href: url('/osrs-exchange'),
+    site: 'https://www.osrs.exchange',
     icon: url('/products/osrs-exchange.webp'),
+    pixelIcon: true,
     color: '#4f46e5',
+    colorDark: '#818cf8',
+    nav: [],
+    footer: [
+      { label: 'Quick Guide', href: 'https://www.osrs.exchange/quick-guide', external: true },
+      { label: 'Discord', href: 'https://discord.gg/BV4vGeKFUt', external: true },
+      { label: 'Privacy policy', href: 'https://www.osrs.exchange/privacy-policy', external: true },
+      { label: 'Terms of service', href: 'https://www.osrs.exchange/terms-of-service', external: true },
+    ],
+    notice: jagexNotice,
     shot: {
       src: url('/shots/osrs-exchange.webp'),
       small: url('/shots/osrs-exchange-800.webp'),
@@ -73,10 +109,20 @@ export const products: Product[] = [
       'The same live market for RuneScape 3, with years of price history behind every item.',
     platforms: 'Web',
     status: 'live',
-    href: 'https://www.rs3.exchange',
-    external: true,
+    href: url('/rs3-exchange'),
+    site: 'https://www.rs3.exchange',
     icon: url('/products/rs3-exchange.webp'),
+    pixelIcon: true,
     color: '#047857',
+    colorDark: '#34d399',
+    nav: [],
+    footer: [
+      { label: 'Quick Guide', href: 'https://www.rs3.exchange/quick-guide', external: true },
+      { label: 'Discord', href: 'https://discord.gg/BV4vGeKFUt', external: true },
+      { label: 'Privacy policy', href: 'https://www.rs3.exchange/privacy-policy', external: true },
+      { label: 'Terms of service', href: 'https://www.rs3.exchange/terms-of-service', external: true },
+    ],
+    notice: jagexNotice,
     shot: {
       src: url('/shots/rs3-exchange.webp'),
       small: url('/shots/rs3-exchange-800.webp'),
@@ -96,9 +142,19 @@ export const products: Product[] = [
     platforms: 'Android',
     status: 'soon',
     href: url('/wallyt'),
-    external: false,
     icon: url('/products/wallyt.webp'),
     color: '#0f766e',
+    colorDark: '#2dd4bf',
+    nav: [
+      { label: 'Support', href: url('/wallyt/support') },
+      { label: 'Privacy', href: url('/wallyt/privacy') },
+    ],
+    footer: [
+      { label: 'Support', href: url('/wallyt/support') },
+      { label: 'Privacy policy', href: url('/wallyt/privacy') },
+      { label: 'Terms of use', href: url('/wallyt/terms') },
+      { label: 'Delete your account', href: url('/wallyt/delete-account') },
+    ],
     shot: {
       src: url('/shots/wallyt-light.webp'),
       dark: url('/shots/wallyt-dark.webp'),
@@ -109,3 +165,5 @@ export const products: Product[] = [
     },
   },
 ];
+
+export const product = (slug: string) => products.find((p) => p.slug === slug)!;

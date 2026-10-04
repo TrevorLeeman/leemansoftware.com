@@ -1,0 +1,27 @@
+---
+// The studio's header, on the home page and the studio's own pages.
+import { url } from '../url';
+import { company } from '../site';
+import Monogram from './Monogram.astro';
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href={url('/')} aria-label={`${company.brand}, home`}>
+      <Monogram size={28} />
+      <span class="wordmark">Leeman <span>Software</span></span>
+    </a>
+    <nav aria-label="Main">
+      <a class="optional" href={url('/#products')}>Products</a>
+      <a href={url('/#contact')}>Work with us</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  @media (max-width: 400px) {
+    .optional {
+      display: none;
+    }
+  }
+</style>

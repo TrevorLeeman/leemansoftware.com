@@ -1,7 +1,7 @@
 ---
 import { url } from '../../url';
 import Doc from '../../layouts/Doc.astro';
-import { email } from '../../site';
+import { email, product } from '../../site';
 
 const faqs = [
   {
@@ -14,19 +14,47 @@ const faqs = [
   },
   {
     q: 'Someone left or was removed. What happens to their expenses?',
-    a: 'They stay in the group under that person’s name, so everyone else’s balances stay correct.',
+    a: 'They stay in the group under that person’s name, so everyone else’s balances stay correct. Removed someone by mistake? Add them back from the group’s settings: History, then Removed people.',
+  },
+  {
+    q: 'Someone is in the group twice.',
+    a: 'The group’s owner or an admin can merge the two in the group’s settings, with Merge people. Their expenses come together under one person.',
+  },
+  {
+    q: 'Someone joined as the wrong person.',
+    a: 'The group’s owner or an admin can take away their access from Remove. The person they picked stays in the group with all their expenses, ready for the right person to join as.',
   },
   {
     q: 'Can I use different currencies in one group?',
-    a: 'Yes. Each expense can be in its own currency. Wallyt converts it into the group’s currency at that day’s exchange rate.',
+    a: 'Yes. Wallyt has 161 currencies, and each expense can be in its own. Paid on a card, it counts in the group’s currency at that day’s exchange rate. Paid in cash, it stays in the currency it was paid in, to be paid back the same way. The owner or an admin can convert what’s left into the group’s currency in one step.',
   },
   {
-    q: 'Can I bring my history over from Splitwise?',
-    a: 'Yes. Export your group from Splitwise as a CSV file, then import it into Wallyt. You can match each person in the file to someone in your Wallyt group.',
+    q: 'I changed my name, but a group still shows the old one.',
+    a: 'Each group keeps its own name for you. Change it from the pencil on your own row in that group’s settings.',
+  },
+  {
+    q: 'How do I stop a repeating expense?',
+    a: 'Edit the newest copy and set it to Doesn’t repeat, or delete it.',
+  },
+  {
+    q: 'Can I leave a group I owe money in?',
+    a: 'Yes. What you owe stays until it’s settled, and the group’s invite link brings you back as you were. If you own the group, make someone else the owner first.',
+  },
+  {
+    q: 'Can I bring my history over from Splitwise or a spreadsheet?',
+    a: 'Yes. Export your group from Splitwise as a CSV file, or use any spreadsheet saved as CSV, then import it into Wallyt from Import and export. You match each person in the file to someone in your Wallyt group.',
+  },
+  {
+    q: 'Can I get my expenses out of Wallyt?',
+    a: 'Yes. In Import and export, choose Export to download or share the group’s expenses as a CSV file for any spreadsheet.',
   },
   {
     q: 'I deleted an expense by mistake.',
     a: 'Tap Undo right after deleting it, or restore it later from Deleted expenses in the group’s settings.',
+  },
+  {
+    q: 'Who can delete a group?',
+    a: 'Only its owner. The owner or an admin can also clear all of a group’s expenses. Both are permanent, so Wallyt asks first.',
   },
   {
     q: 'How do I delete my account?',
@@ -40,7 +68,7 @@ const faqs = [
   title="Wallyt support"
   eyebrow="Wallyt"
   eyebrowHref="/wallyt"
-  section="wallyt"
+  product={product('wallyt')}
   description="Get help with Wallyt: sign-in codes, joining groups, currencies, imports, and how to reach us."
 >
   <div class="contact-card">

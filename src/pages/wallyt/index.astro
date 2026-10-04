@@ -1,340 +1,117 @@
 ---
 import { url } from '../../url';
 import Base from '../../layouts/Base.astro';
-import { email } from '../../site';
+import ProductHero from '../../components/ProductHero.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import FeatureGrid from '../../components/FeatureGrid.astro';
+import { company, email, organization, product, wallytPlayUrl } from '../../site';
 
+const wallyt = product('wallyt');
+const live = wallyt.status === 'live';
+const description =
+  'Wallyt is a free Android app for splitting shared costs with roommates, trips and friends: every way to split, 161 currencies, and as few payments as possible to settle up. Built by Leeman Software.';
+
+// Checked against the Wallyt app (docs/product.md) on 2026-10-04.
 const features = [
-  {
-    title: 'Groups for anything shared',
-    body: 'Make a group for the apartment, a trip or a standing dinner, and share one link to bring everyone in.',
-  },
-  {
-    title: 'Add people before they join',
-    body: 'Add someone by name or from your contacts and start splitting right away. Their share is waiting when they join.',
-  },
-  {
-    title: 'Every way to split',
-    body: 'Split equally, by exact amounts, by percentage or by shares, with one person paying or several.',
-  },
-  {
-    title: 'Any currency',
-    body: 'Each expense can be in its own currency, converted at that day’s exchange rate so balances add up.',
-  },
-  {
-    title: 'Fewer payments',
-    body: 'Simplify debts works out the smallest set of payments that settles the whole group.',
-  },
-  {
-    title: 'Repeating costs',
-    body: 'Rent and subscriptions can repeat every week, month or year, and Wallyt adds each one on its day.',
-  },
-  {
-    title: 'A full history',
-    body: 'Every change to an expense is recorded, and deleting one can be undone.',
-  },
-  {
-    title: 'Bring your Splitwise history',
-    body: 'Import a Splitwise export and keep every past expense, matched to the right people.',
-  },
-  {
-    title: 'No passwords',
-    body: 'Sign in with a code sent to your email, or with Google.',
-  },
+  { title: 'Every way to split', body: 'Equally, by amounts, by percentage or by shares, with one payer or several.' },
+  { title: '161 currencies', body: 'Each expense in its own currency, converted at that day’s rate or paid back as it was spent.' },
+  { title: 'Fewer payments', body: 'Wallyt works out the fewest payments that square everyone up.' },
+  { title: 'Repeating costs', body: 'Rent and subscriptions add themselves on schedule.' },
+  { title: 'Bring your history', body: 'Import from Splitwise or any spreadsheet, and export to CSV any time.' },
+  { title: 'No passwords', body: 'Sign in with a code sent to your email, or with Google.' },
+];
+
+const built = [
+  { title: 'One codebase, Android and web', body: 'Built with React Native and Expo, so the app and its web version share every screen.' },
+  { title: 'Live for everyone', body: 'A change one person makes shows up on everyone else’s screen as it happens.' },
+  { title: 'Money maths that adds up', body: 'Exchange rates are saved with each expense, so every balance adds up to the cent.' },
+];
+
+const policies = [
+  { href: '/wallyt/privacy', label: 'Privacy policy' },
+  { href: '/wallyt/terms', label: 'Terms of use' },
+  { href: '/wallyt/delete-account', label: 'Delete your account' },
+  { href: '/wallyt/support', label: 'Support' },
 ];
 ---
 
 <Base
-  title="Wallyt"
-  section="wallyt"
-  description="Wallyt splits shared costs with roommates, trips and friends. Coming soon to Google Play."
+  product={wallyt}
+  title="Split shared costs with the people you share them with"
+  description={description}
+  schema={{
+    '@type': 'MobileApplication',
+    name: 'Wallyt',
+    description,
+    url: `${company.url}/wallyt`,
+    operatingSystem: 'Android',
+    applicationCategory: 'FinanceApplication',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    publisher: organization,
+    ...(live ? { installUrl: wallytPlayUrl } : {}),
+  }}
 >
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <p class="badge soon">coming soon to Google Play</p>
-        <h1 class="title">
-          <img class="app-icon" src={url('/products/wallyt.webp')} alt="" width="72" height="72" />
-          Wallyt
-        </h1>
-        <p class="lede">
-          Split rent, trips and dinners with the people you share them with. Everyone sees the same
-          balances, and settling up takes as few payments as possible.
-        </p>
-        <div class="actions">
+  <ProductHero product={wallyt} status={live ? undefined : 'Coming soon to Google Play'}>
+    <Fragment slot="lede">
+      Wallyt is a free Android app for splitting shared costs. Add what you spend with roommates, on
+      trips or at dinner, and everyone sees the same balances until you settle up.
+    </Fragment>
+    <Fragment slot="actions">
+      {
+        live ? (
+          <a class="button primary" href={wallytPlayUrl} rel="noopener">Get it on Google Play</a>
+        ) : (
           <a class="button primary" href={`mailto:${email}?subject=Tell%20me%20when%20Wallyt%20launches`}>
             Tell me when it launches
           </a>
-        </div>
-      </div>
-      <figure class="phone">
-        <picture>
-          <source srcset={url('/shots/wallyt-dark.webp')} media="(prefers-color-scheme: dark)" />
-          <img
-            src={url('/shots/wallyt-light.webp')}
-            alt="Wallyt's home screen for a ski trip group: Cara owes you $202.15, with Add expense and Settle up buttons above a list of the trip's expenses."
-            width="320"
-            height="693"
-          />
-        </picture>
-      </figure>
-    </div>
+        )
+      }
+    </Fragment>
+  </ProductHero>
+
+  <section class="wrap section" id="features" aria-labelledby="features-title">
+    <SectionHead title="Everything a shared cost needs" id="features-title" />
+    <FeatureGrid features={features} />
   </section>
 
-  <section class="wrap section" aria-labelledby="features-title">
-    <div class="section-head">
-      <p class="label" id="features-title">features</p>
-    </div>
-    <ol class="features">
-      {
-        features.map((f) => (
-          <li>
-            <h2>{f.title}</h2>
-            <p>{f.body}</p>
-          </li>
-        ))
-      }
-    </ol>
+  <section class="wrap section" id="built" aria-labelledby="built-title">
+    <SectionHead title="Built to be trusted with money" id="built-title">
+      {company.brand} designs, builds and runs Wallyt, from the app to the servers behind it.
+    </SectionHead>
+    <FeatureGrid features={built} />
   </section>
 
-  <section class="wrap section" aria-labelledby="links-title">
-    <div class="section-head">
-      <p class="label" id="links-title">help and policies</p>
-    </div>
-    <ul class="links">
-      {
-        [
-          { href: '/wallyt/support', title: 'Support', body: 'Answers to common questions, and how to reach us.' },
-          { href: '/wallyt/privacy', title: 'Privacy policy', body: 'What Wallyt stores, who can see it, and what we never do with it.' },
-          { href: '/wallyt/delete-account', title: 'Delete your account', body: 'How to delete your Wallyt account and what happens to your data.' },
-        ].map((l) => (
-          <li>
-            <a href={url(l.href)}>
-              <span class="link-title">{l.title}</span>
-              <span class="link-body">{l.body}</span>
-              <span class="path">
-                {l.href}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-              </span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <section class="wrap section" id="data" aria-labelledby="data-title">
+    <SectionHead title="Your data stays yours" id="data-title">
+      Wallyt stores your name, email, the groups you’re in and the expenses you add, and shows them
+      only to the people in your groups. No ads, no tracking, and your data is never sold. You can
+      delete your account at any time.
+    </SectionHead>
+    <p class="policies">
+      {policies.map((l) => <a href={url(l.href)}>{l.label}</a>)}
+      <a href={`mailto:${email}`}>{email}</a>
+    </p>
   </section>
 </Base>
 
 <style>
-  :global(:root) {
-    --wallyt: #0f766e;
+  .section {
+    padding-top: clamp(96px, 12vw, 160px);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :global(:root) {
-      --wallyt: #2dd4bf;
-    }
-  }
-
-  .hero {
-    position: relative;
-    padding-block: clamp(56px, 9vw, 112px) clamp(48px, 7vw, 88px);
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse 70% 80% at 80% 40%, #000 25%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 80% 40%, #000 25%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .hero-grid {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: clamp(32px, 6vw, 80px);
-  }
-
-  .hero h1 {
-    display: flex;
-    align-items: center;
-    gap: clamp(14px, 2vw, 22px);
-    margin-top: 22px;
-    font-size: clamp(52px, 9vw, 96px);
-  }
-
-  .hero .lede {
-    margin-top: 18px;
-  }
-
-  .actions {
+  .policies {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 30px;
+    gap: 10px 28px;
+    margin: -12px 0 0;
   }
 
-  .app-icon {
-    width: 0.78em;
-    height: 0.78em;
-    border-radius: 22%;
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  .policies a {
+    font-weight: 500;
+    text-decoration-color: var(--rule-strong);
   }
 
-  /* The app's own screenshot, in a plain device outline. */
-  .hint {
-    margin: 12px 0 0;
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  .phone {
-    position: relative;
-    width: clamp(220px, 24vw, 288px);
-    margin: 0;
-    padding: 9px;
-    border: 1px solid var(--rule-strong);
-    border-radius: 40px;
-    background: var(--surface);
-    box-shadow: 0 40px 80px -48px rgb(15 118 110 / 0.55), 0 0 0 6px color-mix(in srgb, var(--ink) 3%, transparent);
-  }
-
-  .phone img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 390 / 844;
-    border-radius: 31px;
-    object-fit: cover;
-    object-position: top;
-  }
-
-  @media (max-width: 760px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-      gap: 48px;
-    }
-
-    .phone {
-      justify-self: center;
-      width: min(280px, 78vw);
-    }
-  }
-
-  .section {
-    padding-top: clamp(56px, 8vw, 96px);
-  }
-
-  .features {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0 clamp(24px, 4vw, 48px);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .features li {
-    padding-block: 26px 30px;
-    border-bottom: 1px solid var(--rule);
-  }
-
-
-  .features h2 {
-    margin: 0 0 6px;
-    font-size: 17px;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-
-  .features p {
-    margin: 0;
-    font-size: 15px;
-    color: var(--ink-soft);
-    text-wrap: pretty;
-  }
-
-  @media (max-width: 900px) {
-    .features {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .features {
-      grid-template-columns: 1fr;
-    }
-
-    .features li {
-      padding-block: 20px 22px;
-    }
-  }
-
-  .links {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .links li {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .links a {
-    display: grid;
-    grid-template-columns: minmax(0, 13em) minmax(0, 1fr) auto;
-    align-items: baseline;
-    gap: 4px 24px;
-    padding-block: 20px;
-    text-decoration: none;
-  }
-
-  .link-title {
-    font-weight: 600;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-decoration-color: transparent;
-    text-underline-offset: 0.22em;
-    transition: text-decoration-color 140ms ease;
-  }
-
-  .links a:hover .link-title {
-    text-decoration-color: currentColor;
-  }
-
-  .link-body {
-    color: var(--ink-soft);
-  }
-
-  .path {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    color: var(--muted);
-    transition: color 140ms ease;
-  }
-
-  .path svg {
-    transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
-
-  .links a:hover .path {
-    color: var(--wallyt);
-  }
-
-  .links a:hover .path svg {
-    transform: translateX(3px);
-  }
-
-  @media (max-width: 760px) {
-    .links a {
-      grid-template-columns: 1fr;
-    }
+  .policies a:hover {
+    text-decoration-color: var(--accent);
   }
 </style>

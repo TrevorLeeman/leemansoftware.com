@@ -1,0 +1,22 @@
+---
+// The build stamp in the footer: when this copy of the site was built, and from which commit.
+import { execSync } from 'node:child_process';
+
+const built = new Date().toISOString().slice(0, 10);
+let commit = '';
+try {
+  commit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+} catch {
+  // Not a git checkout; the stamp shows the date alone.
+}
+---
+
+<span class="stamp">built {built}{commit && <> · <span title="Commit">{commit}</span></>}</span>
+
+<style>
+  .stamp {
+    display: block;
+    margin-top: 4px;
+    color: color-mix(in srgb, var(--muted) 70%, transparent);
+  }
+</style>

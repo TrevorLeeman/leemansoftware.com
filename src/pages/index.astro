@@ -1,28 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
 import Product from '../components/Product.astro';
-import { email, products } from '../site';
-
-const featured = products.find((p) => p.featured)!;
-const rest = products.filter((p) => !p.featured);
+import { email, organization, products } from '../site';
 ---
 
-<Base description="Leeman Software is a small product studio. We make OSRS Exchange, RS3 Exchange and Wallyt.">
-  <section class="landing wrap">
-    <div class="intro">
-      <h1 class="title">
-        Small, focused software <span>for the web and Android.<i class="cursor" aria-hidden="true"></i></span>
-      </h1>
-    </div>
-    <Product product={featured} eager sizes="(min-width: 3000px) 2100px, (min-width: 1100px) min(1400px, 72vw), 100vw" />
+<Base
+  description="Leeman Software designs, builds and runs software for the web and Android: OSRS Exchange and RS3 Exchange, live Grand Exchange prices used by 364,000+ RuneScape traders, and Wallyt, an app for splitting shared costs."
+  schema={{ ...organization, logo: `${organization.url}/apple-touch-icon.png` }}
+>
+  <section class="intro wrap">
+    <h1 class="title">
+      Small, focused software <span>for the web and Android.<i class="cursor" aria-hidden="true"></i></span>
+    </h1>
+    <p class="lede">
+      We design, build and run our own products, end to end: live market tools used by 364,000+
+      RuneScape traders, and Wallyt, an app for splitting shared costs.
+    </p>
   </section>
 
-  <section class="more wrap" aria-label="More products">
-    {rest.map((p) => <Product product={p} sizes="(min-width: 3000px) 1250px, (min-width: 1100px) 42vw, 100vw" />)}
+  <section id="products" class="products wrap" aria-label="Products">
+    {products.map((p, i) => <Product product={p} flip={i % 2 === 1} eager={i === 0} />)}
   </section>
 
   <section id="contact" class="contact wrap" aria-labelledby="contact-title">
-    <h2 class="contact-title" id="contact-title">Get in touch</h2>
+    <h2 class="title" id="contact-title">Work with us</h2>
+    <p class="lede">
+      We take on a few projects a year: web apps, Android apps and the backends behind them, from the
+      first sketch to launch.
+    </p>
     <p class="addr">
       <a href={`mailto:${email}`}>{email}</a>
       <button class="copy" type="button" data-copy={email} aria-label={`Copy ${email}`}>Copy</button>
@@ -31,144 +36,76 @@ const rest = products.filter((p) => !p.featured);
 </Base>
 
 <style>
-  /* First screen: the headline, then the flagship product. */
-  .landing {
+  /* The intro stands alone, centred, with the products well below it. */
+  .intro {
     display: grid;
-    gap: clamp(32px, 5vw, 56px);
-    padding-block: clamp(28px, 4vw, 64px) clamp(48px, 5vw, 80px);
+    justify-items: center;
+    gap: 24px;
+    padding-block: clamp(64px, 12vw, 160px) clamp(56px, 9vw, 128px);
+    text-align: center;
   }
 
   .intro h1 {
-    font-size: clamp(36px, 8.4vw, 64px);
+    font-size: clamp(38px, 6.2vw, 84px);
   }
 
   .intro h1 span {
+    display: block;
     color: var(--muted);
   }
 
-  /* Second screen: the other products, one per row. */
-  .more {
+  .intro .lede {
+    max-width: 34em;
+  }
+
+  /* One row per product, the same for each, alternating sides. */
+  .products {
     display: grid;
-    gap: clamp(56px, 6vw, 96px);
-    padding-top: clamp(48px, 5vw, 80px);
-    background: linear-gradient(var(--rule), var(--rule)) center top / calc(100% - var(--gutter) * 2) 1px no-repeat;
+    gap: clamp(88px, 10vw, 152px);
   }
 
-  .more > :global(.product + .product) {
-    padding-top: clamp(56px, 6vw, 96px);
-    border-top: 1px solid var(--rule);
-  }
-
-  /* Last: the contact, large, under a rule as wide as the content. */
   .contact {
     display: grid;
-    gap: 16px;
-    margin-top: clamp(56px, 6vw, 96px);
-    padding-top: clamp(48px, 6vw, 96px);
-    background: linear-gradient(var(--rule), var(--rule)) center top / calc(100% - var(--gutter) * 2) 1px no-repeat;
+    justify-items: center;
+    gap: 20px;
+    padding-top: clamp(112px, 14vw, 200px);
+    text-align: center;
   }
 
-  .contact-title {
-    margin: 0;
-    font-size: clamp(32px, 4.4vw, 56px);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
+  .contact h2 {
+    font-size: clamp(34px, 4.4vw, 60px);
+  }
+
+  .contact .lede {
+    max-width: 30em;
   }
 
   .addr {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
     gap: 10px 14px;
-    margin: 0;
+    margin: 8px 0 0;
+  }
+
+  /* Phones read the whole page down one left edge, like the stacked products. */
+  @media (max-width: 899px) {
+    .intro,
+    .contact {
+      justify-items: start;
+      text-align: left;
+    }
+
+    .addr {
+      justify-content: start;
+    }
   }
 
   .addr a {
     font-family: var(--mono);
-    font-size: clamp(18px, 3vw, 30px);
+    font-size: clamp(18px, 2vw, 26px);
     letter-spacing: -0.02em;
     overflow-wrap: anywhere;
-  }
-
-  /*
-   * Laptops and up read top to bottom in one line of sight: the headline alone and centred,
-   * the flagship's chart rising into view under it, the other two products on alternating
-   * sides, and the contact centred to close.
-   */
-  @media (min-width: 1100px) {
-    .landing {
-      gap: clamp(72px, 9vh, 128px);
-      padding-block: clamp(80px, 12vh, 168px) clamp(96px, 8vw, 152px);
-    }
-
-    .intro {
-      text-align: center;
-    }
-
-    .intro h1 {
-      font-size: clamp(56px, 4.4vw, 92px);
-    }
-
-    .intro h1 span {
-      display: block;
-    }
-
-    .more {
-      gap: 0;
-      padding-top: 0;
-      background: none;
-    }
-
-    .more > :global(.product) {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      grid-template-rows: none;
-      align-items: center;
-      column-gap: clamp(56px, 6vw, 128px);
-      padding-block: clamp(96px, 8vw, 152px);
-      border-top: 1px solid var(--rule);
-    }
-
-    .more > :global(.product + .product) {
-      padding-top: clamp(96px, 8vw, 152px);
-    }
-
-    /* Every other row puts its screen first, so the eye zigzags down the page. */
-    .more > :global(.product:nth-child(even)) {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    }
-
-    .more > :global(.product:nth-child(even) .screen) {
-      order: -1;
-    }
-
-    /* A phone is narrow, so its row splits evenly and the phone centres in its half. */
-    .more > :global(.product.phone) {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    }
-
-    .more > :global(.product.phone .screen) {
-      justify-self: center;
-    }
-
-    .contact {
-      justify-items: center;
-      gap: 24px;
-      margin-top: 0;
-      padding-block: clamp(96px, 8vw, 152px) clamp(48px, 5vw, 96px);
-      text-align: center;
-    }
-
-    .contact-title {
-      font-size: clamp(48px, 3.6vw, 76px);
-    }
-
-    .addr {
-      justify-content: center;
-    }
-
-    .addr a {
-      font-size: clamp(22px, 1.6vw, 32px);
-    }
   }
 </style>

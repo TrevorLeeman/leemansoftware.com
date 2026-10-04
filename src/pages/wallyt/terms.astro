@@ -1,0 +1,114 @@
+---
+import { url } from '../../url';
+import Doc from '../../layouts/Doc.astro';
+import { company, email, product } from '../../site';
+---
+
+<Doc
+  title="Wallyt terms of use"
+  eyebrow="Wallyt"
+  eyebrowHref="/wallyt"
+  meta="Last updated October 4, 2026"
+  product={product('wallyt')}
+  description="The terms for using Wallyt, the app for splitting shared costs, in plain language."
+>
+  <p>
+    These terms are an agreement between you and {company.legalName}, whose product studio
+    {company.brand} makes Wallyt (“we”, “us”). They apply to the Wallyt app and Wallyt on the web.
+    By using Wallyt you agree to them. The <a href={url('/wallyt/privacy')}>privacy policy</a> explains
+    what we do with your information.
+  </p>
+
+  <div class="callout">
+    <p>
+      <strong>In short:</strong> Wallyt is free. It keeps a shared record of who owes whom, but it
+      doesn’t move money and it isn’t financial advice. Use it honestly, respect the people in your
+      groups, and you can leave whenever you like.
+    </p>
+  </div>
+
+  <h2>Your account</h2>
+  <ul>
+    <li>You need to be at least 13 years old, or older where the law of your country requires it.</li>
+    <li>
+      Use an email address that’s yours. Anyone who can read that inbox can sign in as you, so keep it
+      secure.
+    </li>
+    <li>You’re responsible for what happens in Wallyt under your account.</li>
+  </ul>
+
+  <h2>Groups are shared</h2>
+  <p>
+    A group is a shared record. Everyone in it can see its expenses, payments, notes and history, and
+    can add or change expenses. Its owner and admins can also add and remove people. Only share a
+    group’s invite link with people you want in it.
+  </p>
+  <p>
+    When you add someone to a group, by name or from your contacts, only add people you actually
+    share costs with, and only use details they’d expect you to share with the group.
+  </p>
+
+  <h2>Wallyt doesn’t move money</h2>
+  <p>
+    Wallyt records what people say they spent and owe. It doesn’t hold, send or receive money, and
+    we’re not part of any debt or payment between the people in a group. Balances are only as right as
+    the expenses entered, so check them before you pay. Exchange rates come from public sources and
+    can differ from the rate your bank or card gave you. Nothing in Wallyt is financial, tax or legal
+    advice.
+  </p>
+
+  <h2>Use it fairly</h2>
+  <p>Don’t use Wallyt to:</p>
+  <ul>
+    <li>break the law, or help anyone else to;</li>
+    <li>harass, threaten or impersonate anyone, or post content that does;</li>
+    <li>add people or their details to a group without a good reason to;</li>
+    <li>
+      try to get into groups or accounts that aren’t yours, guess invite links, or test, disrupt or
+      overload our servers;
+    </li>
+    <li>copy, scrape or resell Wallyt or its data, or build a competing service from it.</li>
+  </ul>
+
+  <h2>What you add stays yours</h2>
+  <p>
+    You own the expenses, notes, names and photos you add. You let us store them, process them and show
+    them to the people in your groups, only so that Wallyt can work. You can export a group’s expenses
+    at any time.
+  </p>
+
+  <h2>Changes to Wallyt</h2>
+  <p>
+    Wallyt is free. We keep improving it, which means features can change or be removed. If we ever
+    decide to close Wallyt, we’ll tell you ahead of time, by email or in the app, so you can export
+    your groups first.
+  </p>
+
+  <h2>Ending your use</h2>
+  <p>
+    You can stop using Wallyt at any time, and <a href={url('/wallyt/delete-account')}>delete your account</a> whenever you like. We may suspend or close an account that breaks these terms or puts
+    other people at risk. If we do, we’ll tell you why unless the law or someone’s safety stops us.
+  </p>
+
+  <h2>No guarantees</h2>
+  <p>
+    We work hard to keep Wallyt accurate and available, but it’s provided as it is, without promises
+    that it will always be available, free of mistakes, or right for your purposes. As far as the law
+    allows, {company.legalName} isn’t liable for indirect or consequential losses, or for money owed
+    between the people in a group. Nothing in these terms limits rights you have under the law that
+    can’t be limited by agreement.
+  </p>
+
+  <h2>Changes to these terms</h2>
+  <p>
+    If we change these terms, we’ll update the date at the top. If a change matters, we’ll let you know
+    by email or in Wallyt before it takes effect. Using Wallyt after that means you accept the new
+    terms.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    {company.brand}, the product studio of {company.legalName}<br />
+    <a href={`mailto:${email}`}>{email}</a>
+  </p>
+</Doc>

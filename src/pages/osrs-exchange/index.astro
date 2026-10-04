@@ -1,0 +1,34 @@
+---
+import Exchange from '../../layouts/Exchange.astro';
+import { product } from '../../site';
+
+// Facts checked against www.osrs.exchange on 2026-10-04. When the site changes, change them here.
+---
+
+<Exchange
+  product={product('osrs-exchange')}
+  title="Live Grand Exchange prices for Old School RuneScape"
+  description="OSRS Exchange is a free website with live Grand Exchange prices for Old School RuneScape: margins after tax, price history, recipe profit and price alerts for every tradeable item. Built by Leeman Software."
+  lede="OSRS Exchange is a free website with live Grand Exchange prices for Old School RuneScape. Players use it to find items worth flipping, see what recipes make, and check how any item’s price has moved."
+  features={[
+    { title: 'Live margins', body: 'Every tradeable item in one table: buy and sell price, profit after tax, volume and buy limit.' },
+    { title: 'Price history', body: 'A page and chart for every item, from the last few minutes back through years of trading.' },
+    { title: 'Recipe profit', body: 'What every recipe makes at today’s prices, from skilling to set making.' },
+    { title: 'Price alerts', body: 'A Discord message or email the moment an item hits your price.' },
+  ]}
+  stats={[
+    { value: '364,000+', label: 'traders' },
+    { value: '4,500+', label: 'item pages' },
+    { value: '6 s', label: 'between price updates on Premium' },
+  ]}
+  built={[
+    { title: 'Prices as they trade', body: 'Live prices come in from the RuneScape Wiki as items trade, and every margin, profit and chart updates as they do.' },
+    { title: 'One app, two games', body: 'OSRS Exchange and RS3 Exchange run on one codebase, each with its own game’s rules.' },
+    { title: 'Accounts and payments', body: 'Google sign-in, synced lists, alerts and a Premium subscription that covers both sites.' },
+  ]}
+  trust={[
+    { title: 'Public data', body: 'Prices come from the RuneScape Wiki’s real-time data, the source the community already relies on.' },
+    { title: 'Tax included', body: 'Every profit is after the Grand Exchange’s 2% tax, with its 50 gp floor, 5M cap and exempt items.' },
+    { title: 'Free to use', body: 'Every tool works without an account. Premium adds faster updates and more alerts.' },
+  ]}
+/>

@@ -1,20 +1,19 @@
 ---
 import { url } from '../../url';
 import Doc from '../../layouts/Doc.astro';
-import { company, email } from '../../site';
+import { company, email, product } from '../../site';
 ---
 
 <Doc
   title="Wallyt privacy policy"
   eyebrow="Wallyt"
   eyebrowHref="/wallyt"
-  meta="Last updated October 2, 2026"
-  section="wallyt"
+  meta="Last updated October 4, 2026"
+  product={product('wallyt')}
   description="What Wallyt collects, who can see it, who we share it with, and how to delete it."
 >
   <p>
-    Wallyt is an app for splitting shared costs. It is made by {company.brand}, the product studio of {company.legalName} (“we”, “us”). This policy covers the Wallyt apps for Android and iPhone and
-    Wallyt on the web. It explains what we collect, why, who can see it, and how you can delete it.
+    Wallyt is an app for splitting shared costs. It is made by {company.brand}, the product studio of {company.legalName} (“we”, “us”). This policy covers the Wallyt app and Wallyt on the web. It explains what we collect, why, who can see it, and how you can delete it.
   </p>
 
   <div class="callout">
@@ -30,12 +29,19 @@ import { company, email } from '../../site';
   <h3>Your account</h3>
   <ul>
     <li><strong>Email address</strong>, used to sign you in and to match you to groups you’ve been added to.</li>
-    <li><strong>Name</strong>, as you want it shown to the people in your groups.</li>
-    <li><strong>Photo</strong>, if you choose to add one. We crop it to a square and resize it before it is uploaded.</li>
+    <li>
+      <strong>Name</strong>, as you want it shown to the people in your groups. Each group keeps its own
+      copy, so you can be known by a different name in each.
+    </li>
+    <li>
+      <strong>Photo</strong>, if you choose to add one, for your account or for one group. We crop and
+      resize it on your device before it is uploaded.
+    </li>
     <li>
       <strong>Sign-in details.</strong> If you sign in with Google, we receive your name, email address,
-      Google account ID and profile photo from Google. If you sign in with Apple, we receive your name
-      and email address from Apple. We never receive or store a password.
+      Google account ID and profile photo from Google, and a new account starts with that photo. If
+      you sign in with Apple, we receive your name and email address from Apple. We never receive or
+      store a password.
     </li>
   </ul>
 
@@ -43,8 +49,8 @@ import { company, email } from '../../site';
   <ul>
     <li>Group names and group photos.</li>
     <li>
-      Expenses and payments: descriptions, notes, amounts, currencies, dates, who paid and how each
-      one is split.
+      Expenses and payments: descriptions, notes, categories, amounts, currencies and the exchange
+      rates used, dates, who paid and how each one is split.
     </li>
     <li>A history of changes to each expense: who changed it, when, and what changed.</li>
     <li>
@@ -52,8 +58,10 @@ import { company, email } from '../../site';
       you live.
     </li>
     <li>
-      If you import a Splitwise export, the file name and the expenses in it. The file is read on
-      your device and only the expenses are sent to us.
+      If you import a spreadsheet, such as a Splitwise export, the expenses in it, plus a record of
+      the import: the file name, how many rows it had and how its columns were matched. The file is
+      read on your device and only those are sent to us. Exporting a group makes the file on your
+      device and sends nothing to us.
     </li>
   </ul>
 
@@ -76,7 +84,17 @@ import { company, email } from '../../site';
   <h3>Photos on your phone</h3>
   <p>
     Wallyt can open your photo library so you can choose a picture for yourself, someone in a
-    group, or a group. Only the photo you choose is uploaded. Wallyt does not use your camera.
+    group, or a group. Only the photo you choose is uploaded. On newer Android phones the library
+    includes photos backed up to Google Photos, and a photo you pick from there is downloaded to
+    your phone first. Wallyt does not use your camera.
+  </p>
+
+  <h3>Technical information</h3>
+  <p>
+    Like any online service, our servers receive your IP address and basic details of each request,
+    such as the time and the page or action asked for. We use them only to keep Wallyt running and
+    secure, for example to limit repeated attempts to guess invite links, and our server logs are
+    deleted after a few days.
   </p>
 
   <h3>What we don’t collect</h3>
@@ -140,7 +158,11 @@ import { company, email } from '../../site';
         <tr>
           <td>Google</td>
           <td data-label="Why">Sign in with Google, if you use it</td>
-          <td data-label="Receives">A sign-in token, which we check with Google</td>
+          <td data-label="Receives">
+            A sign-in token, which we check with Google. On the web, Google’s sign-in prompt loads on
+            the sign-in screen, so Google receives your browser’s standard request details there even
+            if you don’t choose Google
+          </td>
         </tr>
         <tr>
           <td>Apple</td>
@@ -171,8 +193,9 @@ import { company, email } from '../../site';
   <h2>How long we keep it</h2>
   <p>
     We keep your account for as long as you have it. Groups, expenses and their history are kept
-    until the group is deleted. When someone leaves or is removed from a group, their name and email
-    address stay with that group’s past expenses, so everyone else’s balances remain correct.
+    until the group is deleted. When someone leaves or is removed from a group, their name, email
+    address and photo stay with that group’s past expenses, so everyone else’s balances remain
+    correct.
   </p>
   <p>
     When you delete your account, we delete it within 30 days. See <a href={url('/wallyt/delete-account')}>Delete your Wallyt account</a> for exactly what is removed and
@@ -196,7 +219,11 @@ import { company, email } from '../../site';
 
   <h2>Your choices and rights</h2>
   <ul>
-    <li>You can change your name and photo in Wallyt at any time, from Account.</li>
+    <li>
+      You can change your name and photo in Wallyt at any time, from Account, or for one group from
+      your own row in its settings.
+    </li>
+    <li>You can export any group’s expenses as a CSV file.</li>
     <li>You can leave a group at any time.</li>
     <li>
       You can ask us for a copy of your data, ask us to correct it, or ask us to delete it, by
