@@ -74,8 +74,8 @@ export const products: Product[] = [
       width: 1600,
       height: 925,
       frame: 'browser',
-      url: 'https://www.osrs.exchange/item/twisted-bow',
-      alt: 'OSRS Exchange’s live chart for the Twisted bow with trend fill: buy and sell prices around 1.34 billion gp over the last day, marked Stable, up 0.4% today, with trade volume underneath.',
+      url: 'https://www.osrs.exchange/item/dragon-bones',
+      alt: 'OSRS Exchange’s one-month chart for Dragon bones with trend fill: buy and sell prices climbing from about 3,300 to 3,900 gp, marked Climbing, up 18.2% this month, with daily volume underneath.',
     },
   },
   {
@@ -96,7 +96,7 @@ export const products: Product[] = [
       height: 925,
       frame: 'browser',
       url: 'https://www.rs3.exchange/item/elder-rune-bar',
-      alt: 'RS3 Exchange’s five-year market price trend for the Elder rune bar: from about 12k gp in 2022 to a peak near 26k in 2024, back to about 14k now, marked Climbing, up 10% over five years.',
+      alt: 'RS3 Exchange’s five-year market price chart for the Elder rune bar: from about 12k gp in 2022 to a peak near 26k in 2024, back to about 14k now.',
     },
   },
 ];
