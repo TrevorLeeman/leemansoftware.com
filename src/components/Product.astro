@@ -116,9 +116,10 @@ const loading = eager ? 'eager' : 'lazy';
 
   .summary {
     margin: 0;
-    max-width: 36em;
+    max-width: 46em;
     color: var(--ink-soft);
-    text-wrap: pretty;
+    /* Where a summary has to wrap, split it evenly rather than leave a word on its own. */
+    text-wrap: balance;
   }
 
   .meta {

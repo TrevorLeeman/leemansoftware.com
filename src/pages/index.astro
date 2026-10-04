@@ -41,7 +41,7 @@ const rest = products.filter((p) => !p.featured);
   </section>
 
   <section class="more wrap" aria-label="More products">
-    {rest.map((p) => <Product product={p} sizes="(min-width: 3000px) 1300px, (min-width: 1100px) 54vw, 100vw" />)}
+    {rest.map((p) => <Product product={p} sizes="(min-width: 3000px) 1100px, (min-width: 1100px) 50vw, 100vw" />)}
   </section>
 </Base>
 
@@ -157,22 +157,27 @@ const rest = products.filter((p) => !p.featured);
   /* Second screen: the other products side by side. */
   .more {
     display: grid;
-    gap: clamp(56px, 6vw, 96px) clamp(40px, 4.5vw, 112px);
+    gap: clamp(56px, 6vw, 96px);
     padding-top: clamp(48px, 5vw, 80px);
     background: linear-gradient(var(--rule), var(--rule)) center top / calc(100% - var(--gutter) * 2) 1px no-repeat;
   }
 
-  /* Side by side once there is room for both screens; each product spans two rows of a shared
-     grid, so the two names, and the two screens, start on the same line. */
+  /* Each remaining product gets its own row: what it is on the left, its screen on the right. */
+  .more > :global(.product + .product) {
+    padding-top: clamp(56px, 6vw, 96px);
+    border-top: 1px solid var(--rule);
+  }
+
   @media (min-width: 1100px) {
-    .more {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-      grid-template-rows: auto auto;
+    .more > :global(.product) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: none;
+      align-items: center;
+      column-gap: clamp(48px, 4.5vw, 112px);
     }
 
-    .more > :global(.product) {
-      grid-row: span 2;
-      grid-template-rows: subgrid;
+    .more > :global(.product.phone .screen) {
+      justify-self: center;
     }
   }
 </style>
