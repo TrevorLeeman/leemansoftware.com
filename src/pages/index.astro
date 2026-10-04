@@ -5,7 +5,7 @@ import { email, products } from '../site';
 const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
 ---
 
-<Base description="Leeman Software is a small product studio. We make Wallyt, OSRS Exchange and RS3 Exchange.">
+<Base description="Leeman Software is a small product studio. We make OSRS Exchange, RS3 Exchange and Wallyt.">
   <section class="hero wrap">
     <h1 class="title">
       Small, focused software<br /><span>for the web and Android.<i class="cursor" aria-hidden="true"></i></span>
@@ -17,7 +17,7 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
       products.map((p, i) => {
         const linkProps = p.external ? { rel: 'noopener' } : {};
         return (
-          <article class:list={['product', p.shot.frame]} style={`--brand: ${p.color}`}>
+          <article class:list={['product', p.shot.frame, { featured: p.featured }]} style={`--brand: ${p.color}`}>
             <div class="info">
               <img
                 class:list={['icon', { pixel: p.slug !== 'wallyt' }]}
@@ -106,6 +106,46 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
 
   .product.phone {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  /* The featured product leads: its text in a row across the top, its screen full width below. */
+  .product.featured {
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 4vw, 44px);
+  }
+
+  .featured .info {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: 48px;
+  }
+
+  .featured .info > :not(.meta, .go) {
+    grid-column: 1;
+  }
+
+  .featured .meta,
+  .featured .go {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .featured .meta {
+    grid-row: 3;
+  }
+
+  .featured .go {
+    grid-row: 4;
+    margin-top: 0;
+  }
+
+  .featured .name {
+    font-size: clamp(34px, 4.6vw, 54px);
+  }
+
+  .featured .summary {
+    max-width: 36em;
+    font-size: 18px;
   }
 
   .info {
@@ -257,6 +297,17 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
     .product.phone {
       grid-template-columns: 1fr;
       gap: 32px;
+    }
+
+    .featured .info {
+      grid-template-columns: 1fr;
+    }
+
+    .featured .meta,
+    .featured .go {
+      grid-column: 1;
+      grid-row: auto;
+      justify-self: start;
     }
 
     .phone .screen {

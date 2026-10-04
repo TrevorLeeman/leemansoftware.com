@@ -19,6 +19,8 @@ export type Product = {
   href: string;
   external: boolean;
   icon: string;
+  /** Our most used product: shown first, with its screen across the full width. */
+  featured?: boolean;
   /** The product's own brand color, used for small accents next to it. */
   color: string;
   /** A real screen from the product, shown in a browser or phone outline. */
@@ -38,27 +40,8 @@ export type Product = {
 
 export const products: Product[] = [
   {
-    slug: 'wallyt',
-    name: 'Wallyt',
-    summary:
-      'Split rent, trips and dinners with the people you share them with. Everyone sees the same balances, in any currency, and settles up in as few payments as possible.',
-    platforms: 'Android',
-    status: 'soon',
-    href: '/wallyt',
-    external: false,
-    icon: '/products/wallyt.webp',
-    color: '#0f766e',
-    shot: {
-      src: '/shots/wallyt-light.webp',
-      dark: '/shots/wallyt-dark.webp',
-      width: 640,
-      height: 1386,
-      frame: 'phone',
-      alt: 'Wallyt’s home screen for a ski trip group: Cara owes you $202.15, above the trip’s expenses.',
-    },
-  },
-  {
     slug: 'osrs-exchange',
+    featured: true,
     name: 'OSRS Exchange',
     summary:
       'Live Grand Exchange prices for Old School RuneScape, with margins, tax and profit worked out for every item as trades happen.',
@@ -97,6 +80,26 @@ export const products: Product[] = [
       frame: 'browser',
       url: 'https://www.rs3.exchange/item/elder-rune-bar',
       alt: 'RS3 Exchange’s five-year market price chart for the Elder rune bar: from about 12k gp in 2022 to a peak near 26k in 2024, back to about 14k now.',
+    },
+  },
+  {
+    slug: 'wallyt',
+    name: 'Wallyt',
+    summary:
+      'Split rent, trips and dinners with the people you share them with. Everyone sees the same balances, in any currency, and settles up in as few payments as possible.',
+    platforms: 'Android',
+    status: 'soon',
+    href: '/wallyt',
+    external: false,
+    icon: '/products/wallyt.webp',
+    color: '#0f766e',
+    shot: {
+      src: '/shots/wallyt-light.webp',
+      dark: '/shots/wallyt-dark.webp',
+      width: 640,
+      height: 1386,
+      frame: 'phone',
+      alt: 'Wallyt’s home screen for a ski trip group: Cara owes you $202.15, above the trip’s expenses.',
     },
   },
 ];
