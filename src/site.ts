@@ -28,6 +28,8 @@ export type Product = {
     src: string;
     /** A half-width copy for small screens. */
     small?: string;
+    /** A full-resolution copy for scaled-up 1440p and 4K screens. */
+    large?: string;
     dark?: string;
     width: number;
     height: number;
@@ -54,6 +56,7 @@ export const products: Product[] = [
     shot: {
       src: '/shots/osrs-exchange.webp',
       small: '/shots/osrs-exchange-800.webp',
+      large: '/shots/osrs-exchange-2400.webp',
       width: 1600,
       height: 925,
       frame: 'browser',
@@ -75,6 +78,7 @@ export const products: Product[] = [
     shot: {
       src: '/shots/rs3-exchange.webp',
       small: '/shots/rs3-exchange-800.webp',
+      large: '/shots/rs3-exchange-2400.webp',
       width: 1600,
       height: 925,
       frame: 'browser',

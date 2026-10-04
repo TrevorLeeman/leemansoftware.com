@@ -23,7 +23,7 @@
 
   --gutter: clamp(16px, 4vw, 32px);
   --measure: 68ch;
-  --wide: 1080px;
+  --wide: 1200px;
   --radius: 12px;
 }
 
@@ -427,4 +427,24 @@ html {
 /* The first section after a hero needs less air: there's no rule between them. */
 main .hero + .section {
   padding-top: clamp(12px, 3vw, 32px);
+}
+
+/* Big screens: scale the whole page instead of stretching it, so 1440p and 4K read like a
+   laptop at a comfortable distance rather than a narrow column in a sea of background. */
+@media (min-width: 2000px) {
+  html {
+    zoom: 1.25;
+  }
+}
+
+@media (min-width: 2400px) {
+  html {
+    zoom: 1.4;
+  }
+}
+
+@media (min-width: 3200px) {
+  html {
+    zoom: 2;
+  }
 }

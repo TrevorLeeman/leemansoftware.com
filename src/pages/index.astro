@@ -3,6 +3,18 @@ import Base from '../layouts/Base.astro';
 import { email, products } from '../site';
 
 const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
+
+// Rendered width of a screen, counting the page zoom big screens get (global.css).
+const sizesFor = (featured?: boolean) => {
+  const w = featured ? 1200 : 700;
+  return [
+    `(min-width: 3200px) ${w * 2}px`,
+    `(min-width: 2400px) ${Math.round(w * 1.4)}px`,
+    `(min-width: 2000px) ${Math.round(w * 1.25)}px`,
+    `(max-width: 820px) 100vw`,
+    `${w}px`,
+  ].join(', ');
+};
 ---
 
 <Base description="Leeman Software is a small product studio. We make OSRS Exchange, RS3 Exchange and Wallyt.">
@@ -17,30 +29,34 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
       products.map((p, i) => {
         const linkProps = p.external ? { rel: 'noopener' } : {};
         return (
-          <article class:list={['product', p.shot.frame, { featured: p.featured }]} style={`--brand: ${p.color}`}>
+          <article class:list={['product', p.shot.frame, { featured: p.featured, flip: !p.featured && i % 2 === 0 }]} style={`--brand: ${p.color}`}>
             <div class="info">
-              <img
-                class:list={['icon', { pixel: p.slug !== 'wallyt' }]}
-                src={p.icon}
-                alt=""
-                width="48"
-                height="48"
-                loading={i === 0 ? 'eager' : 'lazy'}
-              />
-              <h2 class="name">
-                <a href={p.href} {...linkProps}>{p.name}</a>
-              </h2>
-              <p class="summary">{p.summary}</p>
-              <p class="meta">
-                <span class:list={['badge', p.status]}>{p.status === 'live' ? 'live' : 'coming soon'}</span>
-                <span>{p.platforms.toLowerCase()}</span>
-              </p>
-              <a class="go" href={p.href} {...linkProps}>
-                {p.external ? `Open ${host(p.href)}` : `About ${p.name}`}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  {p.external ? <path d="M7 17 17 7M8 7h9v9" /> : <path d="M5 12h14M13 6l6 6-6 6" />}
-                </svg>
-              </a>
+              <div class="head">
+                <img
+                  class:list={['icon', { pixel: p.slug !== 'wallyt' }]}
+                  src={p.icon}
+                  alt=""
+                  width="48"
+                  height="48"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+                <h2 class="name">
+                  <a href={p.href} {...linkProps}>{p.name}</a>
+                </h2>
+              </div>
+              <div class="about">
+                <p class="summary">{p.summary}</p>
+                <p class="meta">
+                  <span class:list={['badge', p.status]}>{p.status === 'live' ? 'live' : 'coming soon'}</span>
+                  <span>{p.platforms.toLowerCase()}</span>
+                </p>
+                <a class="go" href={p.href} {...linkProps}>
+                  {p.external ? `Open ${host(p.href)}` : `About ${p.name}`}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    {p.external ? <path d="M7 17 17 7M8 7h9v9" /> : <path d="M5 12h14M13 6l6 6-6 6" />}
+                  </svg>
+                </a>
+              </div>
             </div>
 
             <a class="screen" href={p.shot.url ?? p.href} tabindex="-1" aria-hidden="true" {...linkProps}>
@@ -56,8 +72,8 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
                 {p.shot.dark && <source srcset={p.shot.dark} media="(prefers-color-scheme: dark)" />}
                 <img
                   src={p.shot.src}
-                  srcset={p.shot.small ? `${p.shot.small} 800w, ${p.shot.src} ${p.shot.width}w` : undefined}
-                  sizes={p.shot.small ? '(max-width: 820px) 100vw, 640px' : undefined}
+                  srcset={p.shot.small ? `${p.shot.small} 800w, ${p.shot.src} ${p.shot.width}w${p.shot.large ? `, ${p.shot.large} 2360w` : ''}` : undefined}
+                  sizes={p.shot.small ? sizesFor(p.featured) : undefined}
                   width={p.shot.width}
                   height={p.shot.height}
                   alt={p.shot.alt}
@@ -73,7 +89,7 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
   </section>
 
   <section id="contact" class="wrap contact" aria-labelledby="contact-title">
-    <p class="label" id="contact-title">contact</p>
+    <h2 class="contact-title" id="contact-title">Get in touch</h2>
     <p class="addr">
       <a href={`mailto:${email}`}>{email}</a>
       <button class="copy" type="button" data-copy={email} aria-label={`Copy ${email}`}>Copy</button>
@@ -83,24 +99,24 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
 
 <style>
   .hero {
-    padding-block: clamp(64px, 11vw, 136px) clamp(40px, 6vw, 72px);
+    padding-block: clamp(40px, 6vw, 96px) clamp(28px, 3.4vw, 48px);
   }
 
   .hero h1 {
-    font-size: clamp(40px, 6.6vw, 76px);
+    font-size: clamp(38px, 5.4vw, 76px);
   }
 
   .hero h1 span {
     color: var(--muted);
   }
 
-  /* Each product: what it is on the left, a real screen from it on the right. */
+  /* Each product: what it is beside a real screen from it. */
   .product {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     align-items: center;
-    gap: clamp(32px, 6vw, 88px);
-    padding-block: clamp(48px, 7vw, 88px);
+    gap: clamp(32px, 5vw, 80px);
+    padding-block: clamp(48px, 6vw, 96px);
     border-top: 1px solid var(--rule);
   }
 
@@ -108,50 +124,30 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   }
 
-  /* The featured product leads: its text in a row across the top, its screen full width below. */
-  .product.featured {
-    grid-template-columns: 1fr;
-    gap: clamp(28px, 4vw, 44px);
+  /* Alternate sides down the page, screen first. */
+  .product.flip .screen {
+    order: -1;
   }
 
-  .featured .info {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    column-gap: 48px;
+  .product.flip.phone {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   }
 
-  .featured .info > :not(.meta, .go) {
-    grid-column: 1;
-  }
-
-  .featured .meta,
-  .featured .go {
-    grid-column: 2;
-    justify-self: end;
-  }
-
-  .featured .meta {
-    grid-row: 3;
-  }
-
-  .featured .go {
-    grid-row: 4;
-    margin-top: 0;
-  }
-
-  .featured .name {
-    font-size: clamp(34px, 4.6vw, 54px);
-  }
-
-  .featured .summary {
-    max-width: 36em;
-    font-size: 18px;
-  }
-
-  .info {
+  .info,
+  .about {
     display: grid;
     justify-items: start;
     gap: 14px;
+  }
+
+  .info {
+    gap: 16px;
+  }
+
+  .head {
+    display: grid;
+    justify-items: start;
+    gap: 18px;
   }
 
   .icon {
@@ -166,8 +162,8 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
   }
 
   .name {
-    margin: 4px 0 0;
-    font-size: clamp(28px, 3.4vw, 40px);
+    margin: 0;
+    font-size: clamp(28px, 3.2vw, 42px);
     font-weight: 600;
     letter-spacing: -0.035em;
     line-height: 1.05;
@@ -193,6 +189,28 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
     font-family: var(--mono);
     font-size: 12.5px;
     color: var(--muted);
+  }
+
+  /* The featured product leads: its name on the left, what it does on the right, and its
+     screen across the full width below. */
+  .product.featured {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 3vw, 40px);
+    padding-top: clamp(32px, 4vw, 56px);
+  }
+
+  .featured .info {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: end;
+    gap: 20px clamp(32px, 5vw, 80px);
+  }
+
+  .featured .name {
+    font-size: clamp(34px, 4.4vw, 60px);
+  }
+
+  .featured .summary {
+    font-size: 18px;
   }
 
   .go {
@@ -294,7 +312,8 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
 
   @media (max-width: 820px) {
     .product,
-    .product.phone {
+    .product.phone,
+    .product.flip.phone {
       grid-template-columns: 1fr;
       gap: 32px;
     }
@@ -303,11 +322,8 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
       grid-template-columns: 1fr;
     }
 
-    .featured .meta,
-    .featured .go {
-      grid-column: 1;
-      grid-row: auto;
-      justify-self: start;
+    .product.flip .screen {
+      order: 0;
     }
 
     .phone .screen {
@@ -316,8 +332,21 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
   }
 
   .contact {
-    padding-block: clamp(48px, 7vw, 88px) 0;
-    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: baseline;
+    gap: 12px clamp(32px, 5vw, 80px);
+    padding-block: clamp(48px, 6vw, 96px) 0;
+    /* A rule as wide as the content, not the padded container. */
+    background: linear-gradient(var(--rule), var(--rule)) center top / calc(100% - var(--gutter) * 2) 1px no-repeat;
+  }
+
+  .contact-title {
+    margin: 0;
+    font-size: clamp(28px, 3.2vw, 42px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
   }
 
   .addr {
@@ -325,7 +354,13 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
     flex-wrap: wrap;
     align-items: center;
     gap: 8px 14px;
-    margin: 14px 0 0;
+    margin: 0;
+  }
+
+  @media (max-width: 820px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
   }
 
   .addr a {
