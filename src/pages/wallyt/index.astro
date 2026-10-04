@@ -4,12 +4,12 @@ import Base from '../../layouts/Base.astro';
 import ProductHero from '../../components/ProductHero.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import FeatureGrid from '../../components/FeatureGrid.astro';
-import { company, email, organization, product, wallytPlayUrl } from '../../site';
+import { company, email, organizationRef, product, wallytPlayUrl } from '../../site';
 
 const wallyt = product('wallyt');
 const live = wallyt.status === 'live';
 const description =
-  'Wallyt is a free Android app for splitting shared costs with roommates, trips and friends: every way to split, 161 currencies, and as few payments as possible to settle up. Built by Leeman Software.';
+  'Wallyt is a free Android app for splitting costs with roommates, trips and friends: every way to split, 161 currencies, and the fewest payments to settle up.';
 
 // Checked against the Wallyt app (docs/product.md) on 2026-10-04.
 const features = [
@@ -37,17 +37,18 @@ const policies = [
 
 <Base
   product={wallyt}
-  title="Split shared costs with the people you share them with"
+  title="Split expenses with roommates, trips and friends"
   description={description}
   schema={{
     '@type': 'MobileApplication',
     name: 'Wallyt',
     description,
-    url: `${company.url}/wallyt`,
+    url: `${company.url}/wallyt/`,
     operatingSystem: 'Android',
     applicationCategory: 'FinanceApplication',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    publisher: organization,
+    publisher: organizationRef,
+    creator: organizationRef,
     ...(live ? { installUrl: wallytPlayUrl } : {}),
   }}
 >

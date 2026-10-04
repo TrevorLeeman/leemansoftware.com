@@ -1,16 +1,17 @@
 import type { APIRoute } from 'astro';
 import { company } from '../site';
 
+// Every page, at the address it's served from (with its trailing slash, see url() in src/url.ts).
 const paths = [
   '/',
-  '/osrs-exchange',
-  '/rs3-exchange',
-  '/wallyt',
-  '/wallyt/support',
-  '/wallyt/privacy',
-  '/wallyt/terms',
-  '/wallyt/delete-account',
-  '/privacy',
+  '/osrs-exchange/',
+  '/rs3-exchange/',
+  '/wallyt/',
+  '/wallyt/support/',
+  '/wallyt/privacy/',
+  '/wallyt/terms/',
+  '/wallyt/delete-account/',
+  '/privacy/',
 ];
 
 export const GET: APIRoute = () =>

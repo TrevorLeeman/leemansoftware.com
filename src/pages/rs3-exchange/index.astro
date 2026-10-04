@@ -7,8 +7,8 @@ import { product } from '../../site';
 
 <Exchange
   product={product('rs3-exchange')}
-  title="Live Grand Exchange prices for RuneScape 3"
-  description="RS3 Exchange is a free website with live Grand Exchange prices for RuneScape 3: margins after tax, years of price history, recipe profit and price alerts for every tradeable item. Built by Leeman Software."
+  title="Live RS3 Grand Exchange prices and history"
+  description="Free live Grand Exchange prices for RuneScape 3: margins after tax, years of price history, recipe profit and price alerts for every tradeable item."
   lede="RS3 Exchange is a free website with live Grand Exchange prices for RuneScape 3, and years of price history behind every item. Players use it to find items worth flipping, see what recipes make, and check how prices have moved."
   features={[
     { title: 'Live margins', body: 'Every tradeable item in one table: buy and sell price, profit after tax, volume and buy limit.' },
@@ -30,5 +30,12 @@ import { product } from '../../site';
     { title: 'Public data', body: 'Prices come from the RuneScape Wiki’s real-time data, the source the community already relies on.' },
     { title: 'Tax included', body: 'Every profit is after the Grand Exchange’s 2% tax, with its 50 gp floor and exempt items.' },
     { title: 'Free, without ads', body: 'Every tool works without an account. Premium adds faster updates and more alerts.' },
+  ]}
+  questions={[
+    { q: 'Is RS3 Exchange free?', a: 'Yes. Every tool works without an account. Premium adds price updates every 6 seconds and more alerts, and one subscription covers both RS3 Exchange and OSRS Exchange. There are no ads on any plan.' },
+    { q: 'Where do RS3 Exchange’s prices come from?', a: 'From the RuneScape Wiki’s real-time price data, the source the community already relies on. Prices come in as items trade, and every margin, profit and chart updates as they do.' },
+    { q: 'Does RS3 Exchange include Grand Exchange tax?', a: 'Yes. Every profit is after the Grand Exchange’s 2% tax, with its 50 gp floor and exempt items.' },
+    { q: 'How do RS3 Exchange’s price alerts work?', a: 'Choose an item and a price, and RS3 Exchange sends you a Discord message or an email the moment the item gets there.' },
+    { q: 'Who makes RS3 Exchange?', a: 'Leeman Software designs, builds and runs it. RS3 Exchange is independent and not affiliated with Jagex Ltd, the makers of RuneScape 3.' },
   ]}
 />

@@ -8,10 +8,10 @@ Everything the Play Console asks for that this site answers, and what still has 
 
 | Console field | Value |
 |---|---|
-| Store settings > Store listing contact details > Website | https://leemansoftware.com/wallyt |
+| Store settings > Store listing contact details > Website | https://leemansoftware.com/wallyt/ |
 | Store settings > Store listing contact details > Email | hello@leemansoftware.com |
-| App content > Privacy policy | https://leemansoftware.com/wallyt/privacy |
-| App content > Data safety > Delete account URL | https://leemansoftware.com/wallyt/delete-account |
+| App content > Privacy policy | https://leemansoftware.com/wallyt/privacy/ |
+| App content > Data safety > Delete account URL | https://leemansoftware.com/wallyt/delete-account/ |
 | Developer page > Website (optional) | https://leemansoftware.com |
 
 Google Cloud OAuth consent screen (Sign in with Google), Branding:
@@ -19,9 +19,9 @@ Google Cloud OAuth consent screen (Sign in with Google), Branding:
 | Field | Value |
 |---|---|
 | App name | Wallyt |
-| App home page | https://leemansoftware.com/wallyt |
-| Privacy policy | https://leemansoftware.com/wallyt/privacy |
-| Terms of service | https://leemansoftware.com/wallyt/terms |
+| App home page | https://leemansoftware.com/wallyt/ |
+| Privacy policy | https://leemansoftware.com/wallyt/privacy/ |
+| Terms of service | https://leemansoftware.com/wallyt/terms/ |
 | Authorized domain | leemansoftware.com (verify it in Google Search Console first) |
 
 ## What the website covers

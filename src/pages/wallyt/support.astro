@@ -1,7 +1,7 @@
 ---
 import { url } from '../../url';
 import Doc from '../../layouts/Doc.astro';
-import { email, product } from '../../site';
+import { company, email, product } from '../../site';
 
 const faqs = [
   {
@@ -62,10 +62,24 @@ const faqs = [
     link: { href: '/wallyt/delete-account', label: 'Delete your Wallyt account' },
   },
 ];
+
+// The same questions for search engines and AI answers, with the deletion answer's link spelled out.
+const faqSchema = {
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.link ? `See ${f.link.label} at ${company.url}${f.link.href}/ for the steps and for exactly what is deleted.` : f.a,
+    },
+  })),
+};
 ---
 
 <Doc
   title="Wallyt support"
+  pageType="FAQPage"
+  schema={faqSchema}
   eyebrow="Wallyt"
   eyebrowHref="/wallyt"
   product={product('wallyt')}

@@ -7,19 +7,28 @@ export const company = {
   legalName: 'Leeman Group LLC',
   domain: 'leemansoftware.com',
   url: 'https://leemansoftware.com',
+  /** What the studio does, after its name in the home page's search result. */
+  tagline: 'Web and Android apps, built end to end',
 };
 
 // The one address for everything: questions, Wallyt help and privacy requests.
 export const email = 'hello@leemansoftware.com';
 
-/** The studio as schema.org sees it: the publisher of every product. */
+/**
+ * The studio as schema.org sees it. Every page describes it in full (see Base), so products and
+ * pages point at it by its id: `publisher: organizationRef`.
+ */
 export const organization = {
   '@type': 'Organization',
+  '@id': `${company.url}/#organization`,
   name: company.brand,
   legalName: company.legalName,
-  url: company.url,
+  url: `${company.url}/`,
   email,
+  logo: { '@type': 'ImageObject', url: `${company.url}/apple-touch-icon.png`, width: 180, height: 180 },
 };
+
+export const organizationRef = { '@id': organization['@id'] };
 
 export const jagexNotice =
   'OSRS Exchange and RS3 Exchange are independent and not affiliated with Jagex Ltd. RuneScape and Old School RuneScape are trademarks of Jagex Ltd.';

@@ -6,7 +6,8 @@ import ProductHero from '../components/ProductHero.astro';
 import SectionHead from '../components/SectionHead.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import Stats from '../components/Stats.astro';
-import { company, organization, type Product } from '../site';
+import Questions from '../components/Questions.astro';
+import { company, organizationRef, type Product } from '../site';
 
 type Point = { title: string; body: string };
 
@@ -24,9 +25,11 @@ interface Props {
   built: Point[];
   /** Why players can rely on it. */
   trust: Point[];
+  /** What players ask before they use it, answered from the facts above. */
+  questions: { q: string; a: string }[];
 }
 
-const { product: p, title, description, lede, features, stats, built, trust } = Astro.props;
+const { product: p, title, description, lede, features, stats, built, trust, questions } = Astro.props;
 const site = p.site!;
 const host = new URL(site).hostname.replace(/^www\./, '');
 ---
@@ -35,6 +38,7 @@ const host = new URL(site).hostname.replace(/^www\./, '');
   product={p}
   title={title}
   description={description}
+  questions={questions}
   schema={{
     '@type': 'WebApplication',
     name: p.name,
@@ -43,7 +47,8 @@ const host = new URL(site).hostname.replace(/^www\./, '');
     applicationCategory: 'GameApplication',
     operatingSystem: 'Any (web browser)',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    publisher: organization,
+    publisher: organizationRef,
+    creator: organizationRef,
   }}
 >
   <ProductHero product={p}>
@@ -72,6 +77,11 @@ const host = new URL(site).hostname.replace(/^www\./, '');
   <section class="wrap section" id="trust" aria-labelledby="trust-title">
     <SectionHead title="Prices you can rely on" id="trust-title" />
     <FeatureGrid features={trust} />
+  </section>
+
+  <section class="wrap section" id="questions" aria-labelledby="questions-title">
+    <SectionHead title="Questions players ask" id="questions-title" />
+    <Questions questions={questions} />
   </section>
 </Base>
 

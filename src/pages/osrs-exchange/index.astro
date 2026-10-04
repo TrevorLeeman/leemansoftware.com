@@ -7,8 +7,8 @@ import { product } from '../../site';
 
 <Exchange
   product={product('osrs-exchange')}
-  title="Live Grand Exchange prices for Old School RuneScape"
-  description="OSRS Exchange is a free website with live Grand Exchange prices for Old School RuneScape: margins after tax, price history, recipe profit and price alerts for every tradeable item. Built by Leeman Software."
+  title="Live OSRS Grand Exchange prices and margins"
+  description="Free live Grand Exchange prices for Old School RuneScape: margins after tax, price history, recipe profit and price alerts for every tradeable item."
   lede="OSRS Exchange is a free website with live Grand Exchange prices for Old School RuneScape. Players use it to find items worth flipping, see what recipes make, and check how any item’s price has moved."
   features={[
     { title: 'Live margins', body: 'Every tradeable item in one table: buy and sell price, profit after tax, volume and buy limit.' },
@@ -30,5 +30,12 @@ import { product } from '../../site';
     { title: 'Public data', body: 'Prices come from the RuneScape Wiki’s real-time data, the source the community already relies on.' },
     { title: 'Tax included', body: 'Every profit is after the Grand Exchange’s 2% tax, with its 50 gp floor, 5M cap and exempt items.' },
     { title: 'Free to use', body: 'Every tool works without an account. Premium adds faster updates and more alerts.' },
+  ]}
+  questions={[
+    { q: 'Is OSRS Exchange free?', a: 'Yes. Every tool works without an account. Premium adds price updates every 6 seconds and more alerts, and one subscription covers both OSRS Exchange and RS3 Exchange.' },
+    { q: 'Where do OSRS Exchange’s prices come from?', a: 'From the RuneScape Wiki’s real-time price data, the source the community already relies on. Prices come in as items trade, and every margin, profit and chart updates as they do.' },
+    { q: 'Does OSRS Exchange include Grand Exchange tax?', a: 'Yes. Every profit is after the Grand Exchange’s 2% tax, with its 50 gp floor, 5M cap and exempt items.' },
+    { q: 'How do OSRS Exchange’s price alerts work?', a: 'Choose an item and a price, and OSRS Exchange sends you a Discord message or an email the moment the item gets there.' },
+    { q: 'Who makes OSRS Exchange?', a: 'Leeman Software designs, builds and runs it. OSRS Exchange is independent and not affiliated with Jagex Ltd, the makers of Old School RuneScape.' },
   ]}
 />

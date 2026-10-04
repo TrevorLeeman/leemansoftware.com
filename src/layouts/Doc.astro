@@ -10,13 +10,21 @@ interface Props {
   eyebrow: string;
   /** Where the label links back to, e.g. "/wallyt". */
   eyebrowHref?: string;
-  /** Shown under the title, e.g. "Last updated October 2, 2026". */
+  /** Shown under the title, e.g. "Wallyt, by Leeman Software". */
   meta?: string;
+  /** When a policy last changed, as YYYY-MM-DD. Shown as "Last updated October 2, 2026" in place of `meta`. */
+  updated?: string;
   /** The product subsite this page belongs to. */
   product?: Product;
+  /** Passed through to Base: the page's schema.org type and its own fields. */
+  pageType?: string;
+  schema?: Record<string, unknown>;
 }
 
-const { title, description, eyebrow, eyebrowHref, meta, product } = Astro.props;
+const { title, description, eyebrow, eyebrowHref, meta, updated, product, pageType, schema } = Astro.props;
+const updatedText = updated
+  ? new Date(`${updated}T12:00:00Z`).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
+  : undefined;
 
 // Give every h2 an id and list them as the page's contents.
 const slugify = (text: string) =>
@@ -35,7 +43,7 @@ const html = (await Astro.slots.render('default')).replace(/<h2([^>]*)>([\s\S]*?
 const hasToc = headings.length >= 4;
 ---
 
-<Base title={title} description={description} product={product}>
+<Base title={title} description={description} product={product} pageType={pageType} schema={schema} updated={updated}>
   <article class="wrap doc">
     <header class="doc-head">
       {
@@ -46,7 +54,15 @@ const hasToc = headings.length >= 4;
         )
       }
       <h1 class="title">{title}</h1>
-      {meta && <p class="meta">{meta}</p>}
+      {
+        updated ? (
+          <p class="meta">
+            Last updated <time datetime={updated}>{updatedText}</time>
+          </p>
+        ) : (
+          meta && <p class="meta">{meta}</p>
+        )
+      }
     </header>
 
     <div class:list={['doc-body', { 'has-toc': hasToc }]}>

@@ -1,0 +1,57 @@
+---
+// Questions people ask about a product, each answered in a sentence or two. Written as plain
+// questions and answers so search engines and AI answers can quote them as they are.
+interface Props {
+  questions: { q: string; a: string }[];
+}
+
+const { questions } = Astro.props;
+---
+
+<ul class="questions">
+  {
+    questions.map((x) => (
+      <li>
+        <h3>{x.q}</h3>
+        <p>{x.a}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .questions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(28px, 4vw, 56px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding-block: 22px;
+    border-top: 1px solid var(--rule);
+  }
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    margin: 0;
+    max-width: 36em;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 760px) {
+    .questions {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
