@@ -50,11 +50,18 @@ const action = p.site
     min-width: 0;
   }
 
+  /* The brand's baseline is its wordmark's, so the credit beside it sits on the same line. The
+     wordmark is as tall as the icon, so both stay centred on each other. */
   .owner .brand {
-    align-self: center;
+    align-items: baseline;
+  }
+
+  .owner .wordmark {
+    line-height: 28px;
   }
 
   .product-icon {
+    align-self: center;
     flex: none;
     width: 28px;
     height: 28px;
