@@ -13,50 +13,29 @@ const rest = products.filter((p) => !p.featured);
       <h1 class="title">
         Small, focused software <span>for the web and Android.<i class="cursor" aria-hidden="true"></i></span>
       </h1>
-      <nav class="index" aria-label="Products">
-        <p class="label">products</p>
-        <ol>
-          {
-            products.map((p) => (
-              <li style={`--brand: ${p.color}`}>
-                <a href={`#${p.slug}`}>
-                  <img class:list={{ pixel: p.slug !== 'wallyt' }} src={p.icon} alt="" width="28" height="28" />
-                  <span class="index-name">{p.name}</span>
-                  <span class:list={['badge', p.status]}>{p.status === 'live' ? 'live' : 'soon'}</span>
-                </a>
-              </li>
-            ))
-          }
-        </ol>
-      </nav>
-      <div id="contact" class="contact">
-        <p class="label">contact</p>
-        <p class="addr">
-          <a href={`mailto:${email}`}>{email}</a>
-          <button class="copy" type="button" data-copy={email} aria-label={`Copy ${email}`}>Copy</button>
-        </p>
-      </div>
     </div>
-    <Product product={featured} eager sizes="(min-width: 3000px) 1760px, (min-width: 1100px) 62vw, 100vw" />
+    <Product product={featured} eager sizes="(min-width: 3000px) 2100px, (min-width: 1100px) min(1400px, 72vw), 100vw" />
   </section>
 
   <section class="more wrap" aria-label="More products">
-    {rest.map((p) => <Product product={p} sizes="(min-width: 3000px) 1100px, (min-width: 1100px) 50vw, 100vw" />)}
+    {rest.map((p) => <Product product={p} sizes="(min-width: 3000px) 1250px, (min-width: 1100px) 42vw, 100vw" />)}
+  </section>
+
+  <section id="contact" class="contact wrap" aria-labelledby="contact-title">
+    <h2 class="contact-title" id="contact-title">Get in touch</h2>
+    <p class="addr">
+      <a href={`mailto:${email}`}>{email}</a>
+      <button class="copy" type="button" data-copy={email} aria-label={`Copy ${email}`}>Copy</button>
+    </p>
   </section>
 </Base>
 
 <style>
-  /* First screen: the studio on the left, its flagship product on the right. */
+  /* First screen: the headline, then the flagship product. */
   .landing {
     display: grid;
     gap: clamp(32px, 5vw, 56px);
     padding-block: clamp(28px, 4vw, 64px) clamp(48px, 5vw, 80px);
-  }
-
-  .intro {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
   }
 
   .intro h1 {
@@ -67,94 +46,7 @@ const rest = products.filter((p) => !p.featured);
     color: var(--muted);
   }
 
-  .index ol {
-    margin: 10px 0 0;
-    padding: 0;
-    list-style: none;
-    border-top: 1px solid var(--rule);
-  }
-
-  .index li {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .index a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-block: 10px;
-    text-decoration: none;
-  }
-
-  .index img {
-    flex: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 7px;
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
-  }
-
-  .index img.pixel {
-    image-rendering: pixelated;
-  }
-
-  .index-name {
-    flex: 1;
-    font-weight: 500;
-  }
-
-  .index a:hover .index-name {
-    text-decoration: underline;
-    text-decoration-color: var(--brand);
-    text-underline-offset: 0.22em;
-  }
-
-  /* On phones the products follow straight after, so the index is only for wider screens. */
-  .index {
-    display: none;
-  }
-
-  .addr {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 12px;
-    margin: 6px 0 0;
-  }
-
-  .addr a {
-    font-family: var(--mono);
-    font-size: 15px;
-    overflow-wrap: anywhere;
-  }
-
-  @media (min-width: 1100px) {
-    .landing {
-      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-      align-items: stretch;
-      column-gap: clamp(48px, 4.5vw, 112px);
-    }
-
-    .intro {
-      gap: clamp(36px, 4vw, 64px);
-      padding-block: 4px;
-    }
-
-    /* The contact settles at the bottom, level with the end of the chart. */
-    .contact {
-      margin-top: auto;
-    }
-
-    .intro h1 {
-      font-size: clamp(40px, 2.6vw, 60px);
-    }
-
-    .index {
-      display: block;
-    }
-  }
-
-  /* Second screen: the other products side by side. */
+  /* Second screen: the other products, one per row. */
   .more {
     display: grid;
     gap: clamp(56px, 6vw, 96px);
@@ -162,22 +54,121 @@ const rest = products.filter((p) => !p.featured);
     background: linear-gradient(var(--rule), var(--rule)) center top / calc(100% - var(--gutter) * 2) 1px no-repeat;
   }
 
-  /* Each remaining product gets its own row: what it is on the left, its screen on the right. */
   .more > :global(.product + .product) {
     padding-top: clamp(56px, 6vw, 96px);
     border-top: 1px solid var(--rule);
   }
 
+  /* Last: the contact, large, under a rule as wide as the content. */
+  .contact {
+    display: grid;
+    gap: 16px;
+    margin-top: clamp(56px, 6vw, 96px);
+    padding-top: clamp(48px, 6vw, 96px);
+    background: linear-gradient(var(--rule), var(--rule)) center top / calc(100% - var(--gutter) * 2) 1px no-repeat;
+  }
+
+  .contact-title {
+    margin: 0;
+    font-size: clamp(32px, 4.4vw, 56px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+
+  .addr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    margin: 0;
+  }
+
+  .addr a {
+    font-family: var(--mono);
+    font-size: clamp(18px, 3vw, 30px);
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+
+  /*
+   * Laptops and up read top to bottom in one line of sight: the headline alone and centred,
+   * the flagship's chart rising into view under it, the other two products on alternating
+   * sides, and the contact centred to close.
+   */
   @media (min-width: 1100px) {
+    .landing {
+      gap: clamp(72px, 9vh, 128px);
+      padding-block: clamp(80px, 12vh, 168px) clamp(96px, 8vw, 152px);
+    }
+
+    .intro {
+      text-align: center;
+    }
+
+    .intro h1 {
+      font-size: clamp(56px, 4.4vw, 92px);
+    }
+
+    .intro h1 span {
+      display: block;
+    }
+
+    .more {
+      gap: 0;
+      padding-top: 0;
+      background: none;
+    }
+
     .more > :global(.product) {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
       grid-template-rows: none;
       align-items: center;
-      column-gap: clamp(48px, 4.5vw, 112px);
+      column-gap: clamp(56px, 6vw, 128px);
+      padding-block: clamp(96px, 8vw, 152px);
+      border-top: 1px solid var(--rule);
+    }
+
+    .more > :global(.product + .product) {
+      padding-top: clamp(96px, 8vw, 152px);
+    }
+
+    /* Every other row puts its screen first, so the eye zigzags down the page. */
+    .more > :global(.product:nth-child(even)) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    .more > :global(.product:nth-child(even) .screen) {
+      order: -1;
+    }
+
+    /* A phone is narrow, so its row splits evenly and the phone centres in its half. */
+    .more > :global(.product.phone) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
     .more > :global(.product.phone .screen) {
       justify-self: center;
+    }
+
+    .contact {
+      justify-items: center;
+      gap: 24px;
+      margin-top: 0;
+      padding-block: clamp(96px, 8vw, 152px) clamp(48px, 5vw, 96px);
+      text-align: center;
+    }
+
+    .contact-title {
+      font-size: clamp(48px, 3.6vw, 76px);
+    }
+
+    .addr {
+      justify-content: center;
+    }
+
+    .addr a {
+      font-size: clamp(22px, 1.6vw, 32px);
     }
   }
 </style>

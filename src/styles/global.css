@@ -23,8 +23,8 @@
 
   --gutter: clamp(16px, 4vw, 32px);
   --measure: 68ch;
-  /* Content width grows with the screen, so big displays get more room, not bigger margins. */
-  --wide: clamp(1200px, 84vw, 1760px);
+  /* Content width grows with the screen, but stops where a row would get too wide to read as one. */
+  --wide: clamp(1040px, 70vw, 1400px);
   --radius: 12px;
 }
 

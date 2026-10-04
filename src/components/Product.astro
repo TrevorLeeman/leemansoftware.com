@@ -237,20 +237,77 @@ const loading = eager ? 'eager' : 'lazy';
     object-position: top;
   }
 
-  /* The featured product gets a larger name, with what it does beside it on wide screens. */
+  /* The featured product gets a larger name and summary. */
   .featured .name {
     font-size: clamp(30px, 3vw, 52px);
   }
 
   @media (min-width: 700px) {
+    .featured .summary {
+      font-size: 17px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .name {
+      font-size: clamp(32px, 2.3vw, 46px);
+    }
+
+    .summary {
+      font-size: clamp(16px, 1vw, 19px);
+    }
+
+    .go {
+      margin-left: 6px;
+    }
+
+    /* The flagship's name and summary sit centred over its chart, under the centred headline. */
+    .featured {
+      gap: clamp(36px, 3.4vw, 56px);
+    }
+
     .featured .info {
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: end;
-      column-gap: clamp(28px, 4vw, 64px);
+      justify-items: center;
+      text-align: center;
+    }
+
+    .featured .name {
+      font-size: clamp(32px, 2.3vw, 46px);
     }
 
     .featured .summary {
-      font-size: 17px;
+      max-width: 36em;
+      font-size: clamp(17px, 1.1vw, 21px);
+    }
+
+    .featured .meta {
+      justify-content: center;
+    }
+
+    .phone .screen {
+      width: min(100%, 340px);
+    }
+  }
+
+  /* Products below the first screen rise into place as they scroll in. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .product:not(.featured) > * {
+        animation: product-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 80%;
+      }
+
+      .product:not(.featured) > .screen {
+        animation-range: entry 15% entry 95%;
+      }
+    }
+  }
+
+  @keyframes product-rise {
+    from {
+      opacity: 0;
+      translate: 0 48px;
     }
   }
 </style>
