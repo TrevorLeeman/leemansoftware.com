@@ -27,7 +27,7 @@ const html = (await Astro.slots.render('default')).replace(/<h2([^>]*)>([\s\S]*?
   const text = inner.replace(/<[^>]+>/g, '').trim();
   const id = slugify(text);
   headings.push({ id, text });
-  return `<h2${attrs} id="${id}">${inner}</h2>`;
+  return `<h2${attrs} id="${id}">${inner}<a class="anchor" href="#${id}" aria-label="Link to this section">#</a></h2>`;
 });
 const hasToc = headings.length >= 4;
 ---
@@ -166,6 +166,49 @@ const hasToc = headings.length >= 4;
     display: none;
   }
 
+  /* The section being read is marked with the logo's cursor, set on the contents' rule. */
+  .toc li {
+    position: relative;
+  }
+
+  .toc a[aria-current='true'] {
+    color: var(--ink);
+  }
+
+  .toc a[aria-current='true']::before {
+    content: '';
+    position: absolute;
+    top: 0.25em;
+    left: -17px;
+    width: 3px;
+    height: 1em;
+    border-radius: 1px;
+    background: var(--cursor);
+  }
+
+  .prose :global(h2) {
+    position: relative;
+  }
+
+  .prose :global(.anchor) {
+    margin-left: 0.35em;
+    font-family: var(--mono);
+    font-weight: 400;
+    color: var(--rule-strong);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 140ms ease, color 140ms ease;
+  }
+
+  .prose :global(h2:hover .anchor),
+  .prose :global(.anchor:focus-visible) {
+    opacity: 1;
+  }
+
+  .prose :global(.anchor:hover) {
+    color: var(--accent);
+  }
+
   /* On narrower screens the contents fold into one line above the text. */
   @media (max-width: 960px) {
     .doc-body.has-toc {
@@ -179,19 +222,39 @@ const hasToc = headings.length >= 4;
     .toc-fold {
       display: block;
       margin-top: 24px;
-      padding: 12px 16px;
-      border: 1px solid var(--rule);
-      border-radius: 10px;
-      background: var(--surface);
+      border-bottom: 1px solid var(--rule);
     }
 
     .toc-fold summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin: 0;
+      padding-block: 4px 14px;
       cursor: pointer;
+      list-style: none;
     }
 
-    .toc-fold[open] summary {
-      margin-bottom: 12px;
+    .toc-fold summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .toc-fold summary::after {
+      content: '+';
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .toc-fold[open] summary::after {
+      content: '\2212';
+    }
+
+    .toc-fold ol {
+      padding-bottom: 12px;
+    }
+
+    .prose :global(.anchor) {
+      opacity: 1;
     }
   }
 </style>

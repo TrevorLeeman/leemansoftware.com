@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import Monogram from '../components/Monogram.astro';
+import { execSync } from 'node:child_process';
+
 import { company, email } from '../site';
 
 interface Props {
@@ -14,6 +16,14 @@ const { title, description, section } = Astro.props;
 const fullTitle = title ? `${title} | ${company.brand}` : company.brand;
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', company.url).href;
 const year = new Date().getFullYear();
+// The build stamp in the footer: when this copy of the site was built, and from which commit.
+const built = new Date().toISOString().slice(0, 10);
+let commit = '';
+try {
+  commit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+} catch {
+  // Not a git checkout; the stamp shows the date alone.
+}
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const current = (href: string) => (path === href ? 'page' : undefined);
 ---
@@ -38,7 +48,7 @@ const current = (href: string) => (path === href ? 'page' : undefined);
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={`${company.url}/og.png`} />
     <meta name="twitter:card" content="summary_large_image" />
-    <script src="/copy.js" defer is:inline></script>
+    <script src="/site.js" defer is:inline></script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -111,7 +121,10 @@ const current = (href: string) => (path === href ? 'page' : undefined);
 
       <div class="wrap">
         <div class="fine">
-          <p>&copy; {year} {company.legalName}</p>
+          <p>
+            &copy; {year} {company.legalName}
+            <span class="stamp">built {built}{commit && <> · <span title="Commit">{commit}</span></>}</span>
+          </p>
           <p>
             OSRS Exchange and RS3 Exchange are independent and not affiliated with Jagex Ltd.
             RuneScape and Old School RuneScape are trademarks of Jagex Ltd.
@@ -263,6 +276,12 @@ const current = (href: string) => (path === href ? 'page' : undefined);
   .fine p {
     margin: 0;
     max-width: 60em;
+  }
+
+  .stamp {
+    display: block;
+    margin-top: 4px;
+    color: color-mix(in srgb, var(--muted) 70%, transparent);
   }
 
   @media (max-width: 820px) {

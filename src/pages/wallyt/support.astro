@@ -44,7 +44,10 @@ const faqs = [
 >
   <div class="contact-card">
     <p class="contact-label">email us</p>
-    <a class="contact-mail" href={`mailto:${email.support}`}>{email.support}</a>
+    <p class="contact-line">
+      <a class="contact-mail" href={`mailto:${email.support}`}>{email.support}</a>
+      <button class="copy" type="button" data-copy={email.support} aria-label={`Copy ${email.support}`}>Copy</button>
+    </p>
     <p>
       Tell us what you were doing and what happened, and include a screenshot if you can. We read
       every message and usually reply within two business days.
@@ -80,27 +83,34 @@ const faqs = [
 <style>
   .contact-card {
     margin-top: 2em;
-    padding: 20px;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    background: var(--surface);
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
   }
 
   .contact-label {
-    margin: 0 0 4px !important;
+    margin: 0 0 6px !important;
     font-family: var(--mono);
     font-size: 12.5px;
     color: var(--muted) !important;
   }
 
+  .contact-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin: 0 !important;
+  }
+
   .contact-mail {
     font-family: var(--mono);
-    font-size: clamp(17px, 2.4vw, 22px);
+    font-size: clamp(18px, 2.6vw, 24px);
+    color: var(--ink);
     overflow-wrap: anywhere;
   }
 
   .contact-card p:last-child {
-    margin: 12px 0 0;
+    margin: 14px 0 0;
   }
 
   .faq {

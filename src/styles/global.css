@@ -166,7 +166,18 @@ code,
 
 .badge.live::before {
   background: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  animation: pulse 2.4s ease-out infinite;
+}
+
+/* "Live" breathes: a soft ring leaves the dot every couple of seconds. */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 5px transparent;
+  }
 }
 
 .badge.soon::before {
@@ -317,12 +328,9 @@ code,
 }
 
 .callout {
-  margin: 1.5em 0;
-  padding: 16px 18px;
-  border: 1px solid var(--rule);
-  border-left: 3px solid var(--accent);
-  border-radius: 8px;
-  background: var(--surface);
+  margin: 1.6em 0;
+  padding: 2px 0 2px 18px;
+  border-left: 2px solid var(--accent);
   color: var(--ink-soft);
 }
 
@@ -382,4 +390,41 @@ html {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* Section header: a comment-style label, an optional count, and a hairline under both. */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* The logo's cursor, set at the end of a headline. Blinks a few times, then rests. */
+.cursor {
+  display: inline-block;
+  width: 0.42em;
+  height: 0.12em;
+  margin-left: 0.12em;
+  background: var(--cursor);
+  vertical-align: baseline;
+  animation: blink 1.1s steps(1) 4;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* The first section after a hero needs less air: there's no rule between them. */
+main .hero + .section {
+  padding-top: clamp(12px, 3vw, 32px);
 }
