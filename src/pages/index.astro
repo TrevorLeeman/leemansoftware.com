@@ -43,18 +43,27 @@ const host = (href: string) => new URL(href).hostname.replace(/^www\./, '');
               </a>
             </div>
 
-            <a class="screen" href={p.href} tabindex="-1" aria-hidden="true" {...linkProps}>
+            <a class="screen" href={p.shot.url ?? p.href} tabindex="-1" aria-hidden="true" {...linkProps}>
               {p.shot.frame === 'browser' && (
                 <span class="chrome">
                   <i />
                   <i />
                   <i />
-                  <span class="url">{host(p.href)}</span>
+                  <span class="url">{p.shot.url ? p.shot.url.replace(/^https:\/\/(www\.)?/, '') : host(p.href)}</span>
                 </span>
               )}
               <picture>
                 {p.shot.dark && <source srcset={p.shot.dark} media="(prefers-color-scheme: dark)" />}
-                <img src={p.shot.src} alt={p.shot.alt} loading={i === 0 ? 'eager' : 'lazy'} />
+                <img
+                  src={p.shot.src}
+                  srcset={p.shot.small ? `${p.shot.small} 800w, ${p.shot.src} ${p.shot.width}w` : undefined}
+                  sizes={p.shot.small ? '(max-width: 820px) 100vw, 640px' : undefined}
+                  width={p.shot.width}
+                  height={p.shot.height}
+                  alt={p.shot.alt}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
               </picture>
             </a>
           </article>

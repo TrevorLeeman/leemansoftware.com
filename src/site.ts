@@ -22,7 +22,18 @@ export type Product = {
   /** The product's own brand color, used for small accents next to it. */
   color: string;
   /** A real screen from the product, shown in a browser or phone outline. */
-  shot: { src: string; dark?: string; frame: 'browser' | 'phone'; alt: string };
+  shot: {
+    src: string;
+    /** A half-width copy for small screens. */
+    small?: string;
+    dark?: string;
+    width: number;
+    height: number;
+    frame: 'browser' | 'phone';
+    alt: string;
+    /** The exact page the screen was taken from, shown in the browser outline and linked. */
+    url?: string;
+  };
 };
 
 export const products: Product[] = [
@@ -40,6 +51,8 @@ export const products: Product[] = [
     shot: {
       src: '/shots/wallyt-light.webp',
       dark: '/shots/wallyt-dark.webp',
+      width: 640,
+      height: 1386,
       frame: 'phone',
       alt: 'Wallyt’s home screen for a ski trip group: Cara owes you $202.15, above the trip’s expenses.',
     },
@@ -57,15 +70,19 @@ export const products: Product[] = [
     color: '#4f46e5',
     shot: {
       src: '/shots/osrs-exchange.webp',
+      small: '/shots/osrs-exchange-800.webp',
+      width: 1600,
+      height: 925,
       frame: 'browser',
-      alt: 'OSRS Exchange’s Grand Exchange Tracker: a table of items with live buy and sell prices, margin, tax, profit and return.',
+      url: 'https://www.osrs.exchange/item/twisted-bow',
+      alt: 'OSRS Exchange’s live chart for the Twisted bow: buy and sell prices around 1.34 billion gp over the last day, with trade volume underneath.',
     },
   },
   {
     slug: 'rs3-exchange',
     name: 'RS3 Exchange',
     summary:
-      'The same live market for RuneScape 3, built on the engine behind OSRS Exchange.',
+      'The same live market for RuneScape 3, with years of price history behind every item.',
     platforms: 'Web',
     status: 'live',
     href: 'https://www.rs3.exchange',
@@ -74,8 +91,12 @@ export const products: Product[] = [
     color: '#047857',
     shot: {
       src: '/shots/rs3-exchange.webp',
+      small: '/shots/rs3-exchange-800.webp',
+      width: 1600,
+      height: 925,
       frame: 'browser',
-      alt: 'RS3 Exchange’s Grand Exchange Tracker: the same live table of prices and profits for RuneScape 3 items.',
+      url: 'https://www.rs3.exchange/item/elder-rune-bar',
+      alt: 'RS3 Exchange’s five-year chart for the Elder rune bar: from about 12k gp in 2022 to a peak near 26k in 2024, back to about 14k now.',
     },
   },
 ];
