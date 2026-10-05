@@ -1,0 +1,165 @@
+---
+import { url } from '../../url';
+import Doc from '../../layouts/Doc.astro';
+import { comingSoon, company, email, product, type QA } from '../../site';
+
+const wallyt = product('wallyt');
+const live = wallyt.status === 'live';
+
+// How the import works is checked against the Wallyt app (docs/product.md, Import and Export) on
+// 2026-10-04. Everything here is a fact about Wallyt; nothing says what Splitwise does or lacks.
+const questions: QA[] = [
+  {
+    q: 'Is Wallyt a free alternative to Splitwise?',
+    a: 'Wallyt is a free app for splitting shared costs, with no ads. It splits an expense equally, by exact amounts, by percentage or by shares, handles 161 currencies, and simplifies settling up into fewer payments.',
+  },
+  {
+    q: 'Can Wallyt import my Splitwise groups?',
+    a: 'Yes. Export a group from Splitwise as a CSV file and import it into Wallyt. Wallyt recognises a Splitwise export by itself, matches the people in the file to the people in your group, adds anyone new, and shows you every row before any expense is saved.',
+  },
+  {
+    q: 'Does everyone in my group have to switch at once?',
+    a: 'No. An import adds everyone in the file to the Wallyt group by name. Share the group’s invite link, and each person picks which one they are when they join, taking over everything already split with them.',
+  },
+  {
+    q: 'Can I undo a Splitwise import into Wallyt?',
+    a: 'Not once it finishes, so check the review step first. Importing into a new group keeps your existing groups untouched while you try it.',
+  },
+  {
+    q: 'Can I get my data back out of Wallyt?',
+    a: 'Yes. Any group exports as a CSV file that opens in Excel, Numbers or Google Sheets, and Wallyt can import that file again.',
+  },
+];
+---
+
+<Doc
+  title="A Splitwise alternative that imports your groups"
+  eyebrow="Wallyt"
+  eyebrowHref="/wallyt"
+  updated="2026-10-04"
+  product={wallyt}
+  questions={questions}
+  description="Wallyt is a free app for splitting shared costs that imports a Splitwise group from its CSV export. How the import works and what comes across."
+>
+  <p>
+    Wallyt keeps track of shared costs and who owes whom, the job you use Splitwise for. It’s free,
+    with no ads, and it can import a group you already have, so you don’t start again from nothing.
+    {live ? ' Wallyt is on Google Play for Android.' : ` ${comingSoon}.`}
+  </p>
+
+  <div class="callout">
+    <p>
+      <strong>In short:</strong> export a group from Splitwise as a CSV file, choose it in Wallyt,
+      say which person in the file is you, check the rows, and import. Then send the group’s invite
+      link so everyone else can claim their spot.
+    </p>
+  </div>
+
+  <h2>What you get in Wallyt</h2>
+  <ul>
+    <li>Four ways to split an expense: equally, by exact amounts, by percentage or by shares, with one payer or several.</li>
+    <li>161 currencies. An expense in another currency counts at the exchange rate of its own day, and that rate never changes afterwards.</li>
+    <li>Settling up in fewer payments, worked out across the whole group.</li>
+    <li>Expenses that repeat by themselves, for rent and subscriptions.</li>
+    <li>A history of every change to every expense, and deletes you can undo.</li>
+    <li>Sign-in with a code sent to your email, or with Google. There are no passwords.</li>
+    <li>No ads and no tracking, and your data is never sold.</li>
+  </ul>
+
+  <h2>How to move a group from Splitwise</h2>
+  <ol>
+    <li>In Splitwise, export the group you want to move as a CSV file.</li>
+    <li>
+      In Wallyt, open <strong>Import and export</strong>, the spreadsheet button at the top of the home
+      screen. Choose where the expenses should go: a group you already have, or a new one that you
+      name there.
+    </li>
+    <li>
+      Choose the CSV file. Wallyt recognises a Splitwise export by itself, so there are no columns
+      to match.
+    </li>
+    <li>
+      Answer <strong>Which one is you?</strong>, then check who everyone else in the file is. Wallyt
+      fills in the matches it’s sure of and tells you why it made each one. Anyone left becomes a new
+      person in the group.
+    </li>
+    <li>
+      Review every row before any expense is saved. You see a total for each currency and whether it
+      balances, any row that couldn’t be read, and any row that looks like one you already have,
+      marked <strong>Duplicate?</strong>. Tap a row to leave it out.
+    </li>
+    <li>Import. Then share the group’s invite link, and each person picks which one they are.</li>
+  </ol>
+
+  <h2>What comes across</h2>
+  <ul>
+    <li>Expenses and payments, with their dates, descriptions and categories. Rows of zero are skipped, and a row Wallyt can’t read is listed for you instead of imported.</li>
+    <li>What each person owes on every row.</li>
+    <li>
+      Each row’s currency. By default a row in another currency counts in your group’s currency at
+      the exchange rate of its day, and you can set any of them to stay as it was.
+    </li>
+    <li>Everyone in the file, as people in the group who haven’t joined yet.</li>
+  </ul>
+
+  <h2>What to know before you import</h2>
+  <ul>
+    <li>
+      <strong>Splits come in as equal, percentage or exact amounts.</strong> Wallyt reads what each
+      person owes on a row and stores it as an equal split, a percentage split or exact amounts,
+      whichever reproduces every cent, so you can edit it like any other expense.
+    </li>
+    <li>
+      <strong>Rows several people paid for</strong> are imported with what’s owed split equally and
+      marked “check split”, so you can put them right.
+    </li>
+    <li><strong>One file is one group.</strong> Export and import each group separately.</li>
+    <li>
+      <strong>An import can’t be undone once it finishes.</strong> Use the review step, or import
+      into a new group first to see how it comes out.
+    </li>
+  </ul>
+
+  <h2>Getting your data back out</h2>
+  <p>
+    Your expenses aren’t locked in. <strong>Import and export</strong> also exports any group’s
+    expenses and payments as a CSV file that opens in Excel, Numbers or Google Sheets, and Wallyt can
+    import that file again.
+  </p>
+
+  <h2>What Wallyt doesn’t do yet</h2>
+  <ul>
+    <li>There’s no iPhone app yet. Wallyt is launching on Android first.</li>
+    <li>There’s no offline mode, so adding or changing an expense needs a connection.</li>
+    <li>There are no push notifications yet.</li>
+    <li>Wallyt doesn’t move money or connect to a bank. It keeps the record, and you pay each other however you like.</li>
+  </ul>
+
+  <h2>Questions</h2>
+  {
+    questions.map((x) => (
+      <>
+        <h3>{x.q}</h3>
+        <p>{x.a}</p>
+      </>
+    ))
+  }
+
+  <p>
+    More about the app is on <a href={url('/wallyt')}>Wallyt’s page</a>, and answers to common
+    problems are in <a href={url('/wallyt/support')}>Wallyt support</a>. Anything else, email <a href={`mailto:${email}`}>{email}</a>.
+  </p>
+
+  <p class="fineprint">
+    Splitwise is a trademark of Splitwise, Inc. Wallyt is made by {company.brand} and is not
+    affiliated with or endorsed by Splitwise.
+  </p>
+</Doc>
+
+<style>
+  .fineprint {
+    margin-top: 2.4em;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+</style>

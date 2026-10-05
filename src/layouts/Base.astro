@@ -32,15 +32,19 @@ interface Props {
 
 const { title, description, product, schema, pageType = 'WebPage', questions, updated, noindex } = Astro.props;
 const image = Astro.props.image ?? (product ? `/og/${product.slug}.png` : '/og.png');
-const imageAlt = product ? `${product.name} by ${company.brand}` : company.brand;
+// The card's own headline, read out where the image can't be seen.
+const imageAlt = product ? `${product.name}: ${product.card.join(' ')}` : `${company.brand}: ${company.card.join(' ')}`;
 // A subsite's pages are titled for the product ("Terms of use | Wallyt"), or for the studio when
-// the title already names the product ("Wallyt privacy policy | Leeman Software").
+// the title already names the product ("Wallyt privacy policy | Leeman Software"). A title that
+// names the studio itself stands alone ("About Trevor Leeman and Leeman Software").
 const owner = product ? product.name : company.brand;
 const fullTitle = !title
   ? product
     ? owner
     : `${company.brand} | ${company.tagline}`
-  : `${title} | ${product && !title.includes(product.name) ? product.name : company.brand}`;
+  : title.includes(company.brand)
+    ? title
+    : `${title} | ${product && !title.includes(product.name) ? product.name : company.brand}`;
 const path = withoutBase(Astro.url.pathname);
 const canonical = new URL(path === '/' ? '/' : `${path}/`, company.url).href;
 
@@ -72,9 +76,11 @@ const graph = {
       primaryImageOfPage: new URL(image, company.url).href,
       ...(updated ? { dateModified: updated } : {}),
       ...(crumbs.length > 1 ? { breadcrumb: { '@id': `${canonical}#breadcrumb` } } : {}),
+      // A page is about its subject. It's the subject's main page only when the product has no
+      // site of its own (Wallyt): osrs.exchange, not this page, is OSRS Exchange's.
       ...(schema
         ? pageType === 'WebPage'
-          ? { about: { '@id': `${canonical}#subject` }, mainEntity: { '@id': `${canonical}#subject` } }
+          ? { about: { '@id': `${canonical}#subject` }, ...(product?.site ? {} : { mainEntity: { '@id': `${canonical}#subject` } }) }
           : schema
         : { about: organizationRef }),
     },
@@ -148,6 +154,7 @@ const iconOf = product && !product.site ? product : undefined;
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <link rel="alternate" type="text/plain" href={url('/llms.txt')} title="About this site, for AI assistants" />
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(graph)} />}
     <script src={url('/site.js')} defer is:inline></script>

@@ -4,31 +4,88 @@ import Base from '../../layouts/Base.astro';
 import ProductHero from '../../components/ProductHero.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import FeatureGrid from '../../components/FeatureGrid.astro';
-import { company, email, organizationRef, product, wallytPlayUrl } from '../../site';
+import Steps from '../../components/Steps.astro';
+import Questions from '../../components/Questions.astro';
+import { comingSoon, company, email, organizationRef, playerCount, product, wallytPlayUrl, type QA } from '../../site';
 
 const wallyt = product('wallyt');
 const live = wallyt.status === 'live';
-const description =
-  'Wallyt is a free Android app for splitting costs with roommates, trips and friends: every way to split, 161 currencies, and the fewest payments to settle up.';
+// Until it's out, nothing here says you can get it.
+const what = live ? 'a free Android app for splitting shared costs' : 'a free app for splitting shared costs, coming soon to Android';
+const description = live
+  ? 'Wallyt is a free Android app for splitting shared costs: split any way, use any of 161 currencies, and settle up in fewer payments.'
+  : 'Wallyt is a free app for splitting shared costs, coming soon to Android: split any way, use 161 currencies, and settle up in fewer payments.';
 
-// Checked against the Wallyt app (docs/product.md) on 2026-10-04.
-const features = [
-  { title: 'Every way to split', body: 'Equally, by amounts, by percentage or by shares, with one payer or several.' },
-  { title: '161 currencies', body: 'Each expense in its own currency, converted at that day’s rate or paid back as it was spent.' },
-  { title: 'Fewer payments', body: 'Wallyt works out the fewest payments that square everyone up.' },
-  { title: 'Repeating costs', body: 'Rent and subscriptions add themselves on schedule.' },
-  { title: 'Bring your history', body: 'Import from Splitwise or any spreadsheet, and export to CSV any time.' },
-  { title: 'No passwords', body: 'Sign in with a code sent to your email, or with Google.' },
+// Everything below is checked against the Wallyt app (docs/product.md, docs/decisions.md) on 2026-10-04.
+const steps = [
+  {
+    title: 'Make a group and share one link',
+    body: 'Name it, pick a currency and send the invite. Add people by name before they’ve joined: when they open the link they pick which one they are and take over that spot, with everything already split with them.',
+  },
+  {
+    title: 'Add what you paid',
+    body: 'Split it equally, by exact amounts, by percentage or by shares, with one person paying or several. Everyone’s balance changes on their own screen as you save.',
+  },
+  {
+    title: 'Settle up in fewer payments',
+    body: 'Ana pays a $60 dinner and Ben a $30 taxi, both split three ways. Wallyt has Cara pay Ana $30, and Ben pays nobody. What each person owes overall stays the same.',
+  },
 ];
 
-// Checked against the Wallyt repo (docs/decisions.md, its tests) on 2026-10-04.
-const built = [
-  { title: 'Exact to the cent', body: 'Amounts are stored as whole cents, never rounded floats, and leftover cents from an uneven split stay with the same people when the expense is edited.' },
-  { title: 'Rates that don’t move', body: 'Each expense keeps the central-bank rate it was added at, so a balance someone has settled never shifts later.' },
-  { title: 'Live for everyone', body: 'A change one person makes shows up on everyone else’s screen as it happens.' },
-  { title: 'Nothing lost by accident', body: 'Deleting an expense or removing someone can be undone, and every change to an expense is kept in its history.' },
-  { title: 'Tested on every platform', body: '900+ automated tests, with end-to-end runs on Android, iOS and web builds against a real server.' },
-  { title: 'One codebase, Android and web', body: 'Built with React Native and Expo, so the app and its web version share every screen.' },
+const flat = [
+  { title: 'Rent adds itself', body: 'Set rent, a subscription or the weekly shop to repeat every week, month or year, or any number of days you choose, and Wallyt adds it on the day.' },
+  { title: 'Every change is kept', body: 'Each expense keeps a history of who changed what and when. Nobody can edit that history, and it only goes if the expense or the group is deleted for good.' },
+  { title: 'Deletes can be undone', body: 'A deleted expense goes to Deleted expenses, where anyone in the group can bring it back. Removing a person can be undone too.' },
+];
+
+const trip = [
+  { title: '161 currencies', body: 'Add each expense in the currency you paid in. One group can hold as many as the trip needs.' },
+  { title: 'The rate of the day, kept', body: 'An expense in another currency counts at the exchange rate of its own day, and that rate is saved with the expense, so a debt doesn’t drift with the market.' },
+  { title: 'Paid in cash?', body: 'Mark an expense to stay in the currency it was paid in, and it’s paid back the same way.' },
+];
+
+const exact = [
+  { title: 'Whole cents', body: 'Amounts are stored as whole cents, never fractions, so nothing is lost to rounding.' },
+  { title: 'Totals that must agree', body: 'Wallyt’s server refuses any expense where what was paid, what is owed and the total don’t match.' },
+  { title: 'The odd cent, shared fairly', body: 'When a split doesn’t divide evenly, the leftover cents go to people picked at random, so the same person doesn’t always pay the extra one.' },
+  { title: 'Tested throughout', body: 'More than 900 automated tests cover the app, from the splitting, currency and settling-up maths to whole journeys on a phone.' },
+];
+
+const questions: QA[] = [
+  { q: 'Is Wallyt free?', a: 'Yes. Wallyt is free, with no ads.' },
+  {
+    q: 'When does Wallyt come out?',
+    a: live
+      ? 'Wallyt is out now on Google Play for Android.'
+      : `Wallyt is in testing and is coming to Google Play first. Email ${email} and you’ll get one message when it’s out.`,
+  },
+  { q: 'Is there an iPhone version of Wallyt?', a: 'Not yet. Wallyt is launching on Android first.' },
+  {
+    q: 'Do my friends need Wallyt before I can add them?',
+    a: 'No. Add them by name and start splitting. When they open your invite link they pick which person they are and take over that spot, with everything already split with them.',
+  },
+  { q: 'Do I need a password for Wallyt?', a: 'No. You sign in with a code sent to your email, or with Google.' },
+  {
+    q: 'Does Wallyt move money or connect to my bank?',
+    a: 'No. Wallyt keeps the record of who owes whom. You pay each other however you like, then record the payment in Wallyt.',
+  },
+  {
+    q: 'Can one Wallyt group use more than one currency?',
+    a: 'Yes. Wallyt has 161 currencies, and each expense can be in its own. Paid on a card, it counts in the group’s currency at that day’s exchange rate. Paid in cash, it can stay in the currency it was paid in.',
+  },
+  { q: 'Does Wallyt work offline?', a: 'Not yet. Wallyt has no offline mode, so adding or changing an expense needs a connection.' },
+  {
+    q: 'Can I move my groups from Splitwise to Wallyt?',
+    a: 'Yes. Export a group from Splitwise as a CSV file and import it into Wallyt, which matches the people in the file to the people in your group, adds anyone new, and shows you every row before any expense is saved.',
+  },
+  {
+    q: 'Can I get my expenses out of Wallyt?',
+    a: 'Yes. Any group exports as a CSV file that opens in Excel, Numbers or Google Sheets, and Wallyt can import it again.',
+  },
+  {
+    q: 'Who makes Wallyt?',
+    a: `${company.brand}, the one-developer studio of ${company.founder}, which also makes OSRS Exchange.`,
+  },
 ];
 
 const policies = [
@@ -41,12 +98,13 @@ const policies = [
 
 <Base
   product={wallyt}
-  title="Split expenses with roommates, trips and friends"
+  title="Split bills, rent and trip costs with friends"
   description={description}
+  questions={questions}
   schema={{
     '@type': 'MobileApplication',
     name: 'Wallyt',
-    description,
+    description: wallyt.definition,
     url: `${company.url}/wallyt/`,
     operatingSystem: 'Android',
     applicationCategory: 'FinanceApplication',
@@ -56,10 +114,11 @@ const policies = [
     ...(live ? { installUrl: wallytPlayUrl } : {}),
   }}
 >
-  <ProductHero product={wallyt} status={live ? undefined : 'Coming soon to Google Play'}>
+  <ProductHero product={wallyt} status={live ? undefined : comingSoon}>
     <Fragment slot="lede">
-      Wallyt is a free Android app for splitting shared costs. Add what you spend with roommates, on
-      trips or at dinner, and everyone sees the same balances until you settle up.
+      Wallyt is {what}. Add what you paid for the flat, the trip or the dinner, and everyone in the
+      group sees the same balances. When it’s time to settle, Wallyt works out who pays whom, in as
+      few payments as it can.
     </Fragment>
     <Fragment slot="actions">
       {
@@ -71,30 +130,73 @@ const policies = [
           </a>
         )
       }
+      <a class="button" href={url('/wallyt/privacy')}>Privacy policy</a>
     </Fragment>
   </ProductHero>
 
-  <section class="wrap section" id="features" aria-labelledby="features-title">
-    <SectionHead title="Everything a shared cost needs" id="features-title" />
-    <FeatureGrid features={features} />
+  <section class="wrap section" id="how" aria-labelledby="how-title">
+    <SectionHead title="How it works" id="how-title" />
+    <Steps steps={steps} />
   </section>
 
-  <section class="wrap section" id="built" aria-labelledby="built-title">
-    <SectionHead title="Built to be trusted with money" id="built-title">
-      Wallyt is designed, built and run by {company.brand}, the one-developer studio behind OSRS
-      Exchange, from the app to the server it syncs with.
+  <section class="wrap section" id="flat" aria-labelledby="flat-title">
+    <SectionHead title="For the flat" id="flat-title">
+      The bills that come round every month, and the housemate who swears they already paid.
     </SectionHead>
-    <FeatureGrid features={built} />
+    <FeatureGrid features={flat} />
+  </section>
+
+  <section class="wrap section" id="trip" aria-labelledby="trip-title">
+    <SectionHead title="For the trip" id="trip-title">
+      Three countries, two cards and a pile of cash, settled when you’re home.
+    </SectionHead>
+    <FeatureGrid features={trip} />
+  </section>
+
+  <section class="wrap section" id="exact" aria-labelledby="exact-title">
+    <SectionHead title="Exact with money" id="exact-title">
+      People stop trusting a shared tab the first time a balance moves by itself. This is what Wallyt
+      does about it.
+    </SectionHead>
+    <FeatureGrid features={exact} />
+  </section>
+
+  <section class="wrap section" id="splitwise" aria-labelledby="splitwise-title">
+    <SectionHead title="Coming from Splitwise" id="splitwise-title">
+      Export a group from Splitwise as a CSV file and import it into Wallyt. Wallyt works out who each
+      person in the file is, shows you every row before any expense is saved, and marks the ones that
+      look like duplicates.
+    </SectionHead>
+    <p class="policies">
+      <a href={url('/wallyt/splitwise-alternative')}>How to move a group from Splitwise to Wallyt</a>
+    </p>
   </section>
 
   <section class="wrap section" id="data" aria-labelledby="data-title">
     <SectionHead title="Your data stays yours" id="data-title">
-      Wallyt stores your name, email, the groups you’re in and the expenses you add, and shows them
-      only to the people in your groups. No ads, no tracking, and your data is never sold. You can
-      delete your account at any time.
+      Wallyt stores what it needs to work: your name, your email, a photo if you add one, the groups
+      you’re in, and the expenses and people you add. The people in your groups see them, and anyone
+      you send a group’s invite link to sees its name and who’s in it. No ads, no tracking, and your
+      data is never sold. You can export a group’s expenses at any time, and ask for your account to be
+      deleted whenever you like. The privacy policy has the full list.
     </SectionHead>
     <p class="policies">
       {policies.map((l) => <a href={url(l.href)}>{l.label}</a>)}
+    </p>
+  </section>
+
+  <section class="wrap section" id="questions" aria-labelledby="questions-title">
+    <SectionHead title="Questions people ask" id="questions-title" />
+    <Questions questions={questions} />
+  </section>
+
+  <section class="wrap section" id="maker" aria-labelledby="maker-title">
+    <SectionHead title="Who makes it" id="maker-title">
+      Wallyt is designed, built and run by <a href={url('/about')}>{company.brand}</a>, the studio of
+      one developer, {company.founder}, who also makes OSRS Exchange, which more than {playerCount} players
+      have used. Questions go to the person who wrote the app.
+    </SectionHead>
+    <p class="policies">
       <a href={`mailto:${email}`}>{email}</a>
     </p>
   </section>

@@ -26,9 +26,11 @@ const { stats } = Astro.props;
     margin: 0 0 clamp(40px, 5vw, 64px);
   }
 
+  /* The figure sits on top, and figures line up along it however many lines a label takes. */
   .stats div {
     display: flex;
     flex-direction: column-reverse;
+    justify-content: flex-end;
     gap: 4px;
   }
 

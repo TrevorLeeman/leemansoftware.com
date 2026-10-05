@@ -16,12 +16,13 @@ interface Props {
   updated?: string;
   /** The product subsite this page belongs to. */
   product?: Product;
-  /** Passed through to Base: the page's schema.org type and its own fields. */
+  /** Passed through to Base: the page's schema.org type and its own fields, and the questions it answers. */
   pageType?: string;
   schema?: Record<string, unknown>;
+  questions?: { q: string; a: string }[];
 }
 
-const { title, description, eyebrow, eyebrowHref, meta, updated, product, pageType, schema } = Astro.props;
+const { title, description, eyebrow, eyebrowHref, meta, updated, product, pageType, schema, questions } = Astro.props;
 const updatedText = updated
   ? new Date(`${updated}T12:00:00Z`).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
   : undefined;
@@ -43,7 +44,7 @@ const html = (await Astro.slots.render('default')).replace(/<h2([^>]*)>([\s\S]*?
 const hasToc = headings.length >= 4;
 ---
 
-<Base title={title} description={description} product={product} pageType={pageType} schema={schema} updated={updated}>
+<Base title={title} description={description} product={product} pageType={pageType} schema={schema} questions={questions} updated={updated}>
   <article class="wrap doc">
     <header class="doc-head">
       {

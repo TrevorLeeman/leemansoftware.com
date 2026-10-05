@@ -1,93 +1,137 @@
 ---
 // OSRS Exchange's and RS3 Exchange's subsites. They're one app run for two games, so they share one
-// page and differ only in the facts each page passes in.
+// page, and src/exchange.ts fills in what each game's page says.
 import Base from './Base.astro';
 import ProductHero from '../components/ProductHero.astro';
 import SectionHead from '../components/SectionHead.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
-import Stats from '../components/Stats.astro';
+import Plans from '../components/Plans.astro';
+import Quotes from '../components/Quotes.astro';
 import Questions from '../components/Questions.astro';
-import { company, organizationRef, type Product } from '../site';
-
-type Point = { title: string; body: string; href?: string };
+import { url } from '../url';
+import { exchange } from '../exchange';
+import { company, organizationRef, premium } from '../site';
 
 interface Props {
-  product: Product;
-  /** The page's title in search results: what the product is, in a player's words. */
-  title: string;
-  description: string;
-  lede: string;
-  /** What players use it for. */
-  features: Point[];
-  /** Numbers that show the scale of what the studio built. */
-  stats: { value: string; label: string }[];
-  /** How it's built. */
-  built: Point[];
-  /** Why players can rely on it. */
-  trust: Point[];
-  /** What players ask before they use it, answered from the facts above. */
-  questions: { q: string; a: string }[];
+  slug: 'osrs-exchange' | 'rs3-exchange';
 }
 
-const { product: p, title, description, lede, features, stats, built, trust, questions } = Astro.props;
-const site = p.site!;
-const host = new URL(site).hostname.replace(/^www\./, '');
+const x = exchange(Astro.props.slug);
+const p = x.product;
+const checked = new Date(`${premium.checked}T12:00:00Z`).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const arrow = 'M7 17 17 7M8 7h9v9';
 ---
 
 <Base
   product={p}
-  title={title}
-  description={description}
-  questions={questions}
+  title={x.title}
+  description={x.description}
+  questions={x.questions}
+  updated={premium.checked}
   schema={{
     '@type': 'WebApplication',
     name: p.name,
-    description,
-    url: site,
-    applicationCategory: 'GameApplication',
+    description: p.definition,
+    url: x.site,
+    applicationCategory: 'UtilitiesApplication',
     operatingSystem: 'Any (web browser)',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    featureList: x.features,
+    offers: x.offers,
+    ...(x.sameAs.length ? { sameAs: x.sameAs } : {}),
     publisher: organizationRef,
     creator: organizationRef,
   }}
 >
   <ProductHero product={p}>
-    <Fragment slot="lede">{lede}</Fragment>
+    <Fragment slot="lede">{x.lede}</Fragment>
     <Fragment slot="actions">
-      <a class="button primary" href={site} rel="noopener">
-        Open {host}
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
+      <a class="button primary" href={x.site} rel="noopener">
+        Open {x.host}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg>
       </a>
+      <a class="button" href="#pricing">What it costs</a>
     </Fragment>
   </ProductHero>
 
-  <section class="wrap section" id="features" aria-labelledby="features-title">
-    <SectionHead title="Find the profit, then take it" id="features-title" />
-    <FeatureGrid features={features} />
+  <section class="wrap section" id="uses" aria-labelledby="uses-title">
+    <SectionHead title="What players use it for" id="uses-title" />
+    <FeatureGrid features={x.jobs} />
   </section>
 
-  <section class="wrap section" id="built" aria-labelledby="built-title">
-    <SectionHead title="Live data, at scale" id="built-title">
-      {p.name} is designed, built and run by {company.brand}, a one-developer studio: the price
-      pipeline, the charts, accounts, payments, alerts and the servers they run on.
+  {
+    x.quotes.length > 0 && (
+      <section class="wrap section" id="players" aria-labelledby="players-title">
+        <SectionHead title="In players’ words" id="players-title">
+          Messages players have sent in the {p.name} Discord.
+        </SectionHead>
+        <Quotes quotes={x.quotes} />
+      </section>
+    )
+  }
+
+  <section class="wrap section" id="pricing" aria-labelledby="pricing-title">
+    <SectionHead title="Free, and what Premium adds" id="pricing-title" />
+    <Plans plans={x.plans} />
+    <p class="billing">{x.billing}</p>
+    <p class="after">
+      <a href={`${x.site}/premium`} rel="noopener">{p.name} Premium</a>
+      <a href={`${x.site}/refund-policy`} rel="noopener">Refund policy</a>
+      <span>Prices checked {checked}</span>
+    </p>
+  </section>
+
+  <section class="wrap section" id="data" aria-labelledby="data-title">
+    <SectionHead title="Where the numbers come from" id="data-title" />
+    <FeatureGrid features={x.sources} />
+  </section>
+
+  <section class="wrap section" id="maker" aria-labelledby="maker-title">
+    <SectionHead title="Who runs it" id="maker-title">
+      {p.name} is made and run by <a href={url('/about')}>{company.brand}</a>, the studio of one developer,
+      {company.founder}.
     </SectionHead>
-    <Stats stats={stats} />
-    <FeatureGrid features={built} />
-  </section>
-
-  <section class="wrap section" id="trust" aria-labelledby="trust-title">
-    <SectionHead title="Prices you can rely on" id="trust-title" />
-    <FeatureGrid features={trust} />
+    <FeatureGrid features={x.runs} />
   </section>
 
   <section class="wrap section" id="questions" aria-labelledby="questions-title">
     <SectionHead title="Questions players ask" id="questions-title" />
-    <Questions questions={questions} />
+    <Questions questions={x.questions} />
   </section>
 </Base>
 
 <style>
   .section {
     padding-top: clamp(96px, 12vw, 160px);
+  }
+
+  .billing {
+    max-width: 44em;
+    margin: clamp(24px, 3vw, 32px) 0 0;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+
+  .after {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 28px;
+    margin: 14px 0 0;
+  }
+
+  .after a {
+    font-weight: 500;
+    text-decoration-color: var(--rule-strong);
+  }
+
+  .after a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .after span {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
   }
 </style>

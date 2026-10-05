@@ -1,6 +1,6 @@
 ---
-// The studio's footer: our products and how to reach us. Product policies live in each product's
-// own footer, not here.
+// The studio's footer: our products, who we are and how to reach us. Product policies live in each
+// product's own footer, not here.
 import { url } from '../url';
 import { company, email, jagexNotice, products } from '../site';
 import Monogram from './Monogram.astro';
@@ -15,6 +15,7 @@ import Stamp from './Stamp.astro';
     </a>
     <ul class="foot-links">
       {products.map((p) => <li><a href={p.href}>{p.name}</a></li>)}
+      <li><a href={url('/about')}>About</a></li>
       <li><a href={url('/privacy')}>Website privacy</a></li>
       <li><a href={`mailto:${email}`}>{email}</a></li>
     </ul>

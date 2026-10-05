@@ -1,16 +1,20 @@
 ---
-// One product on the home page: its name, what it does, a link to its subsite, and a real screen.
-import type { Product } from '../site';
+// One product on the home page: its name, what it does for you, what it costs, and a real screen.
+// A product with its own website gets a link straight to it, ahead of the link to its page here.
+import { comingSoon, type Product } from '../site';
 import Screen from './Screen.astro';
 
 interface Props {
   product: Product;
+  /** Something a person using it said, shown under the pitch. */
+  quote?: { text: string; who: string; where: string; when?: string };
   /** Puts the screen on the left, so rows alternate down the page. */
   flip?: boolean;
   eager?: boolean;
 }
 
-const { product: p, flip = false, eager = false } = Astro.props;
+const { product: p, quote, flip = false, eager = false } = Astro.props;
+const host = p.site && new URL(p.site).hostname.replace(/^www\./, '');
 ---
 
 <article id={p.slug} class:list={['product', p.shot.frame, { flip }]} style={`--brand: ${p.color}`}>
@@ -21,14 +25,40 @@ const { product: p, flip = false, eager = false } = Astro.props;
         <span>{p.name}</span>
       </a>
     </h2>
-    <p class="summary">{p.summary}</p>
-    {p.status === 'soon' && <p class="status">Coming soon to Google Play</p>}
-    <a class="go" href={p.href}>
-      More about {p.name}
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M5 12h14M13 6l6 6-6 6" />
-      </svg>
-    </a>
+    <p class="summary">{p.pitch}</p>
+    {
+      quote && (
+        <figure class="said">
+          <blockquote>“{quote.text}”</blockquote>
+          <figcaption>
+            {quote.who} · {quote.where}
+            {quote.when && ` · ${quote.when}`}
+          </figcaption>
+        </figure>
+      )
+    }
+    <p class="status">
+      {p.terms}
+      {p.status === 'soon' && ` · ${comingSoon}`}
+    </p>
+    <p class="links">
+      {
+        p.site && (
+          <a class="go" href={p.site} rel="noopener">
+            Open {host}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17 17 7M8 7h9v9" />
+            </svg>
+          </a>
+        )
+      }
+      <a class="go" href={p.href}>
+        {p.site ? 'What it costs and who runs it' : `See how ${p.name} works`}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </p>
   </div>
 
   <div class="stage">
@@ -188,11 +218,39 @@ const { product: p, flip = false, eager = false } = Astro.props;
     color: var(--muted);
   }
 
+  /* A player's own words, set off with a rule in the product's color. */
+  .said {
+    margin: 4px 0;
+    padding-left: 14px;
+    border-left: 2px solid var(--brand);
+  }
+
+  .said blockquote {
+    margin: 0;
+    max-width: 28em;
+    font-size: 15.5px;
+    font-weight: 500;
+    text-wrap: pretty;
+  }
+
+  .said figcaption {
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin: 8px 0 0;
+  }
+
   .go {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-top: 8px;
     font-size: 15px;
     font-weight: 500;
     text-decoration: none;
@@ -210,6 +268,10 @@ const { product: p, flip = false, eager = false } = Astro.props;
 
   .go:hover svg {
     transform: translateX(3px);
+  }
+
+  .go[rel]:hover svg {
+    transform: translate(2px, -2px);
   }
 
   /*

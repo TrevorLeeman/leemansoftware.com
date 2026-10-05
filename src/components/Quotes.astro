@@ -1,0 +1,78 @@
+---
+// What people using a product have said about it, in their own words, with who said it and where.
+interface Props {
+  quotes: { text: string; who: string; where: string; when?: string }[];
+}
+
+const { quotes } = Astro.props;
+---
+
+<ul class="quotes">
+  {
+    quotes.map((x) => (
+      <li>
+        <figure>
+          <blockquote>
+            <p>{x.text}</p>
+          </blockquote>
+          <figcaption>
+            {x.who} · {x.where}
+            {x.when && ` · ${x.when}`}
+          </figcaption>
+        </figure>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px clamp(28px, 4vw, 56px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  figure {
+    margin: 0;
+    padding: 2px 0 2px 18px;
+    border-left: 2px solid var(--accent);
+  }
+
+  blockquote {
+    margin: 0;
+  }
+
+  blockquote p {
+    margin: 0;
+    font-size: clamp(18px, 1.7vw, 22px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+    text-wrap: pretty;
+  }
+
+  blockquote p::before {
+    content: '“';
+  }
+
+  blockquote p::after {
+    content: '”';
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .quotes {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+  }
+</style>

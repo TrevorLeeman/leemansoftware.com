@@ -1,6 +1,6 @@
 ---
-// The top of a product's subsite: what it is, the one thing to do next, and a real screen.
-// Web products stack the text over a wide browser; an app sits beside its phone.
+// The top of a product's subsite: its name, what it does for you, the one thing to do next, and a
+// real screen. Web products stack the text over a wide browser; an app sits beside its phone.
 import type { Product } from '../site';
 import Screen from './Screen.astro';
 
@@ -21,6 +21,7 @@ const wide = p.shot.frame === 'browser';
         <img class:list={['hero-icon', { pixel: p.pixelIcon }]} src={p.icon} alt="" width="72" height="72" />
         {p.name}
       </h1>
+      <p class="tagline">{p.tagline}</p>
       <p class="lede"><slot name="lede" /></p>
       {status && <p class="status">{status}</p>}
       <div class="actions"><slot name="actions" /></div>
@@ -67,8 +68,17 @@ const wide = p.shot.frame === 'browser';
     image-rendering: pixelated;
   }
 
+  .tagline {
+    margin: clamp(14px, 1.8vw, 22px) 0 0;
+    font-size: clamp(22px, 2.9vw, 36px);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
   .hero .lede {
-    margin-top: 18px;
+    margin-top: 16px;
   }
 
   .status {

@@ -4,9 +4,11 @@ import { company } from '../site';
 // Every page, at the address it's served from (with its trailing slash, see url() in src/url.ts).
 const paths = [
   '/',
+  '/about/',
   '/osrs-exchange/',
   '/rs3-exchange/',
   '/wallyt/',
+  '/wallyt/splitwise-alternative/',
   '/wallyt/support/',
   '/wallyt/privacy/',
   '/wallyt/terms/',

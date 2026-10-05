@@ -1,21 +1,33 @@
 ---
-// Short points side by side: a title and a sentence each. A title with an href links to the thing
-// it describes, such as a product's tool.
+// Short points side by side: a title and a sentence or two each. A point can carry a small tag
+// beside its title (what plan it's on) and a link under it, worded as what the link leads to.
 interface Props {
-  features: { title: string; body: string; href?: string }[];
+  features: { title: string; body: string; tag?: string; link?: { label: string; href: string } }[];
 }
 
 const { features } = Astro.props;
 // Four sit in one row of four rather than three and one left over.
 const columns = features.length === 4 ? 4 : 3;
+const external = (href: string) => href.startsWith('http');
 ---
 
 <ul class="features" style={`--columns: ${columns}`}>
   {
     features.map((f) => (
       <li>
-        <h3>{f.href ? <a href={f.href} rel="noopener">{f.title}</a> : f.title}</h3>
+        <h3>
+          {f.title}
+          {f.tag && <span class="tag">{f.tag}</span>}
+        </h3>
         <p>{f.body}</p>
+        {f.link && (
+          <a class="more" href={f.link.href} rel={external(f.link.href) ? 'noopener' : undefined}>
+            {f.link.label}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              {external(f.link.href) ? <path d="M7 17 17 7M8 7h9v9" /> : <path d="M5 12h14M13 6l6 6-6 6" />}
+            </svg>
+          </a>
+        )}
       </li>
     ))
   }
@@ -31,19 +43,28 @@ const columns = features.length === 4 ? 4 : 3;
     list-style: none;
   }
 
+  /* A tag always sits on its own line under the title, so a row of points lines up. */
   h3 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
     margin: 0 0 6px;
     font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.015em;
   }
 
-  h3 a {
-    text-decoration-color: var(--rule-strong);
-  }
-
-  h3 a:hover {
-    text-decoration-color: var(--accent);
+  .tag {
+    padding: 1px 8px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 450;
+    letter-spacing: 0;
+    color: var(--muted);
+    white-space: nowrap;
   }
 
   p {
@@ -51,6 +72,25 @@ const columns = features.length === 4 ? 4 : 3;
     font-size: 15.5px;
     color: var(--ink-soft);
     text-wrap: pretty;
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 14.5px;
+    font-weight: 500;
+    text-decoration-color: var(--rule-strong);
+  }
+
+  .more:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .more svg {
+    flex: none;
+    color: var(--accent);
   }
 
   @media (max-width: 900px) {

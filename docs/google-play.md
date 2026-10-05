@@ -2,7 +2,7 @@
 
 Everything the Play Console asks for that this site answers, and what still has to happen before the first release. Written 2026-10-02, updated 2026-10-04.
 
-`/wallyt` is Wallyt's own subsite: its header, footer and colors are Wallyt's, and every Wallyt page links to its support, privacy policy, terms and account deletion. The studio's pages don't link to Wallyt's policies, only to `/wallyt`.
+`/wallyt` is Wallyt's own subsite: its header, footer and colors are Wallyt's, and every Wallyt page links to its support, privacy policy, terms and account deletion. The studio's pages don't link to Wallyt's policies, only to `/wallyt`. The subsite also has `/wallyt/splitwise-alternative`, a guide to importing a Splitwise group; Play doesn't need it, and it says what the app does the same way the pages below do.
 
 ## Links to paste into the Console
 
@@ -31,7 +31,7 @@ Google Cloud OAuth consent screen (Sign in with Google), Branding:
 | Privacy policy: public, not a PDF, names the app and the developer, says what's collected, used and shared, how long it's kept and how to delete it | `/wallyt/privacy` |
 | Account deletion page: names the app and developer as on the store listing, gives the steps, says what's deleted and what's kept, and for how long | `/wallyt/delete-account` |
 | A way to contact the developer | Every Wallyt page's footer, `/wallyt/support`, `/wallyt#maker` |
-| OAuth home page: describes the app, links the privacy policy, on a verified domain | `/wallyt` |
+| OAuth home page: describes the app, links the privacy policy, on a verified domain | `/wallyt` (the privacy policy is linked beside the main button and again under Your data stays yours) |
 | Terms (OAuth consent screen, and a future App Store listing) | `/wallyt/terms`. A plain-language draft: have it reviewed, and add a governing-law clause if you want one |
 
 The deletion page shows "Wallyt, by Leeman Software". If the Play developer name is "Leeman Group LLC" instead, change that line (`meta` in `src/pages/wallyt/delete-account.astro`) to match it exactly.

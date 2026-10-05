@@ -1,0 +1,67 @@
+---
+// How something works, as numbered steps in the order you'd do them.
+interface Props {
+  steps: { title: string; body: string }[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="steps">
+  {
+    steps.map((s) => (
+      <li>
+        <h3>{s.title}</h3>
+        <p>{s.body}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px clamp(28px, 4vw, 56px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  li {
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-strong);
+    counter-increment: step;
+  }
+
+  li::before {
+    content: '0' counter(step);
+    display: block;
+    margin-bottom: 10px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--accent);
+  }
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 760px) {
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+    }
+  }
+</style>

@@ -7,14 +7,40 @@ export const company = {
   legalName: 'Leeman Group LLC',
   domain: 'leemansoftware.com',
   url: 'https://leemansoftware.com',
-  /** What the studio does, after its name in the home page's search result. */
-  tagline: 'Web and Android apps, built end to end',
+  /** What the studio makes, after its name in the home page's search result. */
+  tagline: 'OSRS Exchange, RS3 Exchange and Wallyt',
   /** The year the studio's first product, OSRS Exchange, was started. */
   since: 2022,
+  /** The studio's one developer. */
+  founder: 'Trevor Leeman',
+  /** The headline on the studio's link card (public/og.png), remade with `mise run cards`. */
+  card: ['500,000+ players.', 'One developer.'],
 };
 
 // The one address for everything: questions, Wallyt help and privacy requests.
 export const email = 'hello@leemansoftware.com';
+
+/** The Exchange sites' Discord server, where players ask questions and get price alerts. */
+export const discord = 'https://discord.gg/BV4vGeKFUt';
+
+/**
+ * How many players have used OSRS Exchange: unique lifetime visitors from the site's analytics,
+ * "well over 500k" on 2026-10-04. It counts visitors, not accounts, and belongs to OSRS Exchange
+ * alone (RS3 Exchange never quotes it). Round down when it changes, never up.
+ */
+export const playerCount = '500,000';
+export const players = `${playerCount}+`;
+
+/**
+ * Premium on both Exchange sites, from the osrs-exchange repo (packages/shared/src/constants.ts,
+ * checked 2026-10-04). One membership covers both sites, and the charge reads `statement` on a
+ * card statement.
+ */
+export const premium = { monthly: 4.99, annual: 49.99, trialDays: 7, statement: 'OSRS Exchange', checked: '2026-10-04' };
+
+export const usd = (amount: number) => `$${amount.toFixed(2)}`;
+
+const founderRef = { '@id': `${company.url}/about/#founder` };
 
 /**
  * The studio as schema.org sees it. Every page describes it in full (see Base), so products and
@@ -28,7 +54,9 @@ export const organization = {
   url: `${company.url}/`,
   email,
   logo: { '@type': 'ImageObject', url: `${company.url}/apple-touch-icon.png`, width: 180, height: 180 },
+  founder: { '@type': 'Person', ...founderRef, name: company.founder, jobTitle: 'Founder and developer', url: `${company.url}/about/` },
   numberOfEmployees: { '@type': 'QuantitativeValue', value: 1 },
+  contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', email, url: discord },
   knowsAbout: ['Web applications', 'Android apps', 'React Native', 'Next.js', 'NestJS', 'Stripe subscriptions', 'Discord bots', 'Real-time market data'],
   makesOffer: { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Web and Android app development, from design to production' } },
 };
@@ -43,10 +71,22 @@ export const wallytPlayUrl = 'https://play.google.com/store/apps/details?id=com.
 
 export type Link = { label: string; href: string; external?: boolean };
 
+/** A question a visitor asks, answered in plain text so the page, schema.org and /llms.txt share it. */
+export type QA = { q: string; a: string };
+
 export type Product = {
   slug: string;
   name: string;
-  summary: string;
+  /** One sentence that stands alone and starts with the name: what it is and who it's for. */
+  definition: string;
+  /** The line under the name on the product's own page: what it does for you. */
+  tagline: string;
+  /** The home page's paragraph: the outcome first, then what makes it trustworthy. */
+  pitch: string;
+  /** What it costs and where it stands, in a few words. */
+  terms: string;
+  /** The headline on its link card (public/og/<slug>.png), also read out as the card's alt text. */
+  card: [string, string];
   platforms: string;
   status: 'live' | 'soon';
   /** The product's page on this site, its subsite's home. */
@@ -87,8 +127,11 @@ export const products: Product[] = [
   {
     slug: 'osrs-exchange',
     name: 'OSRS Exchange',
-    summary:
-      'Live Grand Exchange prices for Old School RuneScape, trusted by 364,000+ traders. Margins after tax for every item, price alerts on Discord and email, and Premium billed through Stripe.',
+    definition: `OSRS Exchange is a free website that shows live Grand Exchange prices for every tradeable item in Old School RuneScape, with the profit on each one worked out after tax.`,
+    tagline: 'Know what’s worth flipping before you buy.',
+    pitch: `Find out what’s worth flipping before you spend a coin. Live Grand Exchange prices for every tradeable item in Old School RuneScape, with the profit already worked out after tax. It’s free, and more than ${playerCount} players have used it.`,
+    terms: `Free · Premium ${usd(premium.monthly)} a month`,
+    card: ['Live Grand Exchange prices', 'for Old School RuneScape.'],
     platforms: 'Web',
     status: 'live',
     href: url('/osrs-exchange'),
@@ -100,7 +143,7 @@ export const products: Product[] = [
     nav: [],
     footer: [
       { label: 'Quick Guide', href: 'https://www.osrs.exchange/quick-guide', external: true },
-      { label: 'Discord', href: 'https://discord.gg/BV4vGeKFUt', external: true },
+      { label: 'Discord', href: discord, external: true },
       { label: 'Privacy policy', href: 'https://www.osrs.exchange/privacy-policy', external: true },
       { label: 'Terms of service', href: 'https://www.osrs.exchange/terms-of-service', external: true },
     ],
@@ -119,8 +162,12 @@ export const products: Product[] = [
   {
     slug: 'rs3-exchange',
     name: 'RS3 Exchange',
-    summary:
-      'Live Grand Exchange prices for RuneScape 3, on the same platform as OSRS Exchange, with five years of daily history behind every item and no ads.',
+    definition: `RS3 Exchange is a free website that shows live Grand Exchange prices for every tradeable item in RuneScape 3, with the profit on each one worked out after tax and no ads on any plan.`,
+    tagline: 'See the profit before you place the offer.',
+    pitch:
+      'The same market tools for RuneScape 3: live prices and profit after tax, years of daily history, and no ads on any plan. One Premium membership covers both games.',
+    terms: `Free, no ads · Premium ${usd(premium.monthly)} a month`,
+    card: ['Live Grand Exchange prices', 'for RuneScape 3.'],
     platforms: 'Web',
     status: 'live',
     href: url('/rs3-exchange'),
@@ -132,7 +179,7 @@ export const products: Product[] = [
     nav: [],
     footer: [
       { label: 'Quick Guide', href: 'https://www.rs3.exchange/quick-guide', external: true },
-      { label: 'Discord', href: 'https://discord.gg/BV4vGeKFUt', external: true },
+      { label: 'Discord', href: discord, external: true },
       { label: 'Privacy policy', href: 'https://www.rs3.exchange/privacy-policy', external: true },
       { label: 'Terms of service', href: 'https://www.rs3.exchange/terms-of-service', external: true },
     ],
@@ -151,8 +198,12 @@ export const products: Product[] = [
   {
     slug: 'wallyt',
     name: 'Wallyt',
-    summary:
-      'Split rent, trips and dinners with the people you share them with. Everyone sees the same balances as they change, in any of 161 currencies, and settles up in as few payments as possible.',
+    definition: `Wallyt is a free app for splitting shared costs such as rent, trips and dinners: everyone in a group sees the same balances, and it simplifies settling up into as few payments as it can.`,
+    tagline: 'Who owes whom, without the spreadsheet.',
+    pitch:
+      'Split rent, trips and dinners without a spreadsheet. Everyone in the group sees the same balances, in any of 161 currencies, and when it’s time to settle, Wallyt cuts the payments down to as few as it can.',
+    terms: 'Free, no ads',
+    card: ['Split rent, trips', 'and dinners.'],
     platforms: 'Android',
     status: 'soon',
     href: url('/wallyt'),
@@ -182,27 +233,74 @@ export const products: Product[] = [
 
 export const product = (slug: string) => products.find((p) => p.slug === slug)!;
 
+/** Where a product that isn't out yet is headed, said the same way everywhere. */
+export const comingSoon = 'Coming soon to Google Play';
+
 /**
- * The scale of what the studio runs, as one developer. Checked against the products' repos on
- * 2026-10-04: commits are OSRS/RS3 Exchange's main branch plus Wallyt's, tests are counted test
- * cases across both. Round down when they change, never up.
+ * The scale of what the studio runs, as one developer. Checked on 2026-10-04: items are the item
+ * pages in both live sitemaps (4,512 and 7,061), commits are the merged history of OSRS/RS3
+ * Exchange plus Wallyt's (2,846 and 156), tests are counted test cases across both (4,125 and 908).
+ * Round down when they change, never up.
  */
 export const scale = [
-  { value: '364,000+', label: 'traders on OSRS Exchange' },
-  { value: '3', label: 'products, one developer' },
-  { value: '2,900+', label: 'commits since 2022' },
-  { value: '4,500+', label: 'automated tests' },
+  { value: players, label: 'players have used OSRS Exchange' },
+  { value: '11,500+', label: 'items tracked across two games' },
+  { value: '3,000+', label: `commits since ${company.since}` },
+  { value: '4,900+', label: 'automated tests' },
 ];
 
-/** The outside services the products run on in production (Wallyt's are built and tested). */
+/**
+ * The outside services the products are built on, each with what it means for the person using the
+ * product (Wallyt's are built and tested). Not a list of everyone who handles data: each product's
+ * privacy policy has that.
+ */
 export const integrations = [
-  { title: 'Stripe', body: 'Premium subscriptions for both Exchange sites: checkout, automatic sales tax, renewals and a portal to change or cancel.' },
-  { title: 'Google', body: 'Sign-in on the web and on Android, through One Tap and Android’s own account sheet.' },
-  { title: 'Discord', body: 'Accounts linked through Discord, price alerts sent by direct message, and Premium roles kept in step with each subscription.' },
-  { title: 'RuneScape Wiki', body: 'Real-time Grand Exchange prices for both games, picked up the moment the Wiki refreshes them.' },
-  { title: 'WeirdGloop', body: 'Years of official daily Grand Exchange history, backfilled for every item in both games.' },
-  { title: 'Amazon SES and Postmark', body: 'Account email, price alerts and newsletters, with bounces and unsubscribes respected automatically.' },
-  { title: 'Cloudflare', body: 'In front of every site, with Turnstile keeping bots out of sign-up.' },
-  { title: 'Frankfurter', body: 'Central-bank exchange rates for Wallyt’s 161 currencies, with a fallback source and every rate kept.' },
-  { title: 'Sentry', body: 'Errors from browsers and servers reported as they happen, with what’s needed to fix them.' },
+  { title: 'Stripe', body: 'Your card goes to Stripe and never touches my servers. Checkout, sales tax, renewals and cancelling all run there.' },
+  { title: 'Google', body: 'Sign in with the Google account you already have, on the Exchange sites and through Android’s own account sheet in Wallyt.' },
+  { title: 'Discord', body: 'Price alerts arrive as a direct message, and your Premium role in the community follows your membership.' },
+  { title: 'RuneScape Wiki', body: 'Live prices come from the wikis’ real-time price data, the OSRS Wiki for Old School and the RuneScape Wiki for RuneScape 3, the source players already use.' },
+  { title: 'WeirdGloop', body: 'Years of daily Grand Exchange prices, filled in behind the long-range charts for both games.' },
+  { title: 'Amazon SES and Postmark', body: 'Account emails and price alerts go out through Amazon SES. Newsletters go through Postmark, where bounces and unsubscribes are honoured automatically.' },
+  { title: 'Cloudflare', body: 'In front of both Exchange sites, with Turnstile keeping bots out of sign-up.' },
+  { title: 'Frankfurter', body: 'Central-bank exchange rates for Wallyt’s 161 currencies, with a second source as backup and every rate kept.' },
+  { title: 'Sentry', body: 'Errors are reported to me as they happen, with what I need to fix them.' },
+];
+
+/** What people ask about the studio itself. On the home page, in its schema.org data and in /llms.txt. */
+export const studioQuestions: QA[] = [
+  {
+    q: `What is ${company.brand}?`,
+    a: `${company.brand} is a one-developer software studio, the product studio of ${company.legalName}. I make OSRS Exchange and RS3 Exchange, websites with live Grand Exchange prices for RuneScape players, and Wallyt, an app for splitting shared costs.`,
+  },
+  {
+    q: `Who is behind ${company.brand}?`,
+    a: `I am. I’m ${company.founder}, and I’ve designed, built and run every product here myself, starting with OSRS Exchange in ${company.since}. When you email or ask in the Discord, I’m the one who answers.`,
+  },
+  {
+    q: `I see a charge from ${premium.statement} on my card. What is it?`,
+    a: `It’s a Premium membership for OSRS Exchange and RS3 Exchange: ${usd(premium.monthly)} a month or ${usd(premium.annual)} a year, after a ${premium.trialDays}-day free trial for new members. If you don’t recognise it, email ${email} before disputing it and I’ll look into it.`,
+  },
+  {
+    q: 'How do I cancel Premium?',
+    a: 'Sign in on osrs.exchange or rs3.exchange and cancel from your account settings. You keep Premium until the end of the period you’ve paid for, and nothing on your account is deleted.',
+  },
+  {
+    q: 'Are OSRS Exchange and RS3 Exchange affiliated with Jagex?',
+    a: 'No. Both are independent websites that read public price data and never touch your game account. RuneScape and Old School RuneScape are trademarks of Jagex Ltd.',
+  },
+  {
+    q: 'When does Wallyt come out?',
+    a:
+      product('wallyt').status === 'live'
+        ? 'Wallyt is out now on Google Play for Android.'
+        : `Wallyt is in testing and is coming to Google Play first. Email ${email} and I’ll tell you when it’s out.`,
+  },
+  {
+    q: 'How do I reach a person?',
+    a: `Email ${email}. For the Exchange sites you can also ask in the Discord. Either way, I’m the one who answers.`,
+  },
+  {
+    q: 'Do you take on client work?',
+    a: 'Yes, a few projects a year: web apps, Android apps, and the payments, sign-in and servers behind them.',
+  },
 ];

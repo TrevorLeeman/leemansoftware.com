@@ -1,0 +1,140 @@
+---
+// The studio's link card (public/og.png), drawn as a page so it can be remade whenever the headline
+// changes: `mise run cards` screenshots it at 1200×630 while `mise run dev` is running. The page
+// exists only in development; a build makes no card pages, and scripts/check-dist.mjs checks that.
+import '../../styles/global.css';
+import Monogram from '../../components/Monogram.astro';
+import { company, products } from '../../site';
+
+export function getStaticPaths() {
+  return import.meta.env.PROD ? [] : [{ params: { card: 'studio' } }];
+}
+
+const [first, second] = company.card;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Link card</title>
+  </head>
+  <body>
+    <main class="card">
+      <p class="lockup">
+        <Monogram size={44} />
+        <span>Leeman <i>Software</i></span>
+      </p>
+      <h1>
+        {first}
+        <span>{second}<b></b></span>
+      </h1>
+      <p class="base">
+        <span>{company.domain}</span>
+        <span class="icons">
+          {products.map((p) => <img class:list={{ pixel: p.pixelIcon }} src={p.icon} alt="" width="52" height="52" />)}
+        </span>
+      </p>
+    </main>
+  </body>
+</html>
+
+<style>
+  /* The card is always dark, whatever the theme of the machine that draws it. */
+  .card {
+    --ink: #ededef;
+    --muted: #8a8a93;
+    --rule: #222226;
+    --mark: #18181b;
+    --mark-fg: #fafafa;
+    --cursor: #4ade80;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+    height: 630px;
+    padding: 68px 80px 64px;
+    overflow: hidden;
+    background-color: #0a0a0b;
+    background-image: linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+  }
+
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .lockup i {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  h1 {
+    margin: auto 0;
+    font-size: 84px;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+
+  h1 span {
+    display: block;
+    color: var(--muted);
+  }
+
+  h1 b {
+    display: inline-block;
+    width: 0.42em;
+    height: 0.12em;
+    margin-left: 0.12em;
+    background: var(--cursor);
+  }
+
+  .base {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--muted);
+  }
+
+  .icons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .icons img {
+    border-radius: 12px;
+  }
+
+  .icons .pixel {
+    image-rendering: pixelated;
+  }
+</style>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    background: #0a0a0b;
+  }
+
+  /* Astro's own toolbar in development would otherwise be drawn into the card. */
+  astro-dev-toolbar {
+    display: none !important;
+  }
+</style>

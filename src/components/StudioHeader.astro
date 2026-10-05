@@ -1,8 +1,10 @@
 ---
 // The studio's header, on the home page and the studio's own pages.
-import { url } from '../url';
+import { url, withoutBase } from '../url';
 import { company } from '../site';
 import Monogram from './Monogram.astro';
+
+const about = withoutBase(Astro.url.pathname) === '/about' ? 'page' : undefined;
 ---
 
 <header class="site-header">
@@ -12,8 +14,9 @@ import Monogram from './Monogram.astro';
       <span class="wordmark">Leeman <span>Software</span></span>
     </a>
     <nav aria-label="Main">
-      <a class="optional" href={url('/#products')}>Products</a>
-      <a href={url('/#contact')}>Work with me</a>
+      <a href={url('/#products')}>Products</a>
+      <a class="optional" href={url('/about')} aria-current={about}>About</a>
+      <a href={url('/#contact')}>Contact</a>
     </nav>
   </div>
 </header>
