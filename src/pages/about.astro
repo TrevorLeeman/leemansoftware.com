@@ -63,13 +63,30 @@ const shipped = [
   schema={{ mainEntity: organizationRef }}
 >
   <section class="intro wrap">
-    <p class="label">about</p>
-    <h1 class="title">The person behind the products.</h1>
-    <p class="lede">
-      I’m {company.founder}. {company.brand} is my studio, the product studio of {company.legalName},
-      and I’m its only developer. I started with OSRS Exchange in {company.since}, and I’ve designed, built
-      and run everything here myself since, from the first sketch to the servers.
-    </p>
+    <div class="intro-copy">
+      <p class="label">about</p>
+      <h1 class="title">The person behind the products.</h1>
+      <p class="lede">
+        I’m {company.founder}. {company.brand} is my studio, the product studio of {company.legalName},
+        and I’m its only developer. I started with OSRS Exchange in {company.since}, and I’ve designed, built
+        and run everything here myself since, from the first sketch to the servers.
+      </p>
+    </div>
+    <figure class="portrait">
+      <img
+        src={url('/about/trevor-leeman.webp')}
+        alt={`${company.founder}, founder and developer of ${company.brand}`}
+        width="600"
+        height="750"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <figcaption>
+        <span>{company.founder}</span>
+        <span>Founder & developer</span>
+      </figcaption>
+    </figure>
   </section>
 
   <section id="record" class="wrap section" aria-labelledby="record-title">
@@ -108,12 +125,57 @@ const shipped = [
 <style>
   .intro {
     display: grid;
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+    align-items: center;
+    gap: clamp(40px, 6vw, 96px);
     padding-block: clamp(56px, 9vw, 128px) 0;
+  }
+
+  .intro-copy {
+    display: grid;
+    gap: 20px;
   }
 
   .intro h1 {
     font-size: clamp(36px, 5.6vw, 72px);
+  }
+
+  .portrait {
+    margin: 0;
+  }
+
+  .portrait img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+
+  .portrait figcaption {
+    display: grid;
+    gap: 2px;
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .portrait figcaption span:last-child {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .intro {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .portrait {
+      width: 240px;
+      max-width: 100%;
+    }
   }
 
   .section {
