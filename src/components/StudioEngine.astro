@@ -1,0 +1,53 @@
+---
+import { scale } from '../site';
+import { limits } from '../exchange';
+---
+<div class="engine">
+  <article class="inventory">
+    <p class="label">two worlds, one platform</p>
+    <h3>{scale[1].value}</h3><p class="caption">items tracked across two games</p>
+    <div class="item-map" aria-hidden="true">{Array.from({length: 115}, (_, i) => <i class:list={{osrs: i < 45}} />)}</div>
+    <div class="legend"><span><i class="purple"></i>OSRS <strong>4,500+</strong></span><span><i></i>RS3 <strong>7,000+</strong></span></div>
+    <p class="note">Each square represents approximately 100 items.</p>
+  </article>
+  <article class="checks">
+    <p class="label">built to keep working</p>
+    <h3>{scale[3].value}</h3><p class="caption">automated tests across the products</p>
+    <div class="test-rows">{['Tax rules', 'Payments', 'Price alerts', 'Currency maths'].map(t => <div><span>{t}</span><span class="test-line" aria-hidden="true"></span><span class="check" aria-hidden="true">✓</span></div>)}</div>
+    <p class="note">On the Exchange sites, tests run before every change goes live.</p>
+  </article>
+  <article class="rhythm">
+    <div><p class="label">around the clock</p><h3>{limits.alertCheck}<span>sec</span></h3><p class="caption">between price-alert checks</p></div>
+    <div class="signal"><svg viewBox="0 0 440 92" fill="none" aria-hidden="true"><path class="baseline" d="M0 65H440"/><path class="wave" d="M0 65H45L56 65L65 39L74 80L84 15L96 65H155L164 39L173 80L183 15L195 65H254L263 39L272 80L282 15L294 65H353L362 39L371 80L381 15L393 65H440"/></svg><p>11 scheduled jobs keep history, trends and memberships in order.</p></div>
+  </article>
+</div>
+<style>
+  .engine { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; background: var(--surface); }
+  article { padding: clamp(24px, 3.5vw, 44px); min-width: 0; }
+  .inventory { border-right: 1px solid var(--rule); }
+  .label { font-size: 11px; }
+  h3 { margin: 22px 0 0; font-weight: 500; font-size: clamp(46px, 5vw, 68px); letter-spacing: -.06em; line-height: 1; }
+  h3 span { font-size: 24px; margin-left: 8px; color: var(--muted); }
+  .caption { margin: 8px 0 28px; color: var(--ink-soft); font-size: 14px; }
+  .item-map { display: grid; grid-template-columns: repeat(23, 1fr); gap: 5px; }
+  .item-map i { aspect-ratio: 1; background: color-mix(in srgb, var(--accent) 65%, var(--surface)); border-radius: 2px; }
+  .item-map .osrs { background: #8880dd; }
+  .legend { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; font: 11px var(--mono); }
+  .legend span { display: flex; gap: 7px; align-items: center; }
+  .legend i { width: 7px; height: 7px; background: var(--accent); border-radius: 2px; }
+  .legend .purple { background: #8880dd; }
+  .legend strong { font-weight: 500; }
+  .note { margin: 20px 0 0; font-size: 11px; color: var(--muted); }
+  .test-rows { display: grid; gap: 13px; }
+  .test-rows > div { display: flex; align-items: center; gap: 18px; font: 12px var(--mono); }
+  .test-line { flex: 1; height: 1px; background: var(--rule); }
+  .check { color: var(--accent); background: var(--accent-soft); width: 21px; height: 21px; text-align: center; border-radius: 50%; }
+  .rhythm { grid-column: 1 / -1; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; background: color-mix(in srgb, var(--accent) 3%, var(--surface)); }
+  .rhythm .caption { margin-bottom: 0; }
+  .signal svg { width: 100%; overflow: visible; }
+  .baseline { stroke: var(--rule); }
+  .wave { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 1000; animation: trace 3s ease-out both; }
+  .signal p { font-size: 12px; color: var(--muted); max-width: 32em; }
+  @keyframes trace { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+  @media (max-width: 600px) { .engine { grid-template-columns: 1fr; } .inventory { border-right: 0; border-bottom: 1px solid var(--rule); } .rhythm { grid-template-columns: 1fr; gap: 18px; } }
+</style>

@@ -3,11 +3,25 @@ import { url } from '../url';
 import Base from '../layouts/Base.astro';
 import Product from '../components/Product.astro';
 import SectionHead from '../components/SectionHead.astro';
-import Stats from '../components/Stats.astro';
+import StudioReach from '../components/StudioReach.astro';
+import StudioEngine from '../components/StudioEngine.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import Questions from '../components/Questions.astro';
 import { exchange, limits } from '../exchange';
 import { company, email, integrations, playerCount, players, products, scale, studioQuestions } from '../site';
+
+// Local brand assets keep the connected-services section free of third-party requests.
+const serviceIcons: Record<string, string> = {
+  Stripe: 'stripe.svg',
+  Google: 'google.svg',
+  Discord: 'discord.svg',
+  'RuneScape Wiki': 'runescape-wiki.png',
+  WeirdGloop: 'weird-gloop.png',
+  'Amazon SES and Postmark': 'amazon-ses.svg',
+  Cloudflare: 'cloudflare.svg',
+  Frankfurter: 'frankfurter.ico',
+  Sentry: 'sentry.svg',
+};
 
 // One player's words sit under OSRS Exchange, the product they were said about.
 const quotes: Record<string, ReturnType<typeof exchange>['quotes'][number]> = {
@@ -37,36 +51,45 @@ const runs = [
   questions={studioQuestions}
 >
   <section class="intro wrap">
-    <h1 class="title">
-      {players} players. <span>One developer.<i class="cursor" aria-hidden="true"></i></span>
-    </h1>
-    <p class="lede">
-      I’m {company.founder}, and {company.brand} is my studio. I design, build and run OSRS Exchange
-      and RS3 Exchange, where RuneScape players check live Grand Exchange prices before they buy, and
-      Wallyt, an app that keeps track of who owes whom. More than {playerCount} players have used OSRS
-      Exchange since I started it in {company.since}.
-    </p>
+    <div class="intro-copy">
+      <p class="label">independent software · since {company.since}</p>
+      <h1 class="title">Small studio.<br />Big <span class="impact">impact.<i class="cursor" aria-hidden="true"></i></span></h1>
+      <p class="lede">I’m {company.founder}. I build useful software, then stick around to make it better. Three products. More than {playerCount} players have used OSRS Exchange. One developer behind it all.</p>
+      <div class="intro-links"><a class="button primary" href="#products">Explore the products <span aria-hidden="true">↓</span></a><a href={url('/about')}>Meet the developer <span aria-hidden="true">↗</span></a></div>
+      <p class="intro-note">Designed, built and run by a human.</p>
+    </div>
+    <StudioReach />
   </section>
 
   <section id="products" class="products wrap" aria-label="Products">
+    <div class="chapter"><p class="label">01 / the products</p><span>Built for real life. And a couple of virtual worlds.</span></div>
     {products.map((p, i) => <Product product={p} quote={quotes[p.slug]} flip={i % 2 === 1} eager={i === 0} />)}
   </section>
 
   <section id="scale" class="wrap section" aria-labelledby="scale-title">
-    <SectionHead title="What one developer runs" id="scale-title">
+    <p class="label chapter-label">02 / under the hood</p>
+    <SectionHead title="Small team. Substantial machinery." id="scale-title">
       I’ve built and run everything here on my own: OSRS Exchange since {company.since}, then RS3 Exchange
       and Wallyt in 2026. This is what that takes, and what it means for you.
     </SectionHead>
-    <Stats stats={scale} />
-    <FeatureGrid features={runs} />
+    <StudioEngine />
+    <div class="runs"><FeatureGrid features={runs} /></div>
+  </section>
+
+  <section id="story" class="wrap section" aria-labelledby="story-title">
+    <div class="story-top"><div><p class="label chapter-label">03 / the long game</p><SectionHead title="Built one commit at a time." id="story-title">No overnight story. Just years of shipping, listening and making things a little better.</SectionHead></div><div class="commit-total"><strong>{scale[2].value}</strong><span>commits since {company.since}</span></div></div>
+    <ol class="timeline">
+      <li><span class="year">July {company.since}</span><span class="milestone" aria-hidden="true"></span><img src={products[0].icon} width="32" height="32" alt="" loading="lazy" /><h3>One game. One idea.</h3><p>OSRS Exchange begins: a better way to see what’s worth trading. More than {playerCount} players have used it since.</p><a href={products[0].href}>OSRS Exchange <span aria-hidden="true">↗</span></a></li>
+      <li><span class="year">2026</span><span class="milestone" aria-hidden="true"></span><img src={products[1].icon} width="32" height="32" alt="" loading="lazy" /><h3>A second world.</h3><p>I rework the platform for two games. RS3 Exchange arrives with its own items, tax rules and years of price history.</p><a href={products[1].href}>RS3 Exchange <span aria-hidden="true">↗</span></a></li>
+      <li><span class="year">Next up · in testing</span><span class="milestone hollow" aria-hidden="true"></span><img src={products[2].icon} width="32" height="32" alt="" loading="lazy" /><h3>Beyond the game.</h3><p>Wallyt brings the same care to shared expenses. Built for 161 currencies, with Android coming first.</p><a href={products[2].href}>Meet Wallyt <span aria-hidden="true">↗</span></a></li>
+    </ol>
   </section>
 
   <section id="integrations" class="wrap section" aria-labelledby="integrations-title">
-    <SectionHead title="Built on the services you already trust" id="integrations-title">
-      I don’t rebuild what others already do well. Your card, your sign-in and your alerts are handled
-      by companies whose whole job that is, each one wired into the products properly.
-    </SectionHead>
-    <FeatureGrid features={integrations} />
+    <p class="label chapter-label">04 / connected by design</p>
+    <SectionHead title="Good software doesn’t work alone." id="integrations-title">I connect the services you already trust, so each part is handled by people whose whole job that is.</SectionHead>
+    <div class="services">{integrations.map((service) => <details><summary><span class="service-icon" data-service={service.title} aria-hidden="true"><img src={url(`/services/${serviceIcons[service.title]}`)} alt="" width="24" height="24" loading="lazy" decoding="async" /></span><span>{service.title}</span><span class="expand" aria-hidden="true">+</span></summary><p>{service.body}</p></details>)}</div>
+    <p class="service-hint">Open a service to see where it fits.</p>
   </section>
 
   <section id="questions" class="wrap section" aria-labelledby="questions-title">
@@ -75,7 +98,9 @@ const runs = [
   </section>
 
   <section id="contact" class="contact wrap" aria-labelledby="contact-title">
-    <h2 class="title" id="contact-title">Work with me</h2>
+    <a class="contact-portrait" href={url('/about')} aria-label="Meet Trevor Leeman"><img src={url('/about/trevor-leeman.webp')} alt="" width="64" height="64" loading="lazy" /></a>
+    <p class="label">your next idea</p>
+    <h2 class="title" id="contact-title">Let’s build something useful.</h2>
     <p class="lede">
       I take on a few projects a year: web apps, Android apps, and the payments, sign-in and servers
       behind them. You work directly with the person who built everything on this page, from the first
@@ -89,87 +114,60 @@ const runs = [
 </Base>
 
 <style>
-  /* The intro stands alone, centred, with the products well below it. */
-  .intro {
-    display: grid;
-    justify-items: center;
-    gap: 24px;
-    padding-block: clamp(64px, 12vw, 160px) clamp(56px, 9vw, 128px);
-    text-align: center;
-  }
-
-  .intro h1 {
-    font-size: clamp(38px, 6.2vw, 84px);
-  }
-
-  .intro h1 span {
-    display: block;
-    color: var(--muted);
-  }
-
-  /* Each line of the headline stays whole wherever it fits on one line. */
-  @media (min-width: 900px) {
-    .intro h1 span {
-      white-space: nowrap;
-    }
-  }
-
-  .intro .lede {
-    max-width: 34em;
-  }
-
-  /* One row per product, the same for each, alternating sides. */
-  .products {
-    display: grid;
-    gap: clamp(88px, 10vw, 152px);
-  }
-
-  .section {
-    padding-top: clamp(112px, 14vw, 200px);
-  }
-
-  .contact {
-    display: grid;
-    justify-items: center;
-    gap: 20px;
-    padding-top: clamp(112px, 14vw, 200px);
-    text-align: center;
-  }
-
-  .contact h2 {
-    font-size: clamp(34px, 4.4vw, 60px);
-  }
-
-  .contact .lede {
-    max-width: 30em;
-  }
-
-  .addr {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 10px 14px;
-    margin: 8px 0 0;
-  }
-
-  /* Phones read the whole page down one left edge, like the stacked products. */
-  @media (max-width: 899px) {
-    .intro,
-    .contact {
-      justify-items: start;
-      text-align: left;
-    }
-
-    .addr {
-      justify-content: start;
-    }
-  }
-
-  .addr a {
-    font-family: var(--mono);
-    font-size: clamp(18px, 2vw, 26px);
-    letter-spacing: -0.02em;
-    overflow-wrap: anywhere;
-  }
+  .intro { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(36px, 5vw, 80px); padding-block: clamp(56px, 8vw, 112px) clamp(72px, 10vw, 144px); }
+  .intro-copy { display: grid; justify-items: start; gap: 26px; }
+  .intro h1 { font-size: clamp(52px, 5.5vw, 80px); letter-spacing: -.055em; line-height: 1.04; }
+  .impact { color: var(--muted); }
+  .intro .lede { max-width: 28em; font-size: 17px; }
+  .intro .label { font-size: 11px; }
+  .intro-links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; font-size: 13px; }
+  .intro-links .button { height: 44px; gap: 20px; }
+  .intro-note { margin: 0; font: 10px var(--mono); color: var(--muted); }
+  .products { display: grid; gap: clamp(72px, 9vw, 128px); }
+  .chapter { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--rule-strong); margin-bottom: -32px; }
+  .chapter span { font-size: 12px; color: var(--muted); }
+  .chapter-label { margin-bottom: 22px; font-size: 11px; }
+  .section { padding-top: clamp(88px, 11vw, 160px); }
+  .runs { margin-top: 36px; }
+  .story-top { display: flex; justify-content: space-between; gap: 32px; }
+  .commit-total { display: grid; align-content: center; padding-bottom: 36px; flex-shrink: 0; }
+  .commit-total strong { font-size: clamp(40px, 5vw, 64px); line-height: 1.1; font-weight: 500; letter-spacing: -.06em; }
+  .commit-total span { font: 11px var(--mono); color: var(--muted); }
+  .timeline { display: grid; grid-template-columns: repeat(3, 1fr); padding: 0; margin: 8px 0 0; list-style: none; }
+  .timeline li { position: relative; padding-right: 36px; display: flex; flex-direction: column; align-items: start; }
+  .year { font: 11px var(--mono); color: var(--muted); margin-bottom: 22px; }
+  .milestone { position: relative; display: block; width: calc(100% + 36px); height: 1px; background: var(--rule-strong); margin-bottom: 32px; }
+  .milestone::before { content: ''; position: absolute; left: 0; top: -4px; width: 9px; height: 9px; border: 2px solid var(--accent); border-radius: 50%; background: var(--accent); }
+  .hollow::before { background: var(--bg); }
+  .timeline img { border-radius: 8px; }
+  .timeline h3 { margin: 16px 0 8px; font-size: 20px; font-weight: 550; letter-spacing: -.025em; }
+  .timeline p { margin: 0 0 20px; font-size: 14px; color: var(--ink-soft); }
+  .timeline a { font-size: 12px; margin-top: auto; }
+  .timeline a span { color: var(--accent); }
+  .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
+  .services details { border: 1px solid var(--rule); border-radius: 9px; background: var(--surface); }
+  .services summary { list-style: none; display: flex; align-items: center; gap: 12px; padding: 18px; cursor: pointer; font-size: 13px; }
+  .services summary::-webkit-details-marker { display: none; }
+  .service-icon { display: grid; place-items: center; flex: 0 0 38px; height: 38px; border-radius: 7px; background: #1b1b20; border: 1px solid #303036; }
+  .service-icon img { width: 24px; height: 24px; object-fit: contain; }
+  /* Keep the tiles dark; lift individual marks without changing multicolor logos. */
+  .service-icon[data-service='Stripe'] img,
+  .service-icon[data-service='Discord'] img,
+  .service-icon[data-service='Sentry'] img { filter: brightness(1.6) saturate(.8); }
+  .service-icon[data-service='Amazon SES and Postmark'] img { filter: brightness(1.3); }
+  .service-icon[data-service='WeirdGloop'] img { filter: brightness(1.5); }
+  .service-icon[data-service='Frankfurter'] img { filter: invert(1); }
+  .expand { margin-left: auto; color: var(--muted); }
+  details[open] .expand { transform: rotate(45deg); }
+  details[open] { border-color: var(--rule-strong); }
+  .services p { margin: 0; padding: 0 18px 20px; font-size: 13px; color: var(--ink-soft); }
+  .service-hint { margin: 16px 0 0; color: var(--muted); font: 11px var(--mono); }
+  .contact { display: grid; justify-items: center; gap: 20px; margin-top: clamp(88px, 11vw, 160px); padding-top: 64px; border-top: 1px solid var(--rule); text-align: center; }
+  .contact-portrait img { object-fit: cover; object-position: center 25%; border-radius: 50%; }
+  .contact h2 { font-size: clamp(34px, 4.4vw, 60px); }
+  .contact .lede { max-width: 34em; font-size: 16px; }
+  .addr { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 14px; margin: 8px 0 0; }
+  .addr a { font-family: var(--mono); font-size: clamp(17px, 2vw, 26px); letter-spacing: -.02em; overflow-wrap: anywhere; }
+  @media (max-width: 899px) { .intro { grid-template-columns: 1fr; } .intro-copy { max-width: 560px; } .intro h1 { font-size: clamp(52px, 9vw, 78px); } .intro :global(.reach) { width: 100%; max-width: 620px; } .services { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .chapter { flex-direction: column; gap: 8px; } .story-top { flex-direction: column; gap: 0; } .commit-total { padding-bottom: 40px; } .timeline { grid-template-columns: 1fr; gap: 32px; } .timeline li { padding-left: 24px; padding-right: 0; border-left: 1px solid var(--rule-strong); } .milestone { position: absolute; top: 9px; left: -5px; width: 9px; background: none; } .year { margin-bottom: 16px; } .services { grid-template-columns: 1fr; } .contact { text-align: left; justify-items: start; } .addr { justify-content: start; } }
 </style>
