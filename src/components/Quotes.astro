@@ -1,18 +1,26 @@
 ---
 import { url } from '../url';
 import { discord } from '../site';
+import type { Product } from '../site';
 import type { Quote } from '../exchange';
 
 interface Props {
   quotes: Quote[];
+  /** Whose Discord server the messages are from; its icon and name head the channel. */
+  product: Product;
 }
 
-const { quotes } = Astro.props;
+const { quotes, product: p } = Astro.props;
 ---
 
 <div class="community">
   <div class="channel">
-    <span class="channel-name"><span class="hash" aria-hidden="true">#</span> trader-talk</span>
+    <span class="channel-name">
+      <img class:list={['server', { pixel: p.pixelIcon }]} src={p.icon} alt="" width="24" height="24" loading="lazy" />
+      <span class="server-name">{p.name}</span>
+      <span class="slash" aria-hidden="true">/</span>
+      <span class="hash" aria-hidden="true">#</span> trader-talk
+    </span>
     <a class="join" href={discord}>Join the Discord <span aria-hidden="true">↗</span></a>
   </div>
   <div class="feed">
@@ -65,6 +73,26 @@ const { quotes } = Astro.props;
     gap: 10px;
     color: #e8ebea;
     font-weight: 600;
+  }
+
+  .channel .server {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+  }
+
+  .server.pixel {
+    image-rendering: pixelated;
+  }
+
+  .server-name {
+    color: #b5bab8;
+    font-weight: 500;
+  }
+
+  .slash {
+    color: #5c6462;
+    font-weight: 400;
   }
 
   .hash {
@@ -139,6 +167,7 @@ const { quotes } = Astro.props;
   @media (max-width: 760px) {
     .quotes { grid-template-columns: minmax(0, 1fr); }
     .channel { padding: 14px 16px; }
+    .server-name, .slash { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {

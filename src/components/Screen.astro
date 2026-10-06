@@ -1,5 +1,6 @@
 ---
 // A real screen from a product: a browser outline for the web products, a phone outline for Wallyt.
+// The browser shows the product's icon as the page's favicon, beside the address it came from.
 import type { Product } from '../site';
 
 interface Props {
@@ -32,7 +33,10 @@ const linkProps = href ? { href, tabindex: '-1', 'aria-hidden': 'true', ...(exte
         <i />
         <i />
         <i />
-        <span class="url">{shot.url ? shot.url.replace(/^https:\/\/(www\.)?/, '') : p.site && host(p.site)}</span>
+        <span class="url">
+          <img class:list={['favicon', { pixel: p.pixelIcon }]} src={p.icon} alt="" width="14" height="14" loading={loading} />
+          {shot.url ? shot.url.replace(/^https:\/\/(www\.)?/, '') : p.site && host(p.site)}
+        </span>
       </span>
     )
   }
@@ -102,6 +106,19 @@ const linkProps = href ? { href, tabindex: '-1', 'aria-hidden': 'true', ...(exte
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .screen .favicon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+    border-radius: 3px;
+    vertical-align: -3px;
+  }
+
+  .favicon.pixel {
+    image-rendering: pixelated;
   }
 
   /* Wallyt sits in a plain phone outline. */

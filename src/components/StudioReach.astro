@@ -11,7 +11,7 @@ import Monogram from './Monogram.astro';
   <div class="audience" aria-hidden="true">
     {Array.from({ length: 500 }, (_, i) => <i style={`--delay: ${(i % 25) * 24}ms; --shade: ${0.28 + ((i * 17) % 70) / 100}`} />)}
   </div>
-  <figcaption><strong>{players}</strong><span>players have used OSRS Exchange<br /><small>Lifetime visitors since {company.since}</small></span></figcaption>
+  <figcaption><strong>{players}</strong><span>players have used OSRS Exchange</span></figcaption>
   <div class="stem" aria-hidden="true"></div>
   <a class="maker" href={url('/about')}><Monogram size={44} /><span><strong>{company.brand}</strong><small>Independent software studio · design, code, servers and support</small></span><span class="arrow" aria-hidden="true">↗</span></a>
   <div class="branches" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -26,10 +26,9 @@ import Monogram from './Monogram.astro';
   .key i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
   .audience { display: grid; grid-template-columns: repeat(25, 1fr); gap: 6px; margin: 25px 0; }
   .audience i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: var(--shade); animation: arrive 900ms both; animation-delay: var(--delay); }
-  figcaption { display: flex; align-items: center; gap: 20px; }
+  figcaption { display: grid; justify-items: center; gap: 8px; text-align: center; }
   figcaption strong { font-size: clamp(32px, 3.5vw, 48px); font-weight: 550; letter-spacing: -.06em; line-height: 1; }
-  figcaption span { font-size: 12px; line-height: 1.6; color: var(--ink-soft); }
-  figcaption small { font-size: 10px; color: var(--muted); }
+  figcaption span { font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
   .stem { height: 26px; width: 1px; margin: auto; background: var(--rule-strong); }
   .maker { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--rule-strong); border-radius: 9px; text-decoration: none; }
   .maker:hover { border-color: var(--accent); }
@@ -47,5 +46,5 @@ import Monogram from './Monogram.astro';
   .product-nodes img { border-radius: 6px; }
   .product-nodes small { font: 9px var(--mono); color: var(--muted); }
   @keyframes arrive { from { opacity: 0; transform: translateY(4px); } }
-  @media (max-width: 420px) { figcaption { gap: 12px; } figcaption strong { font-size: 34px; } figcaption span { font-size: 10px; } .maker small { font-size: 9px; } }
+  @media (max-width: 420px) { figcaption strong { font-size: 34px; } figcaption span { font-size: 12px; } .maker small { font-size: 9px; } }
 </style>
