@@ -1,0 +1,713 @@
+---
+// Variants of the studio mark, side by side, for choosing between them. Like the link card, the
+// page exists only in development (http://localhost:4321/lab/logo/); a build makes no lab pages.
+import '../../styles/global.css';
+import wordmarkLight from '../../../public/brand/wordmark.svg?raw';
+import wordmarkDark from '../../../public/brand/wordmark-dark.svg?raw';
+import lockupLight from '../../../public/brand/lockup.svg?raw';
+import lockupDark from '../../../public/brand/lockup-dark.svg?raw';
+
+export function getStaticPaths() {
+  return import.meta.env.PROD ? [] : [{ params: { lab: 'logo' } }];
+}
+
+// Each mark is drawn on the 64×64 grid of src/components/Monogram.astro. The L's stroke there runs
+// from y 16 to 48.25 (the foot's bottom edge), so a cursor "the height of the L" spans exactly that.
+// `u` keeps ids unique, since every mark is drawn several times on the page.
+const tile = '<rect width="64" height="64" rx="14" fill="var(--mark)"/>';
+const L = (d = 'M21 16V45H35', w = 6.5, color = 'var(--mark-fg)') =>
+  `<path d="${d}" fill="none" stroke="${color}" stroke-width="${w}"/>`;
+
+type Variant = { name: string; note: string; star?: boolean; bare?: boolean; svg: (u: string) => string };
+
+// The original mark with a bigger cursor. Every cursor keeps the original's left edge (x 40) and
+// sits on the bottom of the L's foot (y 48.25); only its width and height change.
+const cursor = (w: number, h: number) => () =>
+  `${tile}${L()}<rect class="blink" x="40" y="${48.25 - h}" width="${w}" height="${h}" fill="var(--cursor)"/>`;
+
+const cursors: Variant[] = [
+  { name: 'Original', note: '10 wide, 6.5 tall: the same thickness as the L’s foot. For comparison.', svg: cursor(10, 6.5) },
+  { name: 'Thick underscore', note: '11 wide, 9 tall. Still an underscore, a little heavier than the foot.', svg: cursor(11, 9) },
+  { name: 'Square', note: '11 by 11. Reads as a block cursor, about a third of the L’s height.', svg: cursor(11, 11) },
+  { name: 'Short block', note: '10 wide, 14 tall. Clearly a block, still well below the top of the L.', svg: cursor(10, 14) },
+  { name: 'Half block', note: '11 wide, 16 tall: half the height of the L.', svg: cursor(11, 16.125) },
+  { name: 'Wide underscore', note: '13 wide, 8.5 tall. More presence from width instead of height.', svg: cursor(13, 8.5) },
+];
+
+// The original mark with the glitch: red and cyan copies that tear away from it every three seconds.
+const glitch = (w: number, h: number) => () => {
+  const mark = (color: string, cursor: string) =>
+    `${L('M21 16V45H35', 6.5, color)}<rect class="blink" x="40" y="${48.25 - h}" width="${w}" height="${h}" fill="${cursor}"/>`;
+  return `${tile}<g class="glitch-r" style="mix-blend-mode:screen">${mark('#ff2d55', '#ff2d55')}</g><g class="glitch-c" style="mix-blend-mode:screen">${mark('#22d3ee', '#22d3ee')}</g><g class="glitch-m">${mark('var(--mark-fg)', 'var(--cursor)')}</g>`;
+};
+
+const glitches: Variant[] = [
+  { name: 'Glitch, original cursor', note: '10 wide, 6.5 tall: today’s cursor, for comparison.', svg: glitch(10, 6.5) },
+  { name: 'Glitch, cursor 10 × 5', note: 'A little thinner than the foot, the smallest step down.', svg: glitch(10, 5) },
+  { name: 'Glitch, cursor 10 × 4', note: 'A thin underscore. Still easy to see at 28px.', svg: glitch(10, 4) },
+  { name: 'Glitch, cursor 9 × 3', note: 'A hairline, one narrower too. At 16px it’s barely a line.', svg: glitch(9, 3) },
+];
+
+
+const variants: Variant[] = [
+  {
+    name: 'Current',
+    note: 'Today’s mark, for comparison: an underscore cursor sitting on the baseline.',
+    svg: () => `${tile}${L()}<rect class="blink" x="40" y="41.75" width="10" height="6.5" fill="var(--cursor)"/>`,
+  },
+  {
+    name: 'Tall block',
+    star: true,
+    note: 'A full block cursor from the top of the L to the bottom of its foot. L and cursor make a 32×32 square, centred on the tile.',
+    svg: () =>
+      `${tile}<g transform="translate(-1.875 0)">${L()}<rect class="blink" x="39" y="16" width="11" height="32.25" fill="var(--cursor)"/></g>`,
+  },
+  {
+    name: 'Tall block, heavy',
+    star: true,
+    note: 'The same idea with a heavier L (8 instead of 6.5) and a 12-wide cursor. Holds up better at 16px.',
+    svg: () =>
+      `${tile}<g transform="translate(-1 0)">${L('M20 15V45H34', 8)}<rect class="blink" x="38" y="15" width="12" height="34" fill="var(--cursor)"/></g>`,
+  },
+  {
+    name: 'Joined',
+    note: 'The foot runs straight into the cursor, so the two read as one glyph. When the cursor blinks off, the L is left with a long foot.',
+    svg: () =>
+      `${tile}<g transform="translate(-2.375 0)">${L('M21 16V45H40')}<rect class="blink" x="40" y="16" width="11" height="32.25" fill="var(--cursor)"/></g>`,
+  },
+  {
+    name: 'Unfocused',
+    note: 'An outlined block, like a terminal that isn’t focused. Hover the card and it focuses: the block fills and starts blinking.',
+    svg: () =>
+      `${tile}<g transform="translate(-1.875 0)">${L()}<rect class="hollow" x="40.25" y="17.25" width="8.5" height="29.75" fill="none" stroke="var(--cursor)" stroke-width="2.5"/></g>`,
+  },
+  {
+    name: 'Inverse',
+    note: 'The block sits over the end of the foot and inverts it, the way a terminal draws the character under its cursor.',
+    svg: (u) =>
+      `${tile}<clipPath id="${u}c"><rect x="33" y="16" width="12" height="32.25"/></clipPath><g transform="translate(1.625 0)">${L('M19 16V45H41')}<g class="blink"><rect x="33" y="16" width="12" height="32.25" fill="var(--cursor)"/>${L('M19 16V45H41', 6.5, 'var(--mark)').replace('<path', `<path clip-path="url(#${u}c)"`)}</g></g>`,
+  },
+  {
+    name: 'Caret L',
+    note: 'The cursor is the L’s own foot. Blinking, the mark flips between an L and a text caret.',
+    svg: () =>
+      `${tile}<g transform="translate(5.625 0)">${L('M21 16V41.75')}<rect class="blink" x="17.75" y="41.75" width="17.25" height="6.5" fill="var(--cursor)"/></g>`,
+  },
+  {
+    name: 'I-beam',
+    note: 'A thin editor caret with serifs, the height of the L. Reads as “code editor” more than “terminal”.',
+    svg: () =>
+      `${tile}<g transform="translate(-1.5 0)" fill="var(--cursor)">${L()}<g class="blink"><rect x="42" y="16" width="3.5" height="32.25"/><rect x="38.5" y="16" width="10.5" height="3"/><rect x="38.5" y="45.25" width="10.5" height="3"/></g></g>`,
+  },
+  {
+    name: 'Typing',
+    note: 'A four-second loop: the L is typed, the cursor jumps after it and blinks, then the L is backspaced.',
+    svg: () =>
+      `${tile}<g transform="translate(-1.875 0)"><g class="type-l">${L()}</g><g class="type-c"><rect class="blink" x="39" y="16" width="11" height="32.25" fill="var(--cursor)"/></g></g>`,
+  },
+  {
+    name: 'Phosphor',
+    note: 'A green CRT: phosphor glow, scanlines, a dark vignette and a faint flicker. Always dark, whatever the theme.',
+    svg: (u) => `
+      <defs>
+        <radialGradient id="${u}v" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#0d2416"/><stop offset="1" stop-color="#020604"/></radialGradient>
+        <pattern id="${u}s" width="64" height="2.5" patternUnits="userSpaceOnUse"><rect width="64" height="1.1" fill="#000" opacity="0.38"/></pattern>
+        <filter id="${u}g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <clipPath id="${u}t"><rect width="64" height="64" rx="14"/></clipPath>
+      </defs>
+      <g clip-path="url(#${u}t)">
+        <rect width="64" height="64" fill="url(#${u}v)"/>
+        <g class="flicker" filter="url(#${u}g)" transform="translate(-1.875 0)">${L('M21 16V45H35', 6.5, '#a7f3c0')}<rect class="blink" x="39" y="16" width="11" height="32.25" fill="#4ade80"/></g>
+        <rect width="64" height="64" fill="url(#${u}s)"/>
+      </g>`,
+  },
+  {
+    name: 'Pixels',
+    note: 'L and cursor set on a 9×9 LED matrix, with the unlit pixels faintly visible.',
+    svg: () => {
+      const on = new Set<string>();
+      for (let r = 1; r <= 7; r++) on.add(`1,${r}`);
+      for (let c = 2; c <= 3; c++) on.add(`${c},7`);
+      let cells = '';
+      for (let r = 0; r < 9; r++)
+        for (let c = 0; c < 9; c++) {
+          const cursor = c >= 5 && c <= 7 && r >= 1 && r <= 7;
+          const lit = on.has(`${c},${r}`);
+          const x = 5.5 + c * 6;
+          const y = 5.5 + r * 6;
+          cells += `<rect x="${x}" y="${y}" width="5" height="5" rx="1" fill="var(--mark-fg)" opacity="${lit ? 1 : 0.07}"/>`;
+          if (cursor) cells += `<rect class="blink" x="${x}" y="${y}" width="5" height="5" rx="1" fill="var(--cursor)"/>`;
+        }
+      return `${tile}${cells}`;
+    },
+  },
+  {
+    name: 'Glitch',
+    note: 'The tall-block mark with red and cyan channels that tear apart for a moment every few seconds.',
+    svg: () => {
+      const mark = (color: string, cursor: string) =>
+        `${L('M21 16V45H35', 6.5, color)}<rect class="blink" x="39" y="16" width="11" height="32.25" fill="${cursor}"/>`;
+      return `${tile}<g transform="translate(-1.875 0)"><g class="glitch-r" style="mix-blend-mode:screen">${mark('#ff2d55', '#ff2d55')}</g><g class="glitch-c" style="mix-blend-mode:screen">${mark('#22d3ee', '#22d3ee')}</g><g class="glitch-m">${mark('var(--mark-fg)', 'var(--cursor)')}</g></g>`;
+    },
+  },
+  {
+    name: 'Brackets',
+    note: 'The L becomes the bottom-left corner of a frame, answered by a green corner top right. A selection, or a viewfinder, around nothing yet.',
+    svg: () =>
+      `${tile}${L('M17 22V47H32')}<path class="blink" d="M32 17H47V42" fill="none" stroke="var(--cursor)" stroke-width="6.5"/>`,
+  },
+  {
+    name: 'No tile',
+    bare: true,
+    note: 'The tall-block mark on its own, in the text colour, for places where the dark tile feels heavy.',
+    svg: () =>
+      `<g transform="translate(-1.875 0)">${L('M21 16V45H35', 6.5, 'var(--ink)')}<rect class="blink" x="39" y="16" width="11" height="32.25" fill="var(--cursor)"/></g>`,
+  },
+];
+
+const sections = [
+  { title: 'Glitch on the original', key: 'g', items: glitches, label: (n: number) => `G${n + 1}` },
+  { title: 'A more prominent cursor', key: 'c', items: cursors, label: (n: number) => String.fromCharCode(65 + n) },
+  { title: 'Earlier ideas', key: 'v', items: variants, label: (n: number) => String(n + 1).padStart(2, '0') },
+];
+
+const sizes = [64, 44, 28, 16];
+
+// A logo file from public/brand, drawn three times over for the glitch: red and cyan copies under
+// the logo itself, which tear apart from it every three seconds.
+const glitched = (raw: string) => {
+  const viewBox = raw.match(/viewBox="([^"]+)"/)![1];
+  const inner = raw.slice(raw.indexOf('>') + 1, raw.lastIndexOf('</svg>')).replace('class="caret"', 'class="caret blink"');
+  return `<svg viewBox="${viewBox}" aria-hidden="true"><g class="base">${inner}</g><g class="glitch-r ghost-red" style="mix-blend-mode:screen">${inner}</g><g class="glitch-c ghost-cyan" style="mix-blend-mode:screen">${inner}</g><g class="glitch-m">${inner}</g></svg>`;
+};
+const brand = [
+  { name: 'Wordmark', note: 'public/brand/wordmark.svg and wordmark-dark.svg. The name in Geist, outlined, followed by a thin cursor about one letter wide, like the one after the home page’s headline.', light: wordmarkLight, dark: wordmarkDark, sizes: [44, 24, 16] },
+  { name: 'Lockup', note: 'public/brand/lockup.svg and lockup-dark.svg. The mark and the wordmark, in the header’s proportions.', light: lockupLight, dark: lockupDark, sizes: [56, 28, 20] },
+];
+const themes = ['light', 'dark'] as const;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Logo lab</title>
+  </head>
+  <body data-blink="always">
+    <main class="wrap lab">
+      <header class="top">
+        <div>
+          <p class="label">Logo lab · development only</p>
+          <h1>The mark and wordmark</h1>
+          <p class="lede">Each variant at hero size, at 64, 44, 28 and 16px (the favicon), and in the header lockup, on light and dark. The new wordmark and lockup come first, then the glitch on the original mark with the cursor a little thinner at each step, then the cursor sizes and the earlier, wilder ideas.</p>
+        </div>
+        <div class="controls" role="group" aria-label="Blinking">
+          <span>Blink</span>
+          <button type="button" data-set="always">Always</button>
+          <button type="button" data-set="hover">On hover</button>
+          <button type="button" data-set="off">Off</button>
+        </div>
+      </header>
+
+      <h2 class="section">Wordmark</h2>
+      <div class="grid brand">
+        {
+          brand.map((b) => (
+            <article class="card">
+              <h2>{b.name}</h2>
+              <p class="note">{b.note}</p>
+              <div class="panels stacked">
+                {themes.map((t) => (
+                  <div class={`panel ${t}`}>
+                    <div class="logo-big" set:html={glitched(t === 'light' ? b.light : b.dark)} />
+                    <div class="logo-sizes">
+                      {b.sizes.map((h) => (
+                        <div style={`height:${h}px`} set:html={glitched(t === 'light' ? b.light : b.dark)} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      {
+        sections.map(({ title, key, items, label }, n) => (
+          <>
+            <h2 class="section">{title}</h2>
+            <div class="grid">
+              {items.map((v, i) => (
+            <article class="card" class:list={{ star: v.star }}>
+              <h2>
+                <span class="num">{label(i)}</span> {v.name} {v.star && <span class="badge">asked for</span>}
+              </h2>
+              <p class="note">{v.note}</p>
+              <div class="panels">
+                {themes.map((t) => (
+                  <div class={`panel ${t}`}>
+                    <svg class="hero" viewBox="0 0 64 64" aria-hidden="true" set:html={v.svg(`${key}${i}${t}h`)} />
+                    <div class="sizes">
+                      {sizes.map((s) => (
+                        <svg
+                          width={s}
+                          height={s}
+                          viewBox="0 0 64 64"
+                          aria-hidden="true"
+                          class:list={{ tiled: !v.bare }}
+                          set:html={v.svg(`${key}${i}${t}${s}`)}
+                        />
+                      ))}
+                    </div>
+                    <p class="lockup">
+                      <svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true" class:list={{ tiled: !v.bare }} set:html={v.svg(`${key}${i}${t}l`)} />
+                      <span class="wordmark">
+                        Leeman <span>Software</span>
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </article>
+              ))}
+              {n === sections.length - 1 && (
+        <article class="card">
+          <h2><span class="num">15</span> Wordmark cursor</h2>
+          <p class="note">No mark at all: the name, followed by a block cursor cut to the height of its capitals.</p>
+          <div class="panels">
+            {
+              themes.map((t) => (
+                <div class={`panel ${t} words`}>
+                  <p class="typed">
+                    Leeman <span>Software</span>
+                    <b class="blink" />
+                  </p>
+                  <p class="typed small">
+                    Leeman <span>Software</span>
+                    <b class="blink" />
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+        </article>
+              )}
+            </div>
+          </>
+        ))
+      }
+    </main>
+
+    <script>
+      const body = document.body;
+      const set = (mode: string) => {
+        body.dataset.blink = mode;
+        document.querySelectorAll<HTMLButtonElement>('[data-set]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.set === mode)));
+      };
+      set(matchMedia('(prefers-reduced-motion: reduce)').matches ? 'hover' : 'always');
+      document.querySelectorAll<HTMLButtonElement>('[data-set]').forEach((b) => b.addEventListener('click', () => set(b.dataset.set!)));
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .lab {
+    padding-block: 48px 96px;
+  }
+
+  .lab .top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 0;
+  }
+
+  .lab h1 {
+    margin: 10px 0 12px;
+    font-size: clamp(32px, 5vw, 52px);
+    letter-spacing: -0.03em;
+  }
+
+  .lab .lede {
+    max-width: 60ch;
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .controls span {
+    margin-right: 4px;
+  }
+
+  .controls button {
+    padding: 6px 12px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .controls button[aria-pressed='true'] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .lab h2.section {
+    margin: 48px 0 16px;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+
+  /* Screen blending lights up on dark backgrounds but vanishes on light ones. */
+  .panel.light :is(.ghost-red, .ghost-cyan) {
+    mix-blend-mode: normal !important;
+  }
+
+  .ghost-red :is(path, rect) {
+    fill: #ff2d55;
+  }
+
+  .ghost-cyan :is(path, rect) {
+    fill: #22d3ee;
+  }
+
+  /* In the lockup, the copies of the mark tear its L and cursor, not its tile. */
+  :is(.ghost-red, .ghost-cyan, .glitch-m) .tile {
+    fill: transparent;
+  }
+
+  /* The lockup's tile stays still underneath, drawn once on its own. */
+  .base :not(g, .tile) {
+    visibility: hidden;
+  }
+
+  .ghost-red path[stroke] {
+    fill: none;
+    stroke: #ff2d55;
+  }
+
+  .ghost-cyan path[stroke] {
+    fill: none;
+    stroke: #22d3ee;
+  }
+
+  .lab .grid.brand {
+    grid-template-columns: 1fr;
+  }
+
+  .panels.stacked {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .logo-big svg {
+    --a: 2.2;
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    margin-inline: auto;
+  }
+
+  .logo-sizes {
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+  }
+
+  .logo-sizes svg {
+    --a: 2.2;
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .lab .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+    gap: 20px;
+  }
+
+  .lab .card {
+    padding: 20px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .lab .card.star {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .lab h2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .lab .num {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .lab .badge {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .lab .note {
+    min-height: 3em;
+    margin: 6px 0 16px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .lab .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    .lab .panels {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Each panel pins its own colors, so both themes show whatever the machine's theme. */
+  .panel {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+    padding: 20px 12px 16px;
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--rule);
+  }
+
+  .panel.light {
+    --bg: #fbfbfa;
+    --ink: #0b0b0c;
+    --muted: #6c6c73;
+    --rule: #e8e8eb;
+    --mark: #0b0b0c;
+    --mark-fg: #fafafa;
+    --cursor: #22c55e;
+  }
+
+  .panel.dark {
+    --bg: #0a0a0b;
+    --ink: #ededef;
+    --muted: #8a8a93;
+    --rule: #222226;
+    --mark: #18181b;
+    --mark-fg: #fafafa;
+    --cursor: #4ade80;
+  }
+
+  .panel .hero {
+    width: min(100%, 152px);
+    height: auto;
+  }
+
+  .panel .sizes {
+    display: flex;
+    align-items: end;
+    gap: 10px;
+  }
+
+  .panel svg.tiled {
+    border-radius: 22%;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+
+  .panel .lockup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+
+  /* Blinking, switched by the buttons at the top. */
+  [data-blink='always'] .blink,
+  [data-blink='hover'] .card:hover .blink {
+    animation: blink 1.06s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Unfocused: hollow at rest, filled and blinking once the card is hovered. */
+  .hollow {
+    transition: fill 0.12s;
+  }
+
+  .card:hover .hollow {
+    fill: var(--cursor);
+  }
+
+  [data-blink='always'] .card:hover .hollow,
+  [data-blink='hover'] .card:hover .hollow {
+    animation: blink 1.06s steps(1) infinite;
+  }
+
+  /* Typing: the L appears, the cursor jumps after it, and both are backspaced at the end. */
+  [data-blink='always'] .type-l,
+  [data-blink='hover'] .card:hover .type-l {
+    animation: type-l 4s steps(1) infinite;
+  }
+
+  [data-blink='always'] .type-c,
+  [data-blink='hover'] .card:hover .type-c {
+    animation: type-c 4s steps(1) infinite;
+  }
+
+  @keyframes type-l {
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes type-c {
+    0% {
+      transform: translateX(-21.25px);
+    }
+    20% {
+      transform: none;
+    }
+    88% {
+      transform: translateX(-21.25px);
+    }
+  }
+
+  /* Phosphor: a faint, uneven flicker. */
+  [data-blink='always'] .flicker,
+  [data-blink='hover'] .card:hover .flicker {
+    animation: flicker 3.2s linear infinite;
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    7% { opacity: 0.86; }
+    8% { opacity: 1; }
+    41% { opacity: 0.93; }
+    42% { opacity: 1; }
+    77% { opacity: 0.8; }
+    78% { opacity: 1; }
+  }
+
+  /* Glitch: red and cyan channels tear apart for a moment every three seconds. */
+  [data-blink='always'] .glitch-r,
+  [data-blink='hover'] .card:hover .glitch-r {
+    animation: glitch-r 3s steps(1) infinite;
+  }
+
+  [data-blink='always'] .glitch-c,
+  [data-blink='hover'] .card:hover .glitch-c {
+    animation: glitch-c 3s steps(1) infinite;
+  }
+
+  [data-blink='always'] .glitch-m,
+  [data-blink='hover'] .card:hover .glitch-m {
+    animation: glitch-m 3s steps(1) infinite;
+  }
+
+  @keyframes glitch-r {
+    0% { transform: none; }
+    84% { transform: translate(calc(-2.5px * var(--a, 1)), calc(0.5px * var(--a, 1))); }
+    86% { transform: translate(calc(2px * var(--a, 1)), calc(-1px * var(--a, 1))); }
+    88% { transform: translate(calc(-1px * var(--a, 1)), 0); }
+    90% { transform: translate(calc(3px * var(--a, 1)), calc(0.5px * var(--a, 1))); }
+    92% { transform: none; }
+  }
+
+  @keyframes glitch-c {
+    0% { transform: none; }
+    84% { transform: translate(calc(2.5px * var(--a, 1)), calc(-0.5px * var(--a, 1))); }
+    86% { transform: translate(calc(-2px * var(--a, 1)), calc(1px * var(--a, 1))); }
+    88% { transform: translate(calc(1.5px * var(--a, 1)), 0); }
+    90% { transform: translate(calc(-3px * var(--a, 1)), calc(-0.5px * var(--a, 1))); }
+    92% { transform: none; }
+  }
+
+  @keyframes glitch-m {
+    0% { transform: none; clip-path: none; }
+    84% { transform: translate(calc(1px * var(--a, 1)), 0); clip-path: inset(0 0 55% 0); }
+    86% { transform: translate(calc(-1px * var(--a, 1)), 0); clip-path: inset(40% 0 0 0); }
+    88% { transform: none; clip-path: inset(0 0 20% 0); }
+    90% { transform: translate(calc(1.5px * var(--a, 1)), 0); clip-path: inset(30% 0 30% 0); }
+    92% { transform: none; clip-path: none; }
+  }
+
+  /* Wordmark cursor: a block the height of the capitals. */
+  .panel.words {
+    align-content: center;
+    min-height: 240px;
+  }
+
+  .typed {
+    display: flex;
+    align-items: baseline;
+    margin: 0;
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .typed.small {
+    font-size: 16px;
+  }
+
+  .typed span {
+    margin-left: 0.25em;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .typed b {
+    display: inline-block;
+    width: 0.4em;
+    height: 0.7em;
+    margin-left: 0.12em;
+    background: var(--cursor);
+  }
+</style>
