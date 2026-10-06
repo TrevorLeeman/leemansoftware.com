@@ -1,16 +1,18 @@
-import { company, discord, email, playerCount, premium, product, usd, type QA } from './site';
+import { company, discord, email, osrsPageViews, playerCount, premium, product, usd, type QA } from './site';
 
 // What the two Exchange pages say. OSRS Exchange and RS3 Exchange are one app run for two games, so
 // the copy is written once here, with each game's own facts filled in where the games differ (tax
 // rules, ads, launch, player quotes). Checked against the osrs-exchange repo and both live sites on
 // 2026-10-04. When the sites change, change it here.
 //
-// These pages answer what people ask about the product (what it is, what it costs, who runs it).
-// They leave the searches the products rank for themselves ("Grand Exchange prices", "live GE
-// tracker") to osrs.exchange and rs3.exchange: those phrases appear only as the text of links there.
+// The pages are written for a player deciding whether to use the site or pay for Premium: what
+// they'd use it for, what other players say, what's free and what Premium adds, where the numbers
+// come from, who runs it, and the questions they came with. They leave the searches the products
+// rank for themselves ("Grand Exchange prices", "live GE tracker") to osrs.exchange and
+// rs3.exchange: those phrases appear only as the text of links there.
 
 export type Point = { title: string; body: string; tag?: string; link?: { label: string; href: string } };
-export type Quote = { text: string; who: string; where: string; when?: string };
+export type Quote = { text: string; who: string; where: string; when?: string; image: string; width: number; height: number };
 export type Plan = { name: string; price: string; note: string; points: string[] };
 
 /** How often prices and alerts are checked, in seconds, and how many alerts each plan has. */
@@ -28,11 +30,12 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
   // Each game's prices come from its own wiki.
   const wiki = osrs ? 'OSRS Wiki' : 'RuneScape Wiki';
 
+  // What a player does with the site, each with a link into the tool that does it.
   const jobs: Point[] = [
     {
       title: 'Find a flip worth making',
       tag: 'Free',
-      body: 'One table of every tradeable item, with its buy and sell price, the margin after tax, daily volume and buy limit. Sort it by profit and filter out what doesn’t trade.',
+      body: 'One table of every tradeable item: buy and sell price, margin after tax, daily volume and buy limit. Sort it by profit and filter out what doesn’t trade.',
       link: { label: `${abbr} Grand Exchange prices`, href: `${site}/` },
     },
     {
@@ -58,7 +61,7 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
           {
             title: 'Fill Death’s Coffer for less',
             tag: 'Free',
-            body: 'Death’s Coffer values what you sacrifice at 105% of its guide price. The calculator ranks the items that save you the most when you fill it.',
+            body: 'Death’s Coffer values what you sacrifice at 105% of its guide price. The calculator ranks the items that save you the most gold when you fill it.',
             link: { label: 'Death’s Coffer calculator', href: `${site}/deaths-coffer` },
           },
           {
@@ -71,14 +74,14 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
       : []),
   ];
 
-  // Messages players sent in the OSRS Exchange Discord, as osrs.exchange shows them. RS3 Exchange is
-  // new and has none of its own, and never borrows these.
+  // Messages players sent in the OSRS Exchange Discord, shown as the screenshots in
+  // public/testimonials. RS3 Exchange is new and has none of its own, and never borrows these.
   const quotes: Quote[] = osrs
     ? [
-        { text: 'Thanks mate, your sites amazing, new to flipping and it’s made it so easy', who: 'dropbear', where: 'Discord', when: 'July 2023' },
-        { text: 'gotta say, best site I’ve found for tracking prices', who: 'Bubba', where: 'Discord' },
-        { text: 'This site is a hidden gem fr', who: 'Floppy', where: 'Discord', when: 'June 2023' },
-        { text: 'Its a priceless resource', who: 'Lendonos', where: 'Discord', when: 'April 2023' },
+        { text: 'Thanks mate, your sites amazing, new to flipping and it’s made it so easy', who: 'dropbear', image: '/testimonials/1_dropbear_flipping_made_easy.png', width: 560, height: 191, where: 'Discord', when: 'July 2023' },
+        { text: 'gotta say, best site I’ve found for tracking prices', who: 'Bubba', image: '/testimonials/4_Bubba_best_price_site.png', width: 483, height: 114, where: 'Discord' },
+        { text: 'This site is a hidden gem fr', who: 'Floppy', image: '/testimonials/3_Floppy_hidden_gem.png', width: 620, height: 116, where: 'Discord', when: 'June 2023' },
+        { text: 'Its a priceless resource', who: 'Lendonos', image: '/testimonials/5_Lendonos_priceless_resource.png', width: 295, height: 96, where: 'Discord', when: 'April 2023' },
       ]
     : [];
 
@@ -114,6 +117,7 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
     },
   ];
 
+  // Where the numbers on the site come from, for the player who wants to check them.
   const sources: Point[] = [
     {
       title: 'Live prices from the Wiki',
@@ -140,12 +144,13 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
     },
   ];
 
+  // Who is behind the site and how it's run: what a player wants to know before paying.
   const runs: Point[] = [
     {
-      title: osrs ? `One developer, since ${company.since}` : 'One developer, two games',
+      title: osrs ? `Independent since ${company.since}` : 'One platform, two games',
       body: osrs
-        ? `${company.founder} started OSRS Exchange in July ${company.since} and has written every release since.`
-        : `${company.founder} started OSRS Exchange in July ${company.since} and brought the same platform to RuneScape 3 in 2026. He writes every release of both.`,
+        ? `We started OSRS Exchange in July ${company.since} and have shipped every release since. More than ${playerCount} players have used it.`
+        : `We started OSRS Exchange in July ${company.since} and brought the same platform to RuneScape 3 in 2026. Both sites ship from one codebase.`,
     },
     {
       title: 'Your card stays with Stripe',
@@ -159,12 +164,14 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
     },
     {
       title: 'A person answers',
-      body: 'Questions on Discord or by email go to the developer who wrote the code.',
+      body: 'Questions on Discord or by email come straight to us, the studio that writes the code, not to an outsourced support queue.',
       link: { label: `${p.name} on Discord`, href: discord },
     },
     {
-      title: 'Tested before it ships',
-      body: 'More than 4,000 automated tests cover prices, tax rules, alerts and payments, and they run before a change goes live.',
+      title: 'Proven to work and scale',
+      body: osrs
+        ? `More than 4,000 automated tests cover prices, tax rules, alerts and payments, and the platform has carried more than ${playerCount} players and ${osrsPageViews} page views.`
+        : `More than 4,000 automated tests cover prices, tax rules, alerts and payments, on the platform that has run OSRS Exchange since ${company.since}.`,
     },
     {
       title: 'Independent of Jagex',
@@ -175,7 +182,7 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
   const questions: QA[] = [
     {
       q: `Is ${p.name} free?`,
-      a: `Yes. The price table, every item’s charts${osrs ? ', the Death’s Coffer calculator' : ''} and recipe profit for free-to-play recipes are free and work without an account. ${osrs ? 'The free plan shows ads.' : 'There are no ads on any plan.'} Premium costs ${price} and adds faster price checks, members’ recipes and more alerts${osrs ? ', and removes the ads' : ''}.`,
+      a: `Yes. The price table, every item’s charts${osrs ? ', the Death’s Coffer calculator' : ''} and recipe profit for free-to-play recipes are free and need no account. ${osrs ? 'The free plan shows ads.' : 'There are no ads on any plan.'} Premium is ${price} and adds faster price checks, members’ recipes and more alerts${osrs ? ', and removes the ads' : ''}.`,
     },
     {
       q: `How much is ${p.name} Premium?`,
@@ -183,33 +190,33 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
     },
     {
       q: `How do I cancel ${p.name} Premium?`,
-      a: `From your account settings on ${host}. Cancelling stops future charges, and you keep Premium until the end of the period you’ve paid for. Your presets, item lists and favourites stay on your account.`,
+      a: `From your account settings on ${host}. Cancelling stops future charges, you keep Premium until the end of the period you’ve paid for, and your presets, item lists and favourites stay on your account.`,
     },
     {
-      q: `Can I get a refund from ${p.name}?`,
-      a: `Refunds are handled case by case and in good faith. Ask in the ${p.name} Discord or email ${email} with your account’s email address. An approved refund goes back through Stripe and takes 5 to 10 business days to appear.`,
+      q: 'Can I get a refund?',
+      a: `Refunds are handled case by case and in good faith. Ask in the ${p.name} Discord or email ${email} from your account’s email address. An approved refund goes back through Stripe and takes 5 to 10 business days to appear.`,
     },
     {
       q: `I don’t recognise a charge from ${premium.statement}. What is it?`,
-      a: `It’s a Premium membership, ${price}, started on ${osrs ? 'osrs.exchange or rs3.exchange' : 'rs3.exchange or osrs.exchange'}. Both sites bill as ${premium.statement}. If it wasn’t you, email ${email} before disputing it and it will be looked into.`,
+      a: `A Premium membership, ${price}, started on ${osrs ? 'osrs.exchange or rs3.exchange' : 'rs3.exchange or osrs.exchange'}. Both sites bill as ${premium.statement}. If it wasn’t you, email ${email} before disputing it and it will be looked into.`,
     },
     {
-      q: `Where do ${p.name}’s prices come from?`,
+      q: 'Where do the prices come from?',
       a: `From the ${wiki}’s real-time price data, which reports what items are actually trading for. Long-range history comes from WeirdGloop’s archive of daily Grand Exchange prices.`,
     },
     {
-      q: `How often does ${p.name} update its prices?`,
-      a: `The Wiki’s price feed refreshes about once a minute. ${p.name} checks it every ${limits.refresh.free} seconds on the free plan and every ${limits.refresh.premium} seconds on Premium, so Premium sees a change sooner.`,
+      q: 'How often do the prices update?',
+      a: `The Wiki’s feed refreshes about once a minute. ${p.name} checks it every ${limits.refresh.free} seconds on the free plan and every ${limits.refresh.premium} seconds on Premium, so Premium sees a move sooner.`,
     },
     {
-      q: `Does ${p.name} include Grand Exchange tax?`,
+      q: 'Are the margins after Grand Exchange tax?',
       a: osrs
-        ? 'Yes. Every profit is after the Grand Exchange’s 2% tax, with its 5 million gp cap, no tax on prices under 50 gp, and the exempt items such as bonds.'
-        : 'Yes. Every profit is after the Grand Exchange’s 2% tax, which has no cap in RuneScape 3, with no tax on prices under 50 gp and the bond exempt.',
+        ? 'Yes. Every profit is after the 2% tax, with its 5 million gp cap, no tax on prices under 50 gp, and the exempt items such as bonds.'
+        : 'Yes. Every profit is after the 2% tax, which has no cap in RuneScape 3, with no tax on prices under 50 gp and the bond exempt.',
     },
     {
-      q: `Do I need an account to use ${p.name}?`,
-      a: 'Not to look up prices, charts or recipes. A free account, made with an email address or Google, adds favourites that follow you across devices and one price alert with three notifications.',
+      q: 'Do I need an account?',
+      a: `Not to look up prices, charts or recipes. A free account, made with an email address or Google, adds favourites that follow you across devices and one price alert with ${limits.freeNotifications} notifications.`,
     },
     {
       q: `Does my membership cover ${other.name} too?`,
@@ -217,28 +224,28 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
     },
     {
       q: `Does ${p.name} need my RuneScape login?`,
-      a: `No, and it never asks for it. The recipe filter reads your levels from Jagex’s public hiscores, using the name you type.`,
+      a: 'No, and it never asks for it. The recipe filter reads your levels from Jagex’s public hiscores, using the name you type.',
     },
     {
       // RuneLite is an Old School client, so only OSRS players ask about a plugin for it.
       q: osrs ? 'Is there an OSRS Exchange app or RuneLite plugin?' : 'Is there an RS3 Exchange app?',
-      a: `No. ${p.name} is a website that works in any phone or desktop browser. It doesn’t connect to your game client, suggest flips for you or log your trades for you.`,
+      a: `No. ${p.name} is a website that works in any phone or desktop browser. It doesn’t connect to your game client or log your trades for you.`,
     },
     {
-      q: `How is ${p.name} different from the ${osrs ? 'OSRS Wiki’s' : 'RuneScape Wiki’s'} price pages?`,
+      q: `How is it different from the ${wiki}’s price pages?`,
       a: `${p.name} uses the Wiki’s price data and builds tools on top of it: a sortable table of margins after tax, recipe profit filtered by your own levels${osrs ? ', a Death’s Coffer calculator' : ''} and price alerts by Discord message or email.`,
     },
     ...(osrs
       ? [
           {
             q: 'How is OSRS Exchange different from GE Tracker?',
-            a: `They’re separate, independent websites. OSRS Exchange’s price table, item charts and free-to-play recipe profit are free without an account, Premium is ${usd(premium.monthly)} a month, and the same membership covers RS3 Exchange.`,
+            a: `They’re separate, independent websites. On OSRS Exchange the price table, item charts and free-to-play recipe profit are free without an account, Premium is ${usd(premium.monthly)} a month, and the same membership covers RS3 Exchange.`,
           },
         ]
       : []),
     {
       q: `Who makes ${p.name}?`,
-      a: `${company.brand}, the one-developer studio of ${company.founder}, who has built and run ${osrs ? `it since ${company.since}` : `it since its launch in 2026, on the platform behind OSRS Exchange`}. ${p.name} is independent and not affiliated with Jagex Ltd, the makers of ${game}.`,
+      a: `${company.brand}, an independent software studio founded by ${company.founder}. We’ve built and run ${osrs ? `it since ${company.since}` : 'it since its launch in 2026, on the platform behind OSRS Exchange'}. ${p.name} is not affiliated with Jagex Ltd, the makers of ${game}.`,
     },
   ];
 
@@ -249,16 +256,16 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
     host,
     title: `${p.name}: what it is, what it costs`,
     description: osrs
-      ? `OSRS Exchange is a free price tracker for Old School RuneScape’s Grand Exchange that ${playerCount}+ players have used. What it does, what Premium costs, who runs it.`
-      : `RS3 Exchange is a free price tracker for RuneScape 3’s Grand Exchange, with no ads on any plan. What it does, what Premium costs and who runs it.`,
+      ? `OSRS Exchange is a free Grand Exchange price tracker for Old School RuneScape, used by ${playerCount}+ players. What’s free, what Premium costs and who runs it.`
+      : 'RS3 Exchange is a free Grand Exchange price tracker for RuneScape 3, with no ads on any plan. What’s free, what Premium costs and who runs it.',
     lede: osrs
-      ? `${p.definition} More than ${playerCount} players have used it.`
+      ? `${p.definition} More than ${playerCount} players have used it since ${company.since}, across ${osrsPageViews} page views.`
       : `${p.definition} It launched in 2026 on the platform behind OSRS Exchange.`,
     jobs,
     quotes,
     plans,
     /** What both plans share, said once under them. */
-    billing: `One membership covers both ${p.name} and ${other.name}. The trial needs a card, and nothing is charged until it ends. Billing runs through Stripe and shows on your statement as ${premium.statement}. Cancel from your account settings and you keep Premium to the end of the period you paid for.`,
+    billing: `One membership covers both ${p.name} and ${other.name}. The ${premium.trialDays}-day trial needs a card and charges nothing until it ends. Billing runs through Stripe and shows on your statement as ${premium.statement}. Cancel from your account settings and you keep Premium to the end of the period you paid for.`,
     sources,
     runs,
     questions,

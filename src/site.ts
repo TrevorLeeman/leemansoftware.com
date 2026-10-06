@@ -11,10 +11,10 @@ export const company = {
   tagline: 'OSRS Exchange, RS3 Exchange and Wallyt',
   /** The year the studio's first product, OSRS Exchange, was started. */
   since: 2022,
-  /** The studio's one developer. */
+  /** The studio’s founder. */
   founder: 'Trevor Leeman',
   /** The headline on the studio's link card (public/og.png), remade with `mise run cards`. */
-  card: ['500,000+ players.', 'One developer.'],
+  card: ['Products people rely on.', 'Built and run to last.'],
 };
 
 // The one address for everything: questions, Wallyt help and privacy requests.
@@ -30,6 +30,8 @@ export const discord = 'https://discord.gg/BV4vGeKFUt';
  */
 export const playerCount = '500,000';
 export const players = `${playerCount}+`;
+/** OSRS Exchange lifetime page views, supplied by the studio owner. */
+export const osrsPageViews = '5M+';
 
 /**
  * Premium on both Exchange sites, from the osrs-exchange repo (packages/shared/src/constants.ts,
@@ -237,7 +239,7 @@ export const product = (slug: string) => products.find((p) => p.slug === slug)!;
 export const comingSoon = 'Coming soon to Google Play';
 
 /**
- * The scale of what the studio runs, as one developer. Checked on 2026-10-04: items are the item
+ * The scale of what the studio runs. Checked on 2026-10-04: items are the item
  * pages in both live sitemaps (4,512 and 7,061), commits are the merged history of OSRS/RS3
  * Exchange plus Wallyt's (2,846 and 156), tests are counted test cases across both (4,125 and 908).
  * Round down when they change, never up.
@@ -255,34 +257,30 @@ export const scale = [
  * privacy policy has that.
  */
 export const integrations = [
-  { title: 'Stripe', body: 'Your card goes to Stripe and never touches my servers. Checkout, sales tax, renewals and cancelling all run there.' },
-  { title: 'Google', body: 'Sign in with the Google account you already have, on the Exchange sites and through Android’s own account sheet in Wallyt.' },
-  { title: 'Discord', body: 'Price alerts arrive as a direct message, and your Premium role in the community follows your membership.' },
-  { title: 'RuneScape Wiki', body: 'Live prices come from the wikis’ real-time price data, the OSRS Wiki for Old School and the RuneScape Wiki for RuneScape 3, the source players already use.' },
-  { title: 'WeirdGloop', body: 'Years of daily Grand Exchange prices, filled in behind the long-range charts for both games.' },
-  { title: 'Amazon SES and Postmark', body: 'Account emails and price alerts go out through Amazon SES. Newsletters go through Postmark, where bounces and unsubscribes are honoured automatically.' },
-  { title: 'Cloudflare', body: 'In front of both Exchange sites, with Turnstile keeping bots out of sign-up.' },
-  { title: 'Frankfurter', body: 'Central-bank exchange rates for Wallyt’s 161 currencies, with a second source as backup and every rate kept.' },
-  { title: 'Sentry', body: 'Errors are reported to me as they happen, with what I need to fix them.' },
+  { title: 'Stripe', body: 'Takes your card for Premium, so the number never touches our servers. Checkout, sales tax, the free trial, renewals and cancelling all run there, and the charge reads OSRS Exchange.' },
+  { title: 'Google', body: 'Sign in with the Google account you already have: One Tap on the Exchange sites, and Android’s own account sheet in Wallyt. No new password to remember.' },
+  { title: 'Discord', body: 'Where price alerts arrive as a direct message, where players ask us questions, and where your Premium role follows your membership.' },
+  { title: 'RuneScape Wiki', body: 'The source of every live price: the OSRS Wiki’s real-time data for Old School and the RuneScape Wiki’s for RuneScape 3, the same numbers players already check.' },
+  { title: 'WeirdGloop', body: 'Years of daily Grand Exchange prices for both games, behind the long-range charts, so you can see how an item traded long before the live feed existed.' },
+  { title: 'Amazon SES and Postmark', body: 'Sign-in codes, account emails and price alerts go out through Amazon SES. Newsletters go through Postmark, which honours bounces and unsubscribes automatically.' },
+  { title: 'Cloudflare', body: 'In front of both Exchange sites, keeping them fast and reachable, with Turnstile keeping bots out of sign-up.' },
+  { title: 'Frankfurter', body: 'Central-bank exchange rates for Wallyt’s 161 currencies, with a second source as backup. The rate of the day is saved with each expense, so a debt doesn’t drift with the market.' },
+  { title: 'Sentry', body: 'Reports errors to us the moment they happen, with what’s needed to fix them.' },
 ];
 
 /** What people ask about the studio itself. On the home page, in its schema.org data and in /llms.txt. */
 export const studioQuestions: QA[] = [
   {
     q: `What is ${company.brand}?`,
-    a: `${company.brand} is a one-developer software studio, the product studio of ${company.legalName}. I make OSRS Exchange and RS3 Exchange, websites with live Grand Exchange prices for RuneScape players, and Wallyt, an app for splitting shared costs.`,
+    a: `${company.brand} is an independent software studio, the product studio of ${company.legalName}. We design, build and run OSRS Exchange and RS3 Exchange, websites with live Grand Exchange prices for RuneScape players, and Wallyt, an app for splitting shared costs, and take on a few client projects a year.`,
   },
   {
     q: `Who is behind ${company.brand}?`,
-    a: `I am. I’m ${company.founder}, and I’ve designed, built and run every product here myself, starting with OSRS Exchange in ${company.since}. When you email or ask in the Discord, I’m the one who answers.`,
+    a: `${company.brand} was founded by ${company.founder} in ${company.since}, when OSRS Exchange began. We’ve designed, built and run every product here since, and answer support for all of them directly.`,
   },
   {
-    q: `I see a charge from ${premium.statement} on my card. What is it?`,
-    a: `It’s a Premium membership for OSRS Exchange and RS3 Exchange: ${usd(premium.monthly)} a month or ${usd(premium.annual)} a year, after a ${premium.trialDays}-day free trial for new members. If you don’t recognise it, email ${email} before disputing it and I’ll look into it.`,
-  },
-  {
-    q: 'How do I cancel Premium?',
-    a: 'Sign in on osrs.exchange or rs3.exchange and cancel from your account settings. You keep Premium until the end of the period you’ve paid for, and nothing on your account is deleted.',
+    q: `Why is there a charge from ${premium.statement} on my card?`,
+    a: `OSRS Exchange and RS3 Exchange are ${company.brand} products, and a Premium membership on either shows on a card statement as ${premium.statement}. Billing runs through Stripe. If you don’t recognise the charge, email ${email} before disputing it and we’ll look into it.`,
   },
   {
     q: 'Are OSRS Exchange and RS3 Exchange affiliated with Jagex?',
@@ -293,11 +291,11 @@ export const studioQuestions: QA[] = [
     a:
       product('wallyt').status === 'live'
         ? 'Wallyt is out now on Google Play for Android.'
-        : `Wallyt is in testing and is coming to Google Play first. Email ${email} and I’ll tell you when it’s out.`,
+        : `Wallyt is in testing and is coming to Google Play first. Email ${email} to be told when it’s out.`,
   },
   {
     q: 'How do I reach a person?',
-    a: `Email ${email}. For the Exchange sites you can also ask in the Discord. Either way, I’m the one who answers.`,
+    a: `Email ${email}. For the Exchange sites you can also ask in the Discord. Either way the reply comes from us, not a bot or an outsourced desk.`,
   },
   {
     q: 'Do you take on client work?',

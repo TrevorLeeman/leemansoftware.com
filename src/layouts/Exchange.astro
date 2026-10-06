@@ -49,12 +49,14 @@ const arrow = 'M7 17 17 7M8 7h9v9';
         Open {x.host}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg>
       </a>
-      <a class="button" href="#pricing">What it costs</a>
+      <a class="button" href="#pricing">What Premium costs</a>
     </Fragment>
   </ProductHero>
 
   <section class="wrap section" id="uses" aria-labelledby="uses-title">
-    <SectionHead title="What players use it for" id="uses-title" />
+    <SectionHead title="What players use it for" id="uses-title">
+      Most of it is free and needs no account. Each one links straight into the tool on {x.host}.
+    </SectionHead>
     <FeatureGrid features={x.jobs} />
   </section>
 
@@ -62,7 +64,7 @@ const arrow = 'M7 17 17 7M8 7h9v9';
     x.quotes.length > 0 && (
       <section class="wrap section" id="players" aria-labelledby="players-title">
         <SectionHead title="In players’ words" id="players-title">
-          Messages players have sent in the {p.name} Discord.
+          Messages players have sent in the {p.name} Discord, as they were written.
         </SectionHead>
         <Quotes quotes={x.quotes} />
       </section>
@@ -81,14 +83,16 @@ const arrow = 'M7 17 17 7M8 7h9v9';
   </section>
 
   <section class="wrap section" id="data" aria-labelledby="data-title">
-    <SectionHead title="Where the numbers come from" id="data-title" />
+    <SectionHead title="Where the numbers come from" id="data-title">
+      Nothing on {p.name} is guessed. Here is where each number is read from, so you can check it yourself.
+    </SectionHead>
     <FeatureGrid features={x.sources} />
   </section>
 
   <section class="wrap section" id="maker" aria-labelledby="maker-title">
     <SectionHead title="Who runs it" id="maker-title">
-      {p.name} is made and run by <a href={url('/about')}>{company.brand}</a>, the studio of one developer,
-      {company.founder}.
+      {p.name} is made and run by <a href={url('/about')}>{company.brand}</a>, an independent studio founded by
+      {company.founder}. You’re handing over a card, so here is how we run it.
     </SectionHead>
     <FeatureGrid features={x.runs} />
   </section>

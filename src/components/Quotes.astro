@@ -1,78 +1,147 @@
 ---
-// What people using a product have said about it, in their own words, with who said it and where.
+import { url } from '../url';
+import { discord } from '../site';
+import type { Quote } from '../exchange';
+
 interface Props {
-  quotes: { text: string; who: string; where: string; when?: string }[];
+  quotes: Quote[];
 }
 
 const { quotes } = Astro.props;
 ---
 
-<ul class="quotes">
-  {
-    quotes.map((x) => (
-      <li>
-        <figure>
-          <blockquote>
-            <p>{x.text}</p>
-          </blockquote>
-          <figcaption>
-            {x.who} · {x.where}
-            {x.when && ` · ${x.when}`}
-          </figcaption>
-        </figure>
-      </li>
-    ))
-  }
-</ul>
+<div class="community">
+  <div class="channel">
+    <span class="channel-name"><span class="hash" aria-hidden="true">#</span> trader-talk</span>
+    <a class="join" href={discord}>Join the Discord <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="feed">
+    <svg class="trend" viewBox="0 0 1000 300" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <path d="M0 270 85 245 145 260 235 195 310 218 395 160 480 184 570 108 650 134 745 65 825 91 920 28 1000 10" />
+    </svg>
+    <ul class="quotes">
+      {
+        quotes.map((x) => (
+          <li>
+            <a class="message" href={url(x.image)} aria-label={`Open ${x.who}’s Discord screenshot at full size`}>
+              <img
+                src={url(x.image)}
+                alt={`${x.who} on ${x.where}: “${x.text}”${x.when ? ` (${x.when})` : ''}`}
+                width={x.width}
+                height={x.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
 
 <style>
+  .community {
+    overflow: hidden;
+    border: 1px solid #42474a;
+    border-radius: 12px;
+    background: #292d30;
+  }
+
+  .channel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 22px;
+    border-bottom: 1px solid #42474a;
+    background: #25282b;
+    font-size: 13px;
+  }
+
+  .channel-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #e8ebea;
+    font-weight: 600;
+  }
+
+  .hash {
+    color: #8f9995;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .join {
+    color: #8ce3b0;
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  .join:hover { text-decoration: underline; }
+
+  .feed {
+    position: relative;
+    padding: clamp(16px, 3vw, 32px);
+    background-image: linear-gradient(#8ce3b008 1px, transparent 1px), linear-gradient(90deg, #8ce3b008 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .trend {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    stroke: #8ce3b0;
+    stroke-width: 1.5;
+    opacity: 0.13;
+  }
+
   .quotes {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 32px clamp(28px, 4vw, 56px);
+    gap: 16px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  figure {
-    margin: 0;
-    padding: 2px 0 2px 18px;
-    border-left: 2px solid var(--accent);
+  li { min-width: 0; }
+
+  .message {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 12px;
+    border: 1px solid #44494b;
+    border-radius: 6px;
+    background: #313338;
+    transition: border-color 150ms ease;
   }
 
-  blockquote {
-    margin: 0;
+  .message:hover { border-color: #8ce3b0; }
+
+  a:focus-visible {
+    outline: 2px solid #8ce3b0;
+    outline-offset: 3px;
   }
 
-  blockquote p {
-    margin: 0;
-    font-size: clamp(18px, 1.7vw, 22px);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.35;
-    text-wrap: pretty;
-  }
-
-  blockquote p::before {
-    content: '“';
-  }
-
-  blockquote p::after {
-    content: '”';
-  }
-
-  figcaption {
-    margin-top: 10px;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    color: var(--muted);
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
   }
 
   @media (max-width: 760px) {
-    .quotes {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 24px;
-    }
+    .quotes { grid-template-columns: minmax(0, 1fr); }
+    .channel { padding: 14px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .message { transition: none; }
   }
 </style>

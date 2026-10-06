@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { exchange, limits } from '../exchange';
-import { comingSoon, company, discord, email, integrations, players, premium, products, scale, studioQuestions, usd } from '../site';
+import { comingSoon, company, discord, email, integrations, osrsPageViews, players, premium, products, scale, studioQuestions, usd } from '../site';
 
 // A plain-text summary of the studio and its products for AI assistants (llmstxt.org), built from
 // the same facts as the pages so it never drifts from them. It follows the site's own order: who,
@@ -11,7 +11,7 @@ const rs3 = exchange('rs3-exchange');
 
 const body = `# ${company.brand}
 
-> ${company.brand} is the one-developer software studio of ${company.founder}, the product studio of ${company.legalName}. He designs, builds and runs three products himself: OSRS Exchange, started in ${company.since}, a free live price tracker for Old School RuneScape's Grand Exchange, which ${players} players have used; RS3 Exchange, a separate site launched in 2026 that does the same job for RuneScape 3; and Wallyt, a free app for splitting shared costs. He also takes on a few client projects a year.
+> ${company.brand} is an independent software studio founded by ${company.founder}, the product studio of ${company.legalName}. It designs, builds and runs three products: OSRS Exchange, started in ${company.since}, a free live price tracker for Old School RuneScape's Grand Exchange, which ${players} players have used; RS3 Exchange, a separate site launched in 2026 that does the same job for RuneScape 3; and Wallyt, a free app for splitting shared costs. The studio answers support for all three directly and takes on a few client projects a year.
 
 Contact: ${email}. The Exchange sites' Discord: ${discord}
 
@@ -41,6 +41,7 @@ ${rs3.sources
 
 ## Scale
 
+- ${osrsPageViews} OSRS Exchange page views
 ${scale.map((s) => `- ${s.value} ${s.label}`).join('\n')}
 
 ## Built on
@@ -53,8 +54,8 @@ ${studioQuestions.map((x) => `- ${x.q} ${x.a}`).join('\n')}
 
 ## Pages
 
-- [About ${company.founder} and ${company.brand}](${page('/about/')}): who runs the studio, how the products are run, and how to hire him
-- [OSRS Exchange](${page('/osrs-exchange/')}): what it is, what it costs, where its prices come from and who runs it
+- [About ${company.brand}](${page('/about/')}): who founded the studio, how the products are run, and how to hire it
+- [OSRS Exchange](${page('/osrs-exchange/')}): what it is, what's free, what Premium costs, where its prices come from and who runs it
 - [RS3 Exchange](${page('/rs3-exchange/')}): the same for RuneScape 3
 - [Wallyt](${page('/wallyt/')}): how it works, what it does with money and data, and common questions
 - [A Splitwise alternative that imports your groups](${page('/wallyt/splitwise-alternative/')}): how to move a group from Splitwise to Wallyt

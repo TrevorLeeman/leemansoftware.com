@@ -5,7 +5,7 @@ import SectionHead from '../components/SectionHead.astro';
 import Stats from '../components/Stats.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import { limits } from '../exchange';
-import { company, email, organizationRef, playerCount, scale } from '../site';
+import { company, email, organizationRef, osrsPageViews, playerCount, scale } from '../site';
 
 // Dates and counts are checked against the products' repos and live sites on 2026-10-04: OSRS
 // Exchange's first commit is from July 2022, and the item counts are each live sitemap's item pages.
@@ -13,13 +13,13 @@ const record = [
   {
     title: 'OSRS Exchange',
     tag: `Since ${company.since}`,
-    body: `I started OSRS Exchange in July ${company.since}. More than ${playerCount} players have used it since, and it tracks 4,500+ items.`,
+    body: `Our first product, started in July ${company.since}. More than ${playerCount} players have used it since, and it tracks 4,500+ items.`,
     link: { label: 'About OSRS Exchange', href: url('/osrs-exchange') },
   },
   {
     title: 'RS3 Exchange',
     tag: 'Since 2026',
-    body: 'In 2026 I reworked the platform to run two games from one codebase, each with its own items, tax rules and skills, and opened RS3 Exchange on it. It tracks 7,000+ items.',
+    body: 'In 2026 the platform was reworked to run two games from one codebase, each with its own items, tax rules and skills, and RS3 Exchange opened on it. It tracks 7,000+ items.',
     link: { label: 'About RS3 Exchange', href: url('/rs3-exchange') },
   },
   {
@@ -31,15 +31,15 @@ const record = [
 ];
 
 const principles = [
-  { title: 'Your card stays with Stripe', body: 'Premium is billed by Stripe. Card details never reach my servers, and you cancel from your account settings.' },
-  { title: 'A person answers', body: 'Email and Discord messages come to me, the person who wrote the code, so the reply is from someone who can fix the problem.' },
-  { title: 'Nothing ships untested', body: 'More than 4,900 automated tests cover tax rules, payments, alerts and currency maths. On the Exchange sites they run on every change before it goes live.' },
+  { title: 'Your card stays with Stripe', body: 'Premium is billed by Stripe. Card details never reach our servers, and you cancel from your account settings.' },
+  { title: 'Support from the source', body: 'Email and Discord messages come straight to us. We wrote the code, so the reply comes from somewhere that can fix the problem rather than file it.' },
+  { title: 'Proven to work and scale', body: `More than 4,900 automated tests cover tax rules, payments, alerts and currency maths, and the systems behind them have carried more than ${playerCount} players and ${osrsPageViews} page views.` },
   { title: 'Numbers you can check', body: 'Prices come from the RuneScape Wiki’s public data, tax follows each game’s published rules, and Wallyt keeps the exchange rate with every expense it converts.' },
-  { title: 'Servers I look after', body: 'Both Exchange sites run on servers I set up and maintain, behind Cloudflare, with errors reported to me as they happen.' },
+  { title: 'Infrastructure run in-house', body: 'Both Exchange sites run on servers we set up and maintain, behind Cloudflare, with errors reported as they happen.' },
   { title: 'Plain about limits', body: 'Each product’s page says what’s free, what isn’t and what it doesn’t do yet.' },
 ];
 
-// What protects the people using the products if their one developer is ever not here.
+// What protects the people using the products if a product is ever wound down.
 const safeguards = [
   { title: 'Your records leave with you', body: 'Wallyt exports any group as a CSV file that opens in any spreadsheet, whenever you like.' },
   { title: 'You’d be told first', body: 'Wallyt’s terms promise notice by email or in the app before it ever closes, so you can export your groups first.' },
@@ -52,24 +52,24 @@ const shipped = [
   { title: 'Live data at scale', body: `Prices for 11,500+ items across two games, fetched around the clock, charted back years and watched by alerts every ${limits.alertCheck} seconds.` },
   { title: 'Apps for every screen', body: 'One React Native codebase for Android, iOS and the web, with end-to-end tests run on each.' },
   { title: 'Notifications people act on', body: 'A Discord bot and email delivery for price alerts, with retries and cooldowns handled.' },
-  { title: 'Running it afterwards', body: 'Servers, deploys, error reporting and scheduled jobs, looked after by the person who built the product.' },
+  { title: 'Running it afterwards', body: 'Servers, deploys, error reporting and scheduled jobs, looked after by us long after launch.' },
 ];
 ---
 
 <Base
-  title={`About ${company.founder} and ${company.brand}`}
-  description={`${company.founder} is the one developer behind ${company.brand}. He builds and runs OSRS Exchange, RS3 Exchange and Wallyt himself. How he works, and how to hire him.`}
+  title={`About ${company.brand}`}
+  description={`${company.brand} is an independent studio founded by ${company.founder} in ${company.since}. It builds and runs OSRS Exchange, RS3 Exchange and Wallyt, and takes on client work.`}
   pageType="AboutPage"
   schema={{ mainEntity: organizationRef }}
 >
   <section class="intro wrap">
     <div class="intro-copy">
       <p class="label">about</p>
-      <h1 class="title">The person behind the products.</h1>
+      <h1 class="title">An independent studio, proven on our own products.</h1>
       <p class="lede">
-        I’m {company.founder}. {company.brand} is my studio, the product studio of {company.legalName},
-        and I’m its only developer. I started with OSRS Exchange in {company.since}, and I’ve designed, built
-        and run everything here myself since, from the first sketch to the servers.
+        {company.brand} is the product studio of {company.legalName}, founded by {company.founder} in {company.since}.
+        We started with OSRS Exchange, and we’ve designed, built and run everything here since, from the
+        first sketch to the servers and the support inbox.
       </p>
     </div>
     <figure class="portrait">
@@ -84,7 +84,7 @@ const shipped = [
       />
       <figcaption>
         <span>{company.founder}</span>
-        <span>Founder & developer</span>
+        <span>Founder</span>
       </figcaption>
     </figure>
   </section>
@@ -96,22 +96,22 @@ const shipped = [
   </section>
 
   <section id="how" class="wrap section" aria-labelledby="how-title">
-    <SectionHead title="How I run them" id="how-title" />
+    <SectionHead title="How the products are run" id="how-title" />
     <FeatureGrid features={principles} />
   </section>
 
   <section id="stop" class="wrap section" aria-labelledby="stop-title">
-    <SectionHead title="If I stop" id="stop-title">
-      One developer is one point of failure. This is what protects you if I’m ever not here.
+    <SectionHead title="Built so you’re never stuck" id="stop-title">
+      Any product can be wound down one day. This is what protects you if that ever happens.
     </SectionHead>
     <FeatureGrid features={safeguards} />
   </section>
 
   <section id="work" class="wrap section" aria-labelledby="work-title">
-    <SectionHead title="Work with me" id="work-title">
-      I take on a few projects a year. If you need a web app, an Android app, or the payments, sign-in
-      and servers behind one, you work directly with the person writing the code, from the first
-      sketch to production. These are things I’ve built. Everything but Wallyt is live today.
+    <SectionHead title="Work with us" id="work-title">
+      We take on a few client projects a year. If you need a web app, an Android app, or the payments,
+      sign-in and servers behind one, you work directly with the studio writing the code, from the first
+      sketch to production. These are things we’ve built. Everything but Wallyt is live today.
     </SectionHead>
     <FeatureGrid features={shipped} />
     <p class="reach">

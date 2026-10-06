@@ -1,16 +1,19 @@
 ---
+// The studio at a glance, beside the opening headline: how many players have used OSRS Exchange,
+// the studio behind it, and the three products it makes.
 import { company, players, products } from '../site';
 import { url } from '../url';
+import Monogram from './Monogram.astro';
 ---
 
 <figure class="reach">
-  <div class="reach-top"><span class="label">small studio, real reach</span><span class="key"><i></i> 1 dot ≈ 1,000 players</span></div>
+  <div class="reach-top"><span class="label">the studio, at a glance</span><span class="key"><i></i> 1 dot ≈ 1,000 players</span></div>
   <div class="audience" aria-hidden="true">
     {Array.from({ length: 500 }, (_, i) => <i style={`--delay: ${(i % 25) * 24}ms; --shade: ${0.28 + ((i * 17) % 70) / 100}`} />)}
   </div>
   <figcaption><strong>{players}</strong><span>players have used OSRS Exchange<br /><small>Lifetime visitors since {company.since}</small></span></figcaption>
   <div class="stem" aria-hidden="true"></div>
-  <a class="maker" href={url('/about')}><img src={url('/about/trevor-leeman.webp')} width="44" height="44" alt="" /><span><strong>One person behind it all.</strong><small>{company.founder} · Design, code & everything after</small></span><span class="arrow" aria-hidden="true">↗</span></a>
+  <a class="maker" href={url('/about')}><Monogram size={44} /><span><strong>{company.brand}</strong><small>Independent software studio · design, code, servers and support</small></span><span class="arrow" aria-hidden="true">↗</span></a>
   <div class="branches" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="product-nodes">{products.map(p => <a href={`#${p.slug}`}><img src={p.icon} width="24" height="24" alt="" /><span>{p.name}</span><small>{p.status === 'live' ? 'Live' : 'In testing'}</small></a>)}</div>
 </figure>
@@ -29,7 +32,7 @@ import { url } from '../url';
   figcaption small { font-size: 10px; color: var(--muted); }
   .stem { height: 26px; width: 1px; margin: auto; background: var(--rule-strong); }
   .maker { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--rule-strong); border-radius: 9px; text-decoration: none; }
-  .maker img { border-radius: 50%; object-fit: cover; object-position: center 25%; }
+  .maker:hover { border-color: var(--accent); }
   .maker strong { display: block; font-size: 13px; font-weight: 550; }
   .maker small { display: block; font-size: 10px; color: var(--muted); }
   .arrow { margin-left: auto; color: var(--accent); }
