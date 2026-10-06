@@ -9,6 +9,9 @@ const { features } = Astro.props;
 // Four sit in one row of four rather than three and one left over.
 const columns = features.length === 4 ? 4 : 3;
 const external = (href: string) => href.startsWith('http');
+// A tag follows the title inside its heading, so the title's own last two words are joined here,
+// which src/middleware.ts can't do for it.
+const bound = (title: string) => title.replace(/ (\S+)$/, '\u00a0$1');
 ---
 
 <ul class="features" style={`--columns: ${columns}`}>
@@ -16,7 +19,7 @@ const external = (href: string) => href.startsWith('http');
     features.map((f) => (
       <li>
         <h3>
-          {f.title}
+          {f.tag ? bound(f.title) : f.title}
           {f.tag && <span class="tag">{f.tag}</span>}
         </h3>
         <p>{f.body}</p>

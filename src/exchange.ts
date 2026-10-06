@@ -78,8 +78,8 @@ export const exchange = (slug: 'osrs-exchange' | 'rs3-exchange') => {
   // public/testimonials. RS3 Exchange is new and has none of its own, and never borrows these.
   const quotes: Quote[] = osrs
     ? [
-        { text: 'Thanks mate, your sites amazing, new to flipping and it’s made it so easy', who: 'dropbear', image: '/testimonials/1_dropbear_flipping_made_easy.png', width: 560, height: 191, where: 'Discord', when: 'July 2023' },
         { text: 'gotta say, best site I’ve found for tracking prices', who: 'Bubba', image: '/testimonials/4_Bubba_best_price_site.png', width: 483, height: 114, where: 'Discord' },
+        { text: 'Thanks mate, your sites amazing, new to flipping and it’s made it so easy', who: 'dropbear', image: '/testimonials/1_dropbear_flipping_made_easy.png', width: 560, height: 191, where: 'Discord', when: 'July 2023' },
         { text: 'This site is a hidden gem fr', who: 'Floppy', image: '/testimonials/3_Floppy_hidden_gem.png', width: 620, height: 116, where: 'Discord', when: 'June 2023' },
         { text: 'Its a priceless resource', who: 'Lendonos', image: '/testimonials/5_Lendonos_priceless_resource.png', width: 295, height: 96, where: 'Discord', when: 'April 2023' },
       ]

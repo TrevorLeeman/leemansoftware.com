@@ -5,6 +5,7 @@ import StudioHeader from '../components/StudioHeader.astro';
 import StudioFooter from '../components/StudioFooter.astro';
 import ProductHeader from '../components/ProductHeader.astro';
 import ProductFooter from '../components/ProductFooter.astro';
+import StudioContact from '../components/StudioContact.astro';
 
 import { company, organization, organizationRef, type Product } from '../site';
 
@@ -165,6 +166,7 @@ const iconOf = product && !product.site ? product : undefined;
 
     <main id="main">
       <slot />
+      <StudioContact />
     </main>
 
     {product ? <ProductFooter product={product} /> : <StudioFooter />}

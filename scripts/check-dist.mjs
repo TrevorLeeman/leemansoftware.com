@@ -18,6 +18,8 @@ const decode = (text) =>
   text
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    // src/middleware.ts joins each block's last two words with one, so it reads as a space.
+    .replace(/&nbsp;/g, ' ')
     .replace(/&quot;/g, '"')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
@@ -119,7 +121,7 @@ for (const [, link] of readFileSync(join(dist, 'llms.txt'), 'utf8').matchAll(/\]
 if (existsSync(join(dist, 'cards'))) fail('dist/cards', 'the link-card pages were built into the site');
 
 // Google Play matches this line against the developer name on Wallyt's store listing.
-if (!pages.get('/wallyt/delete-account/')?.html.includes('Wallyt, by Leeman Software')) {
+if (!pages.get('/wallyt/delete-account/')?.html.replace(/&nbsp;/g, ' ').includes('Wallyt, by Leeman Software')) {
   fail('/wallyt/delete-account/', 'no longer says "Wallyt, by Leeman Software"');
 }
 

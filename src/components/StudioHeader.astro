@@ -16,7 +16,7 @@ const about = withoutBase(Astro.url.pathname) === '/about' ? 'page' : undefined;
     <nav aria-label="Main">
       <a href={url('/#products')}>Products</a>
       <a class="optional" href={url('/about')} aria-current={about}>About</a>
-      <a href={url('/#contact')}>Contact</a>
+      <a href="#studio-contact">Contact</a>
     </nav>
   </div>
 </header>
