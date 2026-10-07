@@ -5,7 +5,7 @@ import SectionHead from '../components/SectionHead.astro';
 import Stats from '../components/Stats.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import { limits } from '../exchange';
-import { company, email, organizationRef, osrsPageViews, playerCount, scale } from '../site';
+import { company, organizationRef, osrsPageViews, playerCount, scale } from '../site';
 
 // Dates and counts are checked against the products' repos and live sites on 2026-10-04: OSRS
 // Exchange's first commit is from July 2022, and the item counts are each live sitemap's item pages.
@@ -114,11 +114,6 @@ const shipped = [
       sketch to production. These are things we’ve built. Everything but Wallyt is live today.
     </SectionHead>
     <FeatureGrid features={shipped} />
-    <p class="reach">
-      <a class="mail" href={`mailto:${email}`}>{email}</a>
-      <button class="copy" type="button" data-copy={email} aria-label={`Copy ${email}`}>Copy</button>
-      <a href={url('/#integrations')}>The platforms these run on</a>
-    </p>
   </section>
 </Base>
 
@@ -180,33 +175,5 @@ const shipped = [
 
   .section {
     padding-top: clamp(96px, 12vw, 160px);
-  }
-
-  .reach {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px 14px;
-    margin: clamp(32px, 4vw, 48px) 0 0;
-  }
-
-  .mail {
-    font-family: var(--mono);
-    font-size: clamp(17px, 1.8vw, 22px);
-    letter-spacing: -0.02em;
-    overflow-wrap: anywhere;
-  }
-
-  .reach a:last-child {
-    margin-left: auto;
-    font-size: 15px;
-    font-weight: 500;
-  }
-
-  @media (max-width: 700px) {
-    .reach a:last-child {
-      margin-left: 0;
-      flex-basis: 100%;
-    }
   }
 </style>
