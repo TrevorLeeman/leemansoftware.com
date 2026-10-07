@@ -8,11 +8,11 @@ import Stats from '../components/Stats.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import Questions from '../components/Questions.astro';
 import { exchange } from '../exchange';
-import { company, integrations, osrsPageViews, playerCount, players, products, scale, studioQuestions } from '../site';
+import { company, integrations, playerCount, players, products, scale, studioQuestions } from '../site';
 
 // The home page opens on what the studio builds and runs, proves it with the products, then
-// answers what a visitor checking on a product or a charge wants to know: who runs it, how money and
-// data are handled, and the questions they came with. It speaks as the studio (“we”), never as one person.
+// answers what a visitor checking on a product or a charge wants to know: who runs it, which
+// services handle what, and the questions they came with. It speaks as the studio (“we”), never as one person.
 
 // Local brand assets keep the connected-services section free of third-party requests.
 const serviceIcons: Record<string, string> = {
@@ -38,35 +38,6 @@ const capabilities = [
   { title: 'Payments and subscriptions', body: 'Stripe checkout with free trials, sales tax, renewals and cancelling, kept in step with what each account can use.' },
   { title: 'Sign-in and accounts', body: 'Emailed codes, Google sign-in on the web and on Android, Discord linking, and bot protection at sign-up.' },
   { title: 'Apps for every screen', body: 'Web apps, and one React Native codebase for Android, iOS and the web, with end-to-end tests run on each.' },
-];
-
-// How the products are run, from the user's side. Checked against the products' repos and policies
-// on 2026-10-04; the about page has the longer version.
-const trust = [
-  {
-    title: 'Your card stays with Stripe',
-    body: 'Premium is billed by Stripe, and card details never reach our servers. Cancel from your account settings and you keep Premium to the end of the period you paid for.',
-  },
-  {
-    title: 'Prices you can check yourself',
-    body: 'Every price on the Exchange sites comes from the OSRS Wiki’s or the RuneScape Wiki’s public real-time data, and every margin follows each game’s published tax rules. Wallyt keeps the exchange rate with every expense it converts.',
-  },
-  {
-    title: 'Nothing touches your game account',
-    body: 'The Exchange sites never ask for your RuneScape login. Recipe levels come from Jagex’s public hiscores, from the name you type. Neither site is affiliated with Jagex.',
-  },
-  {
-    title: 'Proven to work and scale',
-    body: `More than ${scale[3].value.replace('+', '')} automated tests cover tax rules, payments, alerts and currency maths, and the systems behind them have carried more than ${playerCount} players and ${osrsPageViews} page views.`,
-  },
-  {
-    title: 'Infrastructure we run',
-    body: 'Both Exchange sites run on servers we set up and maintain, behind Cloudflare, with errors reported the moment they happen so they can be fixed quickly.',
-  },
-  {
-    title: 'You can always leave',
-    body: 'Premium is cancelled from your account settings, in a click. Wallyt exports any group as a CSV file, and its terms promise notice before it ever closes, so your records go with you.',
-  },
 ];
 ---
 
@@ -119,16 +90,8 @@ const trust = [
     <FeatureGrid features={capabilities} />
   </section>
 
-  <section id="trust" class="wrap section" aria-labelledby="trust-title">
-    <p class="label chapter-label">04 / how the products are run</p>
-    <SectionHead title="Money, data and uptime, handled the same way everywhere." id="trust-title">
-      Whatever you use, this is how your card, your data and the service itself are looked after.
-    </SectionHead>
-    <FeatureGrid features={trust} />
-  </section>
-
   <section id="integrations" class="wrap section" aria-labelledby="integrations-title">
-    <p class="label chapter-label">05 / who handles what</p>
+    <p class="label chapter-label">04 / who handles what</p>
     <SectionHead title="Built on services you already use." id="integrations-title">
       Cards, email delivery and exchange rates aren’t improvised in-house. Each goes to a service whose
       whole business it is, and the products connect them. Open one to see where it fits.
@@ -137,7 +100,7 @@ const trust = [
   </section>
 
   <section id="questions" class="wrap section" aria-labelledby="questions-title">
-    <p class="label chapter-label">06 / questions</p>
+    <p class="label chapter-label">05 / questions</p>
     <SectionHead title="Questions people ask" id="questions-title" />
     <Questions questions={studioQuestions} />
   </section>
