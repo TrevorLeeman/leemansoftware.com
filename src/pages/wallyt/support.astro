@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     q: 'How do I delete my account?',
-    a: 'See Delete your Wallyt account for the steps and for exactly what is deleted.',
+    a: 'In Wallyt, open Account and tap Delete account. See Delete your Wallyt account for exactly what is deleted, and for asking us by email instead.',
     link: { href: '/wallyt/delete-account', label: 'Delete your Wallyt account' },
   },
 ];
@@ -70,7 +70,7 @@ const faqSchema = {
     name: f.q,
     acceptedAnswer: {
       '@type': 'Answer',
-      text: f.link ? `See ${f.link.label} at ${company.url}${f.link.href}/ for the steps and for exactly what is deleted.` : f.a,
+      text: f.link ? `${f.a.replace(f.link.label, `${f.link.label} (${company.url}${f.link.href}/)`)}` : f.a,
     },
   })),
 };
@@ -106,8 +106,9 @@ const faqSchema = {
           <dd>
             {f.link ? (
               <>
-                See <a href={url(f.link.href)}>{f.link.label}</a> for the steps and for exactly what is
-                deleted.
+                {f.a.split(f.link.label)[0]}
+                <a href={url(f.link.href)}>{f.link.label}</a>
+                {f.a.split(f.link.label)[1]}
               </>
             ) : (
               f.a

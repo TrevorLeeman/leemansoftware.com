@@ -18,18 +18,28 @@ const body = encodeURIComponent(
   description="How to delete your Wallyt account, what is deleted, and what stays with your groups."
 >
   <p>
-    You can ask us to delete your Wallyt account and the personal data that goes with it at any
-    time. You don’t need the app installed to do it.
+    You can delete your Wallyt account and the personal data that goes with it at any time, in the
+    app or by asking us. You don’t need the app installed to ask.
   </p>
 
+  <h2>In the app</h2>
+  <ol>
+    <li>Open Wallyt on your phone or on the web, and sign in.</li>
+    <li>Tap the person icon in the top right (Account), then <strong>Delete account</strong> at the bottom.</li>
+    <li>
+      Wallyt lists what will happen to each of your groups. Tap <strong>Continue</strong>, type your
+      email address to confirm, and tap <strong>Delete account</strong>.
+    </li>
+  </ol>
+  <p>Your account is deleted straight away, and you are signed out.</p>
+
+  <h2>By email</h2>
   <div class="request">
     <a class="button primary" href={`mailto:${email}?subject=${subject}&body=${body}`}>
       Email a deletion request
     </a>
     <p>Opens your email app with the request written for you. Send it from the address you sign in with.</p>
   </div>
-
-  <h2>How to delete your account</h2>
   <ol>
     <li>
       Email <a href={`mailto:${email}?subject=${subject}&body=${body}`}>{email}</a> from the email address you use to sign in to Wallyt, with the subject “Delete my Wallyt
@@ -44,9 +54,9 @@ const body = encodeURIComponent(
 
   <div class="callout">
     <p>
-      <strong>If you own a group</strong> that has other people in it, you can make someone else the
-      owner first, from the group’s settings. Otherwise we pass ownership to one of its admins, or to
-      another member if it has none.
+      <strong>If you own a group</strong> that other people have joined, you can make someone else
+      the owner first, from the group’s settings. Otherwise ownership passes to its longest-standing
+      admin, or to its longest-standing member if it has no admins.
     </p>
   </div>
 
@@ -54,8 +64,11 @@ const body = encodeURIComponent(
   <ul>
     <li>Your account: your email address, name and photo.</li>
     <li>Your Google or Apple sign-in link, and every signed-in session.</li>
-    <li>Your email address and photo from each group you were in.</li>
-    <li>Groups where you were the only person, with all their expenses and history.</li>
+    <li>Your email address, phone number and photo from each group you were in.</li>
+    <li>
+      Groups nobody else has joined, with all their expenses and history. People you added who
+      never joined don’t count, since they can’t open the group.
+    </li>
   </ul>
 
   <h2>What stays with your groups</h2>
@@ -63,13 +76,14 @@ const body = encodeURIComponent(
     Expenses are shared records: the other people in a group rely on them for their own balances.
     So expenses and payments you were part of, and their history, stay in those groups. They
     show the name you had in that group, but nothing else about you, and they’re no longer
-    connected to an account. The other people in the group can still edit or delete them.
+    connected to an account: where they said you added or changed something, they now say
+    “Someone”. The other people in the group can still edit or delete them.
   </p>
 
   <h2>How long it takes</h2>
   <p>
-    Your account is deleted within 30 days of your request. If any copy of it remains in a backup,
-    it is erased within 30 days after that.
+    In the app, your account is deleted straight away. By email, it is deleted within 30 days of
+    your request. If any copy of it remains in a backup, it is erased within 30 days after that.
   </p>
 
   <h2>Deleting some data without closing your account</h2>

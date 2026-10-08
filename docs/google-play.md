@@ -1,6 +1,6 @@
 # Wallyt on Google Play
 
-Everything the Play Console asks for that this site answers, and what still has to happen before the first release. Written 2026-10-02, updated 2026-10-04.
+Everything the Play Console asks for that this site answers, and what still has to happen before the first release. Written 2026-10-02, updated 2026-10-07.
 
 `/wallyt` is Wallyt's own subsite: its header, footer and colors are Wallyt's, and every Wallyt page links to its support, privacy policy, terms and account deletion. The studio's pages don't link to Wallyt's policies, only to `/wallyt`. The subsite also has `/wallyt/splitwise-alternative`, a guide to importing a Splitwise group; Play doesn't need it, and it says what the app does the same way the pages below do.
 
@@ -40,22 +40,25 @@ When Wallyt goes live, set its `status` to `'live'` in `src/site.ts`. Every "com
 
 ## Before the first upload
 
-These are in the Wallyt repo, not here, and the pages on this site assume them. None of them was done as of 2026-10-04.
+The app side, and how to build, sign and submit, is the Wallyt repo's `docs/google-play.md`. Status as of 2026-10-07:
 
-1. **In-app account deletion.** Play requires a way to delete the account from inside the app as well as the web page. Wallyt has none yet (no hook runs on user deletion either). Build it to do what `/wallyt/delete-account` promises:
-   - delete the user record, its Google/Apple link and sessions;
-   - blank the email and photo on every member row that was theirs, keeping the name so balances still add up;
-   - delete groups where they were the only person;
-   - hand ownership of shared groups to an admin, or to another member when there are none.
-   Then add "In the app: Account, then Delete account" as the first option on the deletion page.
-2. **Contacts permission text.** `app.config.ts` says contacts "stay on your phone", but the names and emails of people you pick are uploaded, and so are their photos when an owner or admin adds them. Reword it, for example: "Wallyt uses your contacts so you can add people to a group without typing their names and emails. Only the people you choose are added."
-3. **A sign-in path for Google's reviewers.** Sign-in is by emailed code, and a reviewer can't read the inbox. The App access form needs working credentials, for example one review account with a fixed code.
-4. **Production server and domain.** Deploy per `docs/deploy.md` in the Wallyt repo and build with `WALLYT_PRODUCTION_API_URL`.
-5. **Release signing.** Use EAS Build (or an upload keystore). Today's release build is signed with the debug key.
-6. **Smaller cleanups.** Turn off `usesCleartextTraffic` in production builds, and add `android.permission.SYSTEM_ALERT_WINDOW` to `blockedPermissions`. The release manifest also asks for `USE_BIOMETRIC`, `USE_FINGERPRINT` and storage permissions up to Android 12: block what Wallyt doesn't use before filling in Data safety.
-7. **Server logs.** The privacy policy says server logs (with IP addresses) are deleted after a few days. Check the log retention in the production PocketBase admin (Settings > Logs) and keep it at a few days.
-8. **Sign in with Apple.** The privacy policy mentions it. If production won't have Apple configured, either is fine, but don't add the button without the server side.
-9. **Deleting an account in the database.** `expenses.created_by` and `imports.created_by` require a user, so deleting a user who has added anything will fail until those relations allow it (or the deletion hook clears them).
+Done in the Wallyt repo:
+
+1. **In-app account deletion**: Account, then Delete account (Wallyt docs/decisions.md #97). It does what `/wallyt/delete-account` says, which now lists it first; tested end to end on the web and against the server.
+2. **Contacts permission text**: "Only the people you choose are added."
+3. **A sign-in for Google's reviewers**: one review account with a fixed code, set by `WALLYT_REVIEW_EMAIL` and `WALLYT_REVIEW_CODE` on the server, with a demo group from `mise run review-account` (#98). The App access wording is in the Wallyt runbook.
+4. **Release builds**: `eas.json` builds a signed `.aab` (`mise run build:android`), and a production build refuses to start without an `https://` server and allows no cleartext traffic.
+5. **Permissions**: biometrics, storage and `SYSTEM_ALERT_WINDOW` are blocked. The release manifest asks only for internet, network state, vibrate and reading contacts.
+6. **Server logs**: kept 3 days by migration, matching the privacy policy.
+7. **Deleting a user in the database**: `created_by` no longer blocks it.
+
+Still to do, by hand:
+
+1. **Production server and domain.** Deploy per the Wallyt repo's `docs/deploy.md`, with SMTP, Google sign-in and the two review variables, then run `mise run review-account` against it.
+2. **EAS and signing.** `eas init`, the `WALLYT_PRODUCTION_API_URL` EAS variable, the first build (let EAS create the upload key), then Play App Signing's SHA-1 on the Android OAuth client.
+3. **Play Console.** Create the app under the Leeman Group LLC developer account, fill in App content with the answers below, upload the first `.aab` by hand to internal testing, and add the store listing graphics.
+4. **Developer name.** The deletion page says "Wallyt, by Leeman Software". If the Play developer name ends up "Leeman Group LLC", change `meta` in `src/pages/wallyt/delete-account.astro` to match it exactly.
+5. **Sign in with Apple.** The privacy policy mentions it. Android doesn't need it; don't add the button without the server side.
 
 ## Data safety answers (draft)
 
@@ -67,7 +70,7 @@ Encrypted in transit: **yes**. Users can request deletion: **yes**. No data is s
 | Personal info: Email address | Yes | Required | App functionality, Account management |
 | Personal info: User IDs (Google account ID) | Yes | Optional (Google sign-in only) | Account management |
 | Photos and videos: Photos | Yes | Optional | App functionality |
-| Contacts | Yes (only the people a user picks) | Optional | App functionality |
+| Contacts (names, emails and phone numbers of the people a user adds) | Yes (only the people a user picks or types in) | Optional | App functionality |
 | Financial info: Other financial info (who owes whom) | Yes | Required | App functionality |
 | App activity: Other user-generated content (expenses, notes, group names) | Yes | Required | App functionality |
 | Location, Messages, Device IDs, Health, Web browsing, Crash logs, Diagnostics | No | | |

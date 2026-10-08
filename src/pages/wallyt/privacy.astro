@@ -8,7 +8,7 @@ import { company, email, product } from '../../site';
   title="Wallyt privacy policy"
   eyebrow="Wallyt"
   eyebrowHref="/wallyt"
-  updated="2026-10-04"
+  updated="2026-10-07"
   product={product('wallyt')}
   description="What Wallyt collects, who can see it, who we share it with, and how to delete it."
 >
@@ -67,18 +67,20 @@ import { company, email, product } from '../../site';
 
   <h3>People you add</h3>
   <p>
-    When you add someone to a group, we store the name you give them and, if you add them from
-    your contacts, their email address. If you are the group’s owner or an admin, the contact’s photo
-    is saved as their photo in that group. When that person later joins Wallyt with the same email
-    address, they take over their place in the group and can change their own name and photo.
+    When you add someone to a group, we store the name you give them and, if you give one or add
+    them from your contacts, their phone number and email address. These are used only so their
+    invite can be texted or emailed from your own phone, and anyone in the group can see and
+    change them until that person joins. If you are the group’s owner or an admin, the contact’s
+    photo is saved as their photo in that group. When that person later joins Wallyt with the same
+    email address, they take over their place in the group and can change their own name and photo.
   </p>
 
   <h3>Contacts on your phone</h3>
   <p>
     Wallyt asks for access to your contacts only when you choose to add people from them, and it
     only ever reads them. The list is shown on your phone. Nothing is uploaded except the people
-    you pick, as described above. Phone numbers are never sent to us: when you text someone an
-    invite, the number goes straight to your phone’s messaging app.
+    you pick, as described above. Invites are sent from your phone’s own messaging or email app,
+    never by us.
   </p>
 
   <h3>Photos on your phone</h3>
@@ -198,7 +200,8 @@ import { company, email, product } from '../../site';
     correct.
   </p>
   <p>
-    When you delete your account, we delete it within 30 days. See <a href={url('/wallyt/delete-account')}>Delete your Wallyt account</a> for exactly what is removed and
+    When you delete your account in the app, it is deleted straight away. If you ask us by email
+    instead, we delete it within 30 days. See <a href={url('/wallyt/delete-account')}>Delete your Wallyt account</a> for exactly what is removed and
     what stays with your groups.
   </p>
 
