@@ -1,0 +1,14 @@
+---
+// A small sign-off under the footer's copyright.
+import { email } from '../site';
+---
+
+<span class="footer-note">Still here? <a href={`mailto:${email}`}>Say hello</a>. We answer our email :)</span>
+
+<style>
+  .footer-note {
+    display: block;
+    margin-top: 4px;
+    color: color-mix(in srgb, var(--muted) 70%, transparent);
+  }
+</style>

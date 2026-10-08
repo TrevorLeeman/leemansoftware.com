@@ -13,8 +13,8 @@ import { company, email, product } from '../../site';
   description="The terms for using Wallyt, the app for splitting shared costs, in plain language."
 >
   <p>
-    These terms are an agreement between you and {company.legalName}, whose product studio
-    {company.brand} makes Wallyt (“we”, “us”). They apply to the Wallyt app and Wallyt on the web.
+    These terms are an agreement between you and {company.brand} ({company.legalName}),
+    which makes Wallyt (“we”, “us”). They apply to the Wallyt app and Wallyt on the web.
     By using Wallyt you agree to them. The <a href={url('/wallyt/privacy')}>privacy policy</a> explains
     what we do with your information.
   </p>
@@ -108,7 +108,7 @@ import { company, email, product } from '../../site';
 
   <h2>Contact</h2>
   <p>
-    {company.brand}, the product studio of {company.legalName}<br />
+    {company.brand} ({company.legalName})<br />
     <a href={`mailto:${email}`}>{email}</a>
   </p>
 </Doc>

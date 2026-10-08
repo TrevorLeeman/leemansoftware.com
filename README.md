@@ -1,6 +1,6 @@
 # leemansoftware.com
 
-The website of Leeman Software, the product studio of Leeman Group LLC: the studio's home and About pages, and a subsite for each product. Wallyt's subsite has the pages Google Play needs (privacy policy, account deletion, support, terms).
+The website of Leeman Software: the studio's home and About pages, and a subsite for each product. Wallyt's subsite has the pages Google Play needs (privacy policy, account deletion, support, terms).
 
 Each product's pages are its own subsite: `Base` takes a `product` and swaps the studio's header, footer, favicon and accent color for the product's. The studio's footer links only to the products' subsites, never to a product's policies. A product's nav and footer links live with it in `src/site.ts`.
 

@@ -2,7 +2,7 @@
 // A product subsite's footer: the product's own links and policies, then the studio that makes it.
 import { url } from '../url';
 import { company, email, type Product } from '../site';
-import Stamp from './Stamp.astro';
+import FooterNote from './FooterNote.astro';
 
 interface Props {
   product: Product;
@@ -27,7 +27,7 @@ const { product: p } = Astro.props;
     <div class="fine">
       <p>
         {p.name} is made by <a href={url('/')}>{company.brand}</a>. &copy; {new Date().getFullYear()} {company.legalName}.
-        <Stamp />
+        <FooterNote />
       </p>
       {p.notice && <p>{p.notice}</p>}
     </div>

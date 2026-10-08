@@ -2,9 +2,9 @@
 // The studio's footer: our products, who we are and how to reach us. Product policies live in each
 // product's own footer, not here.
 import { url } from '../url';
-import { company, email, jagexNotice, products } from '../site';
+import { company, email, products } from '../site';
 import Monogram from './Monogram.astro';
-import Stamp from './Stamp.astro';
+import FooterNote from './FooterNote.astro';
 ---
 
 <footer class="site-footer">
@@ -24,10 +24,9 @@ import Stamp from './Stamp.astro';
   <div class="wrap">
     <div class="fine">
       <p>
-        &copy; {new Date().getFullYear()} {company.legalName}. {company.brand} is its product studio.
-        <Stamp />
+        &copy; {new Date().getFullYear()} {company.legalName}.
+        <FooterNote />
       </p>
-      <p>{jagexNotice}</p>
     </div>
   </div>
 </footer>

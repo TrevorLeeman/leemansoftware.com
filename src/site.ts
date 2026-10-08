@@ -272,7 +272,7 @@ export const integrations = [
 export const studioQuestions: QA[] = [
   {
     q: `What is ${company.brand}?`,
-    a: `${company.brand} is an independent software studio, the product studio of ${company.legalName}. We design, build and run OSRS Exchange and RS3 Exchange, websites with live Grand Exchange prices for RuneScape players, and Wallyt, an app for splitting shared costs, and take on a few client projects a year.`,
+    a: `${company.brand} is an independent software studio. We design, build and run OSRS Exchange and RS3 Exchange, websites with live Grand Exchange prices for RuneScape players, and Wallyt, an app for splitting shared costs, and take on a few client projects a year.`,
   },
   {
     q: `Who is behind ${company.brand}?`,

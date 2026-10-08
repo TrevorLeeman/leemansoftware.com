@@ -11,7 +11,7 @@ const rs3 = exchange('rs3-exchange');
 
 const body = `# ${company.brand}
 
-> ${company.brand} is an independent software studio founded by ${company.founder}, the product studio of ${company.legalName}. It designs, builds and runs three products: OSRS Exchange, started in ${company.since}, a free live price tracker for Old School RuneScape's Grand Exchange, which ${players} players have used; RS3 Exchange, a separate site launched in 2026 that does the same job for RuneScape 3; and Wallyt, a free app for splitting shared costs. The studio answers support for all three directly and takes on a few client projects a year.
+> ${company.brand} is an independent software studio founded by ${company.founder}. It designs, builds and runs three products: OSRS Exchange, started in ${company.since}, a free live price tracker for Old School RuneScape's Grand Exchange, which ${players} players have used; RS3 Exchange, a separate site launched in 2026 that does the same job for RuneScape 3; and Wallyt, a free app for splitting shared costs. The studio answers support for all three directly and takes on a few client projects a year.
 
 Contact: ${email}. The Exchange sites' Discord: ${discord}
 
