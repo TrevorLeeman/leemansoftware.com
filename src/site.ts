@@ -272,7 +272,7 @@ export const integrations = [
 export const studioQuestions: QA[] = [
   {
     q: `What is ${company.brand}?`,
-    a: `${company.brand} is an independent software studio. We design, build and run OSRS Exchange and RS3 Exchange, websites with live Grand Exchange prices for RuneScape players, and Wallyt, an app for splitting shared costs, and take on a few client projects a year.`,
+    a: `${company.brand} is an independent software studio. We design, build and run OSRS Exchange and RS3 Exchange, websites with live Grand Exchange prices for RuneScape players, and Wallyt, an app for splitting shared costs, and we’re open to client projects.`,
   },
   {
     q: `Who is behind ${company.brand}?`,
@@ -299,6 +299,6 @@ export const studioQuestions: QA[] = [
   },
   {
     q: 'Do you take on client work?',
-    a: 'Yes, a few projects a year: web apps, Android apps, and the payments, sign-in and servers behind them.',
+    a: 'Yes. Everything we’ve shipped so far is our own, and we’re open to client projects too: web apps, Android apps, and the payments, sign-in and servers behind them.',
   },
 ];
